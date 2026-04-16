@@ -1,0 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+body {
+	font-family: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+.app-page-bg {
+	background: linear-gradient(135deg, #8897ae 0%, #a8b2c0 52%, #7f92ab 100%);
+}
