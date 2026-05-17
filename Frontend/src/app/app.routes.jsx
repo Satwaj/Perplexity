@@ -25,4 +25,5 @@ export const router = createBrowserRouter([
     path: "/dashboard",
     element: <Navigate to="/"  replace/>
   }
-]);
+])
+
