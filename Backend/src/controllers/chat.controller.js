@@ -64,7 +64,7 @@ export async function getChats (req, res) {
 
     const chats = await chatModel.find({
         user: req.user.id
-    })
+    }).populate("messages").sort({ updatedAt: -1 })
 
     res.status(200).json({
         message: "Chats retrieved successfully",
@@ -82,7 +82,7 @@ export async function getMessages(req, res) {
 
         _id: chatId,
         user: req.user.id        
-    })
+    }).populate("messages").sort({ updatedAt: -1 })
 
     if (!chat) {
         return res.status(404).json({
