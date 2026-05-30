@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FiCopy, FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 import { useTheme } from "../../../context/ThemeContext";
 import ReactMarkdown from "react-markdown";
@@ -6,9 +6,44 @@ import remarkGfm from "remark-gfm";
 
 const ChatMessageArea = ({ messages = [] }) => {
   const theme = useTheme();
+  const [copiedIndex, setCopiedIndex] = useState(null);
+  const [likedMessages, setLikedMessages] = useState(new Set());
+  const [dislikedMessages, setDislikedMessages] = useState(new Set());
 
-  const handleCopy = (text) => {
+  const handleCopy = (text, index) => {
     navigator.clipboard.writeText(text);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 2000);
+  };
+
+  const handleLike = (index) => {
+    const newLiked = new Set(likedMessages);
+    if (newLiked.has(index)) {
+      newLiked.delete(index);
+    } else {
+      newLiked.add(index);
+      setDislikedMessages((prev) => {
+        const newDisliked = new Set(prev);
+        newDisliked.delete(index);
+        return newDisliked;
+      });
+    }
+    setLikedMessages(newLiked);
+  };
+
+  const handleDislike = (index) => {
+    const newDisliked = new Set(dislikedMessages);
+    if (newDisliked.has(index)) {
+      newDisliked.delete(index);
+    } else {
+      newDisliked.add(index);
+      setLikedMessages((prev) => {
+        const newLiked = new Set(prev);
+        newLiked.delete(index);
+        return newLiked;
+      });
+    }
+    setDislikedMessages(newDisliked);
   };
 
   // Custom markdown components for styling
@@ -52,24 +87,24 @@ const ChatMessageArea = ({ messages = [] }) => {
     code: ({ node, inline, ...props }) =>
       inline ? (
         <code
-          className={`${theme.isDark ? "bg-gray-600" : "bg-gray-200"} ${theme.isDark ? "text-blue-400" : "text-blue-600"} px-2 py-1 rounded text-sm font-mono`}
+          className={`${theme.isDark ? "bg-gray-800" : "bg-gray-200"} ${theme.isDark ? "text-gray-100" : "text-gray-800"} px-2 py-1 rounded text-sm font-mono`}
           {...props}
         />
       ) : (
         <code
-          className={`${theme.isDark ? "bg-gray-800" : "bg-gray-100"} ${theme.text.primary} block p-3 rounded-lg overflow-x-auto text-sm font-mono mb-2`}
+          className={`${theme.isDark ? "bg-gray-800" : "bg-gray-100"} ${theme.text.primary} block p-3 rounded-lg overflow-x-auto text-sm font-mono mb-2 scrollbar-hide`}
           {...props}
         />
       ),
     pre: ({ node, ...props }) => (
       <pre
-        className={`${theme.isDark ? "bg-gray-800" : "bg-gray-100"} p-3 rounded-lg overflow-x-auto mb-2`}
+        className={`${theme.isDark ? "bg-gray-800" : "bg-gray-100"} p-3 rounded-lg overflow-x-auto mb-2 scrollbar-hide`}
         {...props}
       />
     ),
     blockquote: ({ node, ...props }) => (
       <blockquote
-        className={`${theme.isDark ? "border-l-blue-400 bg-gray-800" : "border-l-blue-500 bg-blue-50"} border-l-4 pl-4 py-2 my-2 rounded`}
+        className={`${theme.isDark ? "border-l-gray-600 bg-gray-900" : "border-l-gray-400 bg-gray-50"} border-l-4 pl-4 py-2 my-2 rounded`}
         {...props}
       />
     ),
@@ -102,7 +137,7 @@ const ChatMessageArea = ({ messages = [] }) => {
       />
     ),
     a: ({ node, ...props }) => (
-      <a className="text-blue-500 hover:underline" {...props} />
+      <a className="text-gray-300 hover:underline" {...props} />
     ),
     strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
     em: ({ node, ...props }) => <em className="italic" {...props} />,
@@ -119,7 +154,7 @@ const ChatMessageArea = ({ messages = [] }) => {
             <span
               className={
                 theme.isDark
-                  ? "text-blue-400"
+                  ? "text-gray-200"
                   : "bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent"
               }
             >
@@ -136,7 +171,7 @@ const ChatMessageArea = ({ messages = [] }) => {
 
   return (
     <div
-      className={`flex-1 overflow-y-auto px-6 py-8 transition-colors duration-200`}
+      className={`flex-1 overflow-y-auto px-6 py-8 transition-colors duration-200 scrollbar-hide`}
     >
       <div className="max-w-3xl mx-auto space-y-6">
         {messages.map((message, index) => (
@@ -165,10 +200,10 @@ const ChatMessageArea = ({ messages = [] }) => {
                 className={`px-4 py-3 rounded-2xl transition-colors duration-200 ${
                   message.sender === "user"
                     ? theme.isDark
-                      ? "bg-blue-600 text-gray-50"
+                      ? "bg-gray-800 text-white"
                       : "bg-gray-800 text-white"
                     : theme.isDark
-                      ? "bg-gray-700 text-gray-50"
+                      ? "bg-gray-900 text-gray-100"
                       : "bg-gray-100 text-gray-900"
                 }`}
               >
@@ -186,24 +221,77 @@ const ChatMessageArea = ({ messages = [] }) => {
                 )}
               </div>
 
-              {/* Actions */}
+              {/* Actions for AI Messages */}
               {message.sender === "assistant" && (
                 <div className="flex gap-2 mt-2 opacity-0 hover:opacity-100 transition-opacity">
                   <button
-                    onClick={() => handleCopy(message.text)}
-                    className={`p-1.5 rounded-lg ${theme.text.tertiary} transition-colors ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`}
-                    title="Copy"
+                    onClick={() => handleCopy(message.text, index)}
+                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
+                      copiedIndex === index
+                        ? "bg-black text-white"
+                        : `${theme.text.tertiary} ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`
+                    }`}
+                    title={copiedIndex === index ? "Copied!" : "Copy"}
                   >
                     <FiCopy size={16} />
                   </button>
                   <button
-                    className={`p-1.5 rounded-lg ${theme.text.tertiary} transition-colors ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`}
+                    onClick={() => handleLike(index)}
+                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
+                      likedMessages.has(index)
+                        ? "bg-black text-white fill-black"
+                        : `${theme.text.tertiary} ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`
+                    }`}
                     title="Like"
                   >
                     <FiThumbsUp size={16} />
                   </button>
                   <button
-                    className={`p-1.5 rounded-lg ${theme.text.tertiary} transition-colors ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`}
+                    onClick={() => handleDislike(index)}
+                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
+                      dislikedMessages.has(index)
+                        ? "bg-black text-white fill-black"
+                        : `${theme.text.tertiary} ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`
+                    }`}
+                    title="Dislike"
+                  >
+                    <FiThumbsDown size={16} />
+                  </button>
+                </div>
+              )}
+
+              {/* Actions for User Messages */}
+              {message.sender === "user" && (
+                <div className="flex gap-2 mt-2 opacity-0 hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={() => handleCopy(message.text, index)}
+                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
+                      copiedIndex === index
+                        ? "bg-black text-white"
+                        : `text-gray-300 ${theme.isDark ? "hover:bg-gray-800" : "hover:bg-gray-700"}`
+                    }`}
+                    title={copiedIndex === index ? "Copied!" : "Copy"}
+                  >
+                    <FiCopy size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleLike(index)}
+                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
+                      likedMessages.has(index)
+                        ? "bg-black text-white fill-black"
+                        : `text-gray-300 ${theme.isDark ? "hover:bg-gray-800" : "hover:bg-gray-700"}`
+                    }`}
+                    title="Like"
+                  >
+                    <FiThumbsUp size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleDislike(index)}
+                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
+                      dislikedMessages.has(index)
+                        ? "bg-black text-white fill-black"
+                        : `text-gray-300 ${theme.isDark ? "hover:bg-gray-800" : "hover:bg-gray-700"}`
+                    }`}
                     title="Dislike"
                   >
                     <FiThumbsDown size={16} />
@@ -216,7 +304,7 @@ const ChatMessageArea = ({ messages = [] }) => {
             {message.sender === "user" && (
               <div className="flex-shrink-0">
                 <div
-                  className={`w-9 h-9 rounded-full ${theme.isDark ? "bg-blue-600" : "bg-gray-700"} flex items-center justify-center ${theme.isDark ? "text-gray-50" : "text-white"} font-bold text-sm`}
+                  className={`w-9 h-9 rounded-full ${theme.isDark ? "bg-gray-800" : "bg-gray-700"} flex items-center justify-center ${theme.isDark ? "text-white" : "text-white"} font-bold text-sm`}
                 >
                   S
                 </div>

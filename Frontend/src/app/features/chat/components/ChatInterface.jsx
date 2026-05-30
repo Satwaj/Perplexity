@@ -48,8 +48,8 @@ const ChatInterface = () => {
         {/* Messages - Pass messages from Redux */}
         <ChatMessageArea messages={formattedMessages} />
 
-        {/* Input */}
-        <ChatInput />
+        {/* Input - Pass hasMessages flag */}
+        <ChatInput hasMessages={messages.length > 0} />
       </div>
     </div>
   );

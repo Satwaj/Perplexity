@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FiArrowUp,
   FiGlobe,
@@ -8,9 +8,15 @@ import {
   FiSun,
 } from "react-icons/fi";
 import { useTheme } from "../../../context/ThemeContext";
+import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import UserDetailsModal from "./UserDetailsModal";
 
 const ChatNavbar = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth || {});
+  const [showUserModal, setShowUserModal] = useState(false);
 
   return (
     <div
@@ -36,7 +42,8 @@ const ChatNavbar = () => {
       {/* Right Side - Actions */}
       <div className="flex items-center gap-3">
         <button
-          className={`px-4 py-2 ${theme.button.primary} text-white rounded-lg font-medium transition-all hover:shadow-md flex items-center gap-2`}
+          onClick={() => navigate("/pricing")}
+          className={`px-4 py-2 ${theme.button.primary} text-white rounded-lg font-medium transition-all hover:shadow-md hover:scale-95 flex items-center gap-2`}
         >
           <FiArrowUp size={16} />
           Upgrade to Pro
@@ -52,7 +59,9 @@ const ChatNavbar = () => {
           <FiVolume2 size={18} />
         </button>
         <button
-          className={`w-9 h-9 rounded-lg ${theme.border.primary} border ${theme.text.tertiary} hover:${theme.bg.tertiary} flex items-center justify-center transition-colors`}
+          onClick={() => setShowUserModal(true)}
+          className={`w-9 h-9 rounded-lg ${theme.border.primary} border ${theme.text.tertiary} hover:${theme.bg.tertiary} flex items-center justify-center transition-colors hover:scale-95`}
+          title="View profile"
         >
           <FiUser size={18} />
         </button>
@@ -63,6 +72,13 @@ const ChatNavbar = () => {
           title="Toggle dark mode"
         >
           {theme.isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
+
+          {/* User Details Modal */}
+          <UserDetailsModal
+            isOpen={showUserModal}
+            onClose={() => setShowUserModal(false)}
+            user={user}
+          />
         </button>
       </div>
     </div>

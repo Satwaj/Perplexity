@@ -13,26 +13,26 @@ export const ThemeProvider = ({ children }) => {
     isDark,
     toggleTheme,
     bg: {
-      primary: isDark ? "bg-gray-900" : "bg-gray-50",
-      secondary: isDark ? "bg-gray-800" : "bg-white",
-      tertiary: isDark ? "bg-gray-700" : "bg-gray-100",
+      primary: isDark ? "bg-black" : "bg-stone-50",
+      secondary: isDark ? "bg-gray-950" : "bg-stone-100",
+      tertiary: isDark ? "bg-gray-900" : "bg-stone-200",
     },
     text: {
-      primary: isDark ? "text-gray-50" : "text-gray-900",
-      secondary: isDark ? "text-gray-300" : "text-gray-700",
+      primary: isDark ? "text-white" : "text-gray-900",
+      secondary: isDark ? "text-gray-200" : "text-gray-700",
       tertiary: isDark ? "text-gray-400" : "text-gray-600",
     },
     border: {
-      primary: isDark ? "border-gray-700" : "border-gray-200",
-      secondary: isDark ? "border-gray-600" : "border-gray-100",
+      primary: isDark ? "border-gray-800" : "border-gray-200",
+      secondary: isDark ? "border-gray-700" : "border-gray-100",
     },
     button: {
       primary: isDark
-        ? "bg-gray-700 hover:bg-gray-600"
+        ? "bg-gray-800 hover:bg-gray-700"
         : "bg-gray-800 hover:bg-gray-900",
       secondary: isDark
-        ? "bg-gray-700 hover:bg-gray-600"
-        : "bg-white border border-gray-200 hover:bg-gray-100",
+        ? "bg-gray-900 hover:bg-gray-800"
+        : "bg-stone-100 border border-gray-200 hover:bg-stone-200",
     },
   };
 

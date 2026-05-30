@@ -5,7 +5,7 @@ import { useTheme } from "../../../context/ThemeContext";
 import { useChat } from "../hooks/useChat";
 import { useSelector } from "react-redux";
 
-const ChatInput = ({ onSendMessage }) => {
+const ChatInput = ({ onSendMessage, hasMessages = false }) => {
   const currentChatId = useSelector((state) => state.chat.currentChatId);
   const { handleSendmessage } = useChat();
 
@@ -39,16 +39,23 @@ const ChatInput = ({ onSendMessage }) => {
     <div
       className={`px-6 py-6 ${theme.bg.primary} ${theme.border.primary} border-t transition-colors duration-200`}
     >
-      {/* Tool Buttons */}
-      <ChatToolButtons
-        selectedTools={selectedTools}
-        onToolSelect={handleToolSelect}
-      />
+      {/* Tool Buttons - Hidden when there are messages */}
+      {!hasMessages && (
+        <>
+          <ChatToolButtons
+            selectedTools={selectedTools}
+            onToolSelect={handleToolSelect}
+          />
+          <div className="mt-10"></div>
+        </>
+      )}
 
       {/* Input Section */}
-      <div className="mt-4 space-y-3">
+      <div
+        className={`space-y-8 ${!hasMessages ? "" : "flex flex-col h-full justify-end"}`}
+      >
         <div
-          className={`flex items-end gap-3 p-3 ${theme.bg.secondary} rounded-xl ${theme.border.primary} border focus-within:${theme.border.primary === "border-gray-200" ? "focus-within:border-gray-400" : "focus-within:border-gray-500"} focus-within:shadow-md transition-all`}
+          className={`flex items-end gap-8 p-8 ${theme.bg.secondary} rounded-xl ${theme.border.primary} border focus-within:${theme.border.primary === "border-gray-200" ? "focus-within:border-gray-400" : "focus-within:border-gray-500"} focus-within:shadow-md transition-all`}
         >
           <textarea
             value={message}
@@ -56,7 +63,7 @@ const ChatInput = ({ onSendMessage }) => {
             onKeyPress={handleKeyPress}
             placeholder="Ask anything..."
             rows="1"
-            className={`flex-1 ${theme.bg.secondary} outline-none ${theme.text.primary} placeholder-${theme.isDark ? "gray-500" : "gray-400"} resize-none font-medium`}
+            className={`flex-3 ${theme.bg.secondary} outline-none ${theme.text.primary} placeholder-${theme.isDark ? "gray-500" : "gray-400"} resize-none font-medium`}
           />
           <button
             onClick={handleSendMessage}

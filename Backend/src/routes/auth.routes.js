@@ -45,4 +45,13 @@ authRouter.get("/get-me",authUser,getMe)
 
 authRouter.get("/verify-email",verifyEmail)
 
+// /**
+//  * @route POST /api/auth/logout
+//  * @desc Logout user by clearing the token cookie
+//  * @access Private
+//  * @header { Authorization: "Bearer <token>" }
+//  */ 
+// authRouter.post("/logout",authUser,logout)
+
+
 export default authRouter

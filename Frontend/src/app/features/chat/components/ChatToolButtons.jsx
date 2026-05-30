@@ -60,14 +60,16 @@ const ChatToolButtons = ({ selectedTools, onToolSelect }) => {
           className={`p-3 rounded-lg border-2 transition-all transform hover:-translate-y-1 ${
             selectedTools.includes(tool.id)
               ? `${theme.button.primary} border-${theme.isDark ? "gray-700" : "gray-800"} text-white shadow-md`
-              : `${theme.bg.secondary} ${theme.border.primary} border-2 ${theme.text.secondary} ${theme.isDark ? "hover:border-gray-600 hover:bg-gray-700" : "hover:border-gray-400 hover:bg-gray-50"}`
+              : `${theme.bg.secondary} ${theme.border.primary} border-2 ${theme.text.secondary} ${theme.isDark ? "hover:border-gray-600 hover:bg-gray-700" : "hover:border-gray-400 hover:bg-stone-100"}`
           }`}
           title={tool.description}
         >
           <div className="flex flex-col items-center gap-1">
             <span
               className={
-                selectedTools.includes(tool.id) ? "text-white" : "text-blue-500"
+                selectedTools.includes(tool.id)
+                  ? "text-white"
+                  : theme.text.secondary
               }
             >
               {tool.icon}

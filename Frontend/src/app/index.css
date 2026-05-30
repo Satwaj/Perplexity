@@ -8,3 +8,13 @@ body {
 .app-page-bg {
 	background: linear-gradient(135deg, #8897ae 0%, #a8b2c0 52%, #7f92ab 100%);
 }
+
+/* Hide scrollbar while keeping functionality */
+.scrollbar-hide {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
+}

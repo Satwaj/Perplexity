@@ -4,6 +4,7 @@ import Register from "./features/auth/pages/Register";
 import Dashboard from "./features/chat/pages/Dashboard";
 import Protected from "./features/chat/components/Protected";
 import { ChatInterface } from "./features/chat/components";
+import Pricing from "./features/pricing/pages/Pricing";
 
 export const router = createBrowserRouter([
   {
@@ -15,15 +16,18 @@ export const router = createBrowserRouter([
     element: <Register />,
   },
   {
+    path: "/pricing",
+    element: <Pricing />,
+  },
+  {
     path: "/",
     element: (
       <Protected>
-       <ChatInterface/>
+        <ChatInterface />
       </Protected>
     ),
   },
-  
-  
+
   {
     path: "/dashboard",
     element: <Navigate to="/" replace />,
