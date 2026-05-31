@@ -1,11 +1,34 @@
 import React, { useState } from "react";
 import { FiCopy, FiThumbsUp, FiThumbsDown } from "react-icons/fi";
+import { GiSwordman } from "react-icons/gi";
 import { useTheme } from "../../../context/ThemeContext";
+import { useNavigate } from "react-router";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+// Add arena promotion animation
+const arenaPromotionStyles = `
+  @keyframes slide-in-out {
+    0% { transform: translateX(-100%); opacity: 0; }
+    10% { transform: translateX(0); opacity: 1; }
+    90% { transform: translateX(0); opacity: 1; }
+    100% { transform: translateX(100%); opacity: 0; }
+  }
+  .arena-slide {
+    animation: slide-in-out 5s ease-in-out infinite;
+  }
+  @keyframes pulse-subtle {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  .arena-icon-pulse {
+    animation: pulse-subtle 2s ease-in-out infinite;
+  }
+`;
+
 const ChatMessageArea = ({ messages = [] }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [likedMessages, setLikedMessages] = useState(new Set());
   const [dislikedMessages, setDislikedMessages] = useState(new Set());
@@ -146,8 +169,43 @@ const ChatMessageArea = ({ messages = [] }) => {
   if (messages.length === 0) {
     return (
       <div
-        className={`flex-1 flex flex-col items-center justify-center px-6 py-12 transition-colors duration-200`}
+        className={`flex-1 flex flex-col items-center justify-center px-6 py-12 transition-colors duration-200 relative overflow-hidden`}
       >
+        <style>{arenaPromotionStyles}</style>
+
+        {/* Animated Arena Promotion Banner */}
+        <div
+          onClick={() => navigate("/battle")}
+          className={`absolute top-12 left-0 right-0 cursor-pointer px-4`}
+        >
+          <div
+            className={`flex items-center gap-3 p-4 rounded-lg transition-all hover:shadow-lg ${
+              theme.isDark
+                ? "bg-slate-700 hover:bg-slate-600 border border-slate-600"
+                : "bg-slate-300 hover:bg-slate-400 border border-slate-400"
+            }`}
+          >
+            <div className="arena-icon-pulse flex-shrink-0">
+              <GiSwordman
+                size={24}
+                className={theme.isDark ? "text-gray-200" : "text-gray-800"}
+              />
+            </div>
+            <div className="arena-slide flex-1">
+              <p
+                className={`font-bold text-sm ${theme.isDark ? "text-gray-100" : "text-gray-900"}`}
+              >
+                ⚔️ Try the New Arena Battle Feature!
+              </p>
+              <p
+                className={`text-xs ${theme.isDark ? "text-gray-300" : "text-gray-700"}`}
+              >
+                Compare AI solutions side-by-side →
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="text-center max-w-2xl">
           <h1 className={`text-5xl font-bold ${theme.text.primary} mb-4`}>
             Good Evening,{" "}

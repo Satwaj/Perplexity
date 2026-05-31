@@ -3,10 +3,6 @@ import { useSelector } from "react-redux";
 import {
   FiPlus,
   FiMessageSquare,
-  FiFolder,
-  FiBox,
-  FiTool,
-  FiSettings,
   FiChevronRight,
   FiTrash2,
   FiZap,
@@ -17,6 +13,17 @@ import { useChat } from "../hooks/useChat";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import UserDetailsModal from "./UserDetailsModal";
+
+// Add animation styles
+const arenaAnimationStyles = `
+  @keyframes subtle-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(100, 116, 139, 0.3); }
+    50% { box-shadow: 0 0 0 6px rgba(100, 116, 139, 0); }
+  }
+  .arena-pulse {
+    animation: subtle-pulse 3s infinite;
+  }
+`;
 
 const ChatSidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -57,11 +64,9 @@ const ChatSidebar = () => {
       icon: <GiSwordman size={20} />,
       label: "Arena",
       action: () => navigate("/battle"),
+      highlight: true,
+      description: "Compare AI solutions side-by-side",
     },
-    { icon: <FiFolder size={20} />, label: "Projects" },
-    { icon: <FiBox size={20} />, label: "Artifacts" },
-    { icon: <FiTool size={20} />, label: "Tools" },
-    { icon: <FiSettings size={20} />, label: "Settings" },
   ];
 
   return (
@@ -96,18 +101,51 @@ const ChatSidebar = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-3">
+      <nav className="flex-1 p-3 space-y-2">
+        <style>{arenaAnimationStyles}</style>
         {navigationItems.map((item, index) => (
-          <button
-            key={index}
-            onClick={item.action}
-            className={`w-full flex items-center gap-3 px-3 py-2 ${theme.text.secondary} rounded-lg transition-colors ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`}
-          >
-            <span className={theme.text.tertiary}>{item.icon}</span>
-            {!isCollapsed && (
-              <span className="text-sm font-medium">{item.label}</span>
+          <div key={index}>
+            <button
+              onClick={item.action}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all relative ${
+                item.highlight
+                  ? `${theme.isDark ? "bg-slate-700 hover:bg-slate-600" : "bg-slate-200 hover:bg-slate-300"} ${theme.isDark ? "text-gray-100" : "text-gray-900"} font-bold arena-pulse`
+                  : `${theme.text.secondary} ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`
+              }`}
+              title={item.description}
+            >
+              <span
+                className={
+                  item.highlight
+                    ? theme.isDark
+                      ? "text-gray-100"
+                      : "text-gray-900"
+                    : theme.text.tertiary
+                }
+              >
+                {item.icon}
+              </span>
+              {!isCollapsed && (
+                <span className="text-sm font-medium">{item.label}</span>
+              )}
+              {item.highlight && !isCollapsed && (
+                <span
+                  className={`ml-auto text-xs px-2 py-0.5 rounded-full font-semibold ${
+                    theme.isDark
+                      ? "bg-slate-600 text-gray-100"
+                      : "bg-slate-400 text-white"
+                  }`}
+                >
+                  NEW
+                </span>
+              )}
+            </button>
+            {item.highlight && !isCollapsed && (
+              <p className={`text-xs ${theme.text.tertiary} px-3 py-1 ml-1`}>
+                {item.description}
+              </p>
             )}
-          </button>
+          </div>
         ))}
       </nav>
 
@@ -159,7 +197,7 @@ const ChatSidebar = () => {
                     }`}
                     title="Delete chat"
                   >
-                    <FiTrash2 size={16} className="text-red-500" />
+                    <FiTrash2 size={16} className="text-red-300" />
                   </button>
                 </div>
               ))
