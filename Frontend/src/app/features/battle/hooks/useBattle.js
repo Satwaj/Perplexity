@@ -8,6 +8,7 @@ import {
   deleteBattle as deleteBattleAction,
 } from "../battle.slice";
 import { startBattle, getBattles, deleteBattle } from "../service/battle.api";
+import { useCallback } from "react";
 
 export const useBattle = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,7 @@ export const useBattle = () => {
     }
   };
 
-  const handleGetBattles = async () => {
+  const handleGetBattles = useCallback(async () => {
     dispatch(setLoading(true));
     dispatch(setError(null));
     try {
@@ -49,7 +50,7 @@ export const useBattle = () => {
     } finally {
       dispatch(setLoading(false));
     }
-  };
+  }, [dispatch]);
 
   const handleOpenBattle = (battle) => {
     if (battle === null) {

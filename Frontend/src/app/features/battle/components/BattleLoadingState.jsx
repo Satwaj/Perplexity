@@ -58,7 +58,7 @@ export const BattleLoadingState = () => {
             <div className="space-y-2">
               <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 h-full rounded-full"
+                  className="bg-linear-to-r from-blue-500 via-purple-500 to-blue-500 h-full rounded-full"
                   style={{
                     width: "100%",
                     animation: "shimmer 2s infinite",

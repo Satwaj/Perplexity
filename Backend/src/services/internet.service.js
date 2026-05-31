@@ -10,7 +10,5 @@ export const searchInternet = async ({ query }) => {
         maxResults: 5,
     })
 
-    // console.log(JSON.stringify(results))
-
     return JSON.stringify(results)
 }

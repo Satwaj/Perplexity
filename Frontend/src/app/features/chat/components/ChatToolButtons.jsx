@@ -52,19 +52,19 @@ const ChatToolButtons = ({ selectedTools, onToolSelect }) => {
   ];
 
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+    <div className="grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3">
       {tools.map((tool) => (
         <button
           key={tool.id}
           onClick={() => onToolSelect(tool.id)}
-          className={`p-3 rounded-lg border-2 transition-all transform hover:-translate-y-1 ${
+          className={`p-2 md:p-3 rounded-lg border-2 transition-all transform hover:-translate-y-1 ${
             selectedTools.includes(tool.id)
               ? `${theme.button.primary} border-${theme.isDark ? "gray-700" : "gray-800"} text-white shadow-md`
               : `${theme.bg.secondary} ${theme.border.primary} border-2 ${theme.text.secondary} ${theme.isDark ? "hover:border-gray-600 hover:bg-gray-700" : "hover:border-gray-400 hover:bg-stone-100"}`
           }`}
           title={tool.description}
         >
-          <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center gap-0.5 md:gap-1">
             <span
               className={
                 selectedTools.includes(tool.id)
@@ -78,7 +78,7 @@ const ChatToolButtons = ({ selectedTools, onToolSelect }) => {
               {tool.label}
             </span>
             <span
-              className={`text-xs hidden sm:block ${selectedTools.includes(tool.id) ? "text-white" : theme.text.tertiary}`}
+              className={`text-xs hidden md:block ${selectedTools.includes(tool.id) ? "text-white" : theme.text.tertiary}`}
             >
               {tool.description.split(" ")[0]}
             </span>

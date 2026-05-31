@@ -60,7 +60,7 @@ export const BattleHistory = ({
                     {battle.problem}
                   </p>
                   <div className="flex items-center gap-2 mt-2">
-                    <span className="text-xs px-2 py-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded">
+                    <span className="text-xs px-2 py-1 bg-linear-to-r from-amber-500 to-yellow-500 text-white rounded">
                       🏆 {winnerName}
                     </span>
                     <span className={`text-xs ${theme.text.tertiary}`}>

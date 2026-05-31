@@ -37,7 +37,7 @@ const ChatInput = ({ onSendMessage, hasMessages = false }) => {
 
   return (
     <div
-      className={`px-6 py-6 ${theme.bg.primary} ${theme.border.primary} border-t transition-colors duration-200`}
+      className={`px-3 md:px-6 py-4 md:py-6 ${theme.bg.primary} ${theme.border.primary} border-t transition-colors duration-200`}
     >
       {/* Tool Buttons - Hidden when there are messages */}
       {!hasMessages && (
@@ -46,16 +46,16 @@ const ChatInput = ({ onSendMessage, hasMessages = false }) => {
             selectedTools={selectedTools}
             onToolSelect={handleToolSelect}
           />
-          <div className="mt-10"></div>
+          <div className="mt-6 md:mt-10"></div>
         </>
       )}
 
       {/* Input Section */}
       <div
-        className={`space-y-8 ${!hasMessages ? "" : "flex flex-col h-full justify-end"}`}
+        className={`space-y-4 md:space-y-8 ${!hasMessages ? "" : "flex flex-col h-full justify-end"}`}
       >
         <div
-          className={`flex items-end gap-8 p-8 ${theme.bg.secondary} rounded-xl ${theme.border.primary} border focus-within:${theme.border.primary === "border-gray-200" ? "focus-within:border-gray-400" : "focus-within:border-gray-500"} focus-within:shadow-md transition-all`}
+          className={`flex items-end gap-3 md:gap-8 p-3 md:p-8 ${theme.bg.secondary} rounded-xl ${theme.border.primary} border focus-within:${theme.border.primary === "border-gray-200" ? "focus-within:border-gray-400" : "focus-within:border-gray-500"} focus-within:shadow-md transition-all`}
         >
           <textarea
             value={message}
@@ -63,21 +63,21 @@ const ChatInput = ({ onSendMessage, hasMessages = false }) => {
             onKeyPress={handleKeyPress}
             placeholder="Ask anything..."
             rows="1"
-            className={`flex-3 ${theme.bg.secondary} outline-none ${theme.text.primary} placeholder-${theme.isDark ? "gray-500" : "gray-400"} resize-none font-medium`}
+            className={`flex-3 text-sm md:text-base ${theme.bg.secondary} outline-none ${theme.text.primary} placeholder-${theme.isDark ? "gray-500" : "gray-400"} resize-none font-medium`}
           />
           <button
             onClick={handleSendMessage}
             disabled={!message.trim()}
-            className={`flex-shrink-0 w-10 h-10 rounded-lg ${theme.button.primary} text-white flex items-center justify-center disabled:opacity-50 transition-all hover:shadow-md`}
+            className={`shrink-0 w-9 md:w-10 h-9 md:h-10 rounded-lg ${theme.button.primary} text-white flex items-center justify-center disabled:opacity-50 transition-all hover:shadow-md`}
           >
-            <FiSend size={18} />
+            <FiSend size={16} />
           </button>
         </div>
 
         {/* Model Selector */}
         <div className="flex justify-between items-center px-2">
           <select
-            className={`px-3 py-1 ${theme.bg.secondary} ${theme.border.primary} border rounded-lg text-sm ${theme.text.secondary} cursor-pointer transition-colors`}
+            className={`px-2 md:px-3 py-1 text-xs md:text-sm ${theme.bg.secondary} ${theme.border.primary} border rounded-lg ${theme.text.secondary} cursor-pointer transition-colors`}
           >
             <option>Sonnet 4.6</option>
             <option>Claude 3 Opus</option>

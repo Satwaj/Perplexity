@@ -41,8 +41,6 @@ const agent = createReactAgent({
 
 
 export async function generateResponse(messages) {
-    // console.log(messages)
-
     const response = await agent.invoke({
         messages: [
             new SystemMessage(`

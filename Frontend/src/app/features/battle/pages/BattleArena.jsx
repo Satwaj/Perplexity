@@ -4,10 +4,14 @@ import { useNavigate } from "react-router";
 import { BattleInputSection, SolutionCard, JudgeResult } from "../components";
 import { useBattle } from "../hooks/useBattle";
 import { FiTrash2 } from "react-icons/fi";
+import { GiCrossedSwords } from "react-icons/gi";
+import { MdLightbulb, MdEmojiEvents } from "react-icons/md";
+import { HiMenu, HiX } from "react-icons/hi";
 
 const BattleArena = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const {
     battles,
     currentBattle,
@@ -20,29 +24,55 @@ const BattleArena = () => {
 
   useEffect(() => {
     handleGetBattles();
-  }, []);
+  }, [handleGetBattles]);
+
+  // Close sidebar when battle is opened
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [currentBattle]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 18) return "Good afternoon";
-    return "Good evening";
+    if (hour >= 5 && hour < 12) return "Good morning";
+    if (hour >= 12 && hour < 17) return "Good afternoon";
+    if (hour >= 17 && hour < 21) return "Good evening";
+    return "Good night";
   };
 
   const bgColor = theme.isDark ? "bg-slate-900" : "bg-white";
   const sidebarColor = theme.isDark ? "bg-slate-900" : "bg-white";
-  const accentColor = theme.isDark ? "bg-slate-800" : "bg-white";
-  const accentBorder = theme.isDark ? "border-slate-700" : "border-gray-200";
 
   return (
-    <div className={`h-screen flex ${bgColor} transition-colors duration-200`}>
+    <div
+      className={`h-screen flex ${bgColor} transition-colors duration-200 relative`}
+    >
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-30"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <div
-        className={`w-72 ${sidebarColor} ${theme.isDark ? "border-slate-700" : "border-gray-200"} border-r flex flex-col overflow-hidden`}
+        className={`fixed md:static w-72 h-screen md:h-auto ${sidebarColor} ${theme.isDark ? "border-slate-700" : "border-gray-200"} border-r flex flex-col overflow-hidden transition-transform duration-300 z-40 md:z-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
       >
+        {/* Close Button - Mobile Only */}
+        <button
+          onClick={() => setSidebarOpen(false)}
+          className="md:hidden absolute top-4 right-4 p-2 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg"
+        >
+          <HiX
+            size={24}
+            className={theme.isDark ? "text-white" : "text-black"}
+          />
+        </button>
         {/* Greeting & New Battle */}
         <div
-          className={`p-8 space-y-6 ${theme.isDark ? "border-slate-700" : "border-gray-200"} border-b flex-shrink-0`}
+          className={`p-8 pt-16 md:pt-8 space-y-6 ${theme.isDark ? "border-slate-700" : "border-gray-200"} border-b shrink-0`}
         >
           <div className="space-y-2">
             <p
@@ -142,7 +172,7 @@ const BattleArena = () => {
 
         {/* Back to Chat */}
         <div
-          className={`p-6 ${theme.isDark ? "border-slate-700" : "border-gray-200"} border-t flex-shrink-0`}
+          className={`p-6 ${theme.isDark ? "border-slate-700" : "border-gray-200"} border-t shrink-0`}
         >
           <button
             onClick={() => navigate("/")}
@@ -158,10 +188,28 @@ const BattleArena = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden w-full">
+        {/* Mobile Header */}
+        <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
+          >
+            <HiMenu
+              size={24}
+              className={theme.isDark ? "text-white" : "text-black"}
+            />
+          </button>
+          <h1
+            className={`font-bold ${theme.isDark ? "text-white" : "text-black"}`}
+          >
+            AI Model Arena
+          </h1>
+          <div className="w-10" /> {/* Spacer */}
+        </div>
         {/* Input Area */}
         <div
-          className={`${theme.isDark ? "bg-slate-800 border-slate-700" : "bg-white border-gray-200"} border-b p-8 flex-shrink-0 shadow-sm`}
+          className={`${theme.isDark ? "bg-slate-800 border-slate-700" : "bg-white border-gray-200"} border-b p-4 md:p-8 shrink-0 shadow-sm`}
         >
           <BattleInputSection
             onStartBattle={handleStartBattle}
@@ -171,69 +219,54 @@ const BattleArena = () => {
 
         {/* Results Area */}
         <div
-          className={`flex-1 overflow-y-auto p-12 ${theme.isDark ? "bg-slate-900" : "bg-white"}`}
+          className={`flex-1 overflow-y-auto p-4 md:p-12 ${theme.isDark ? "bg-slate-900" : "bg-white"}`}
         >
           {!currentBattle ? (
-            <div className="h-full flex items-center justify-center">
-              <div
-                className={`text-center space-y-6 max-w-lg ${accentColor} ${accentBorder} border rounded-2xl p-12`}
-              >
-                <div className="space-y-2">
-                  <p className="text-5xl mb-4">⚔️</p>
-                  <h3
-                    className={`text-2xl font-bold ${theme.isDark ? "text-white" : "text-slate-900"}`}
-                  >
-                    Welcome to Arena Battle
-                  </h3>
-                  <p
-                    className={`${theme.isDark ? "text-slate-300" : "text-slate-700"} text-base leading-relaxed`}
-                  >
-                    Compare two powerful AI models head-to-head and see which
-                    one provides the best solution to your question.
-                  </p>
-                </div>
+            <div className="h-full flex items-center justify-center bg-white p-4 md:p-6">
+              <div className="w-full max-w-2xl">
+                {/* Greeting */}
+                <p className="text-xs md:text-sm font-semibold text-black mb-2">
+                  {getGreeting()}, Satwaj
+                </p>
 
-                <div className="space-y-3 text-left">
-                  <div className="flex gap-3">
-                    <span className="text-lg text-gray-700">✓</span>
-                    <p
-                      className={`text-sm ${theme.isDark ? "text-slate-300" : "text-slate-700"}`}
-                    >
-                      <span className="font-semibold">Ask anything</span> -
-                      Enter your question or problem
-                    </p>
+                {/* Hero */}
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-black mb-2 md:mb-3">
+                  Battle Arena
+                </h1>
+                <p className="text-sm md:text-base text-gray-700 mb-6 md:mb-8">
+                  Pit two AI models against each other and judge the winner
+                </p>
+
+                {/* Features Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
+                  <div className="p-3 md:p-4 bg-stone-100 rounded-lg border border-gray-300">
+                    <h3 className="font-bold text-black mb-1 text-xs md:text-sm">
+                      Ask Anything
+                    </h3>
+                    <p className="text-xs text-gray-700">Enter your question</p>
                   </div>
-                  <div className="flex gap-3">
-                    <span className="text-lg text-gray-700">✓</span>
-                    <p
-                      className={`text-sm ${theme.isDark ? "text-slate-300" : "text-slate-700"}`}
-                    >
-                      <span className="font-semibold">Watch the battle</span> -
-                      Two AI models compete for the best answer
-                    </p>
+                  <div className="p-3 md:p-4 bg-stone-100 rounded-lg border border-gray-300">
+                    <h3 className="font-bold text-black mb-1 text-xs md:text-sm">
+                      Watch Battle
+                    </h3>
+                    <p className="text-xs text-gray-700">Models compete</p>
                   </div>
-                  <div className="flex gap-3">
-                    <span className="text-lg text-gray-700">✓</span>
-                    <p
-                      className={`text-sm ${theme.isDark ? "text-slate-300" : "text-slate-700"}`}
-                    >
-                      <span className="font-semibold">See the verdict</span> -
-                      Judge scores and reasoning
-                    </p>
+                  <div className="p-3 md:p-4 bg-stone-100 rounded-lg border border-gray-300">
+                    <h3 className="font-bold text-black mb-1 text-xs md:text-sm">
+                      Judge Winner
+                    </h3>
+                    <p className="text-xs text-gray-700">See the verdict</p>
                   </div>
                 </div>
 
+                {/* CTA Button */}
                 <button
                   onClick={() => {
                     document.querySelector("textarea")?.focus();
                   }}
-                  className={`w-full py-3 px-6 rounded-lg font-semibold transition-all mt-6 ${
-                    theme.isDark
-                      ? "bg-slate-800 hover:bg-slate-700 text-white"
-                      : "bg-slate-100 hover:bg-slate-200 text-slate-900"
-                  }`}
+                  className="w-full py-3 md:py-3 px-4 md:px-6 bg-black hover:bg-gray-800 text-white font-bold rounded-lg transition-all text-sm md:text-base"
                 >
-                  Start Your First Battle
+                  Start Battle
                 </button>
               </div>
             </div>
@@ -258,23 +291,23 @@ const BattleArena = () => {
               </div>
             </div>
           ) : (
-            <div className="w-full mx-auto space-y-10 px-4">
+            <div className="w-full mx-auto space-y-6 md:space-y-10 px-2 md:px-4">
               {/* Problem */}
-              <div className="space-y-3">
+              <div className="space-y-2 md:space-y-3">
                 <p
                   className={`text-xs font-bold ${theme.isDark ? "text-gray-400" : "text-gray-700"} uppercase tracking-widest`}
                 >
                   Question
                 </p>
                 <p
-                  className={`text-xl font-semibold ${theme.isDark ? "text-white" : "text-slate-900"} leading-relaxed`}
+                  className={`text-lg md:text-xl font-semibold ${theme.isDark ? "text-white" : "text-slate-900"} leading-relaxed`}
                 >
                   {currentBattle.problem}
                 </p>
               </div>
 
               {/* Solutions */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12">
                 <SolutionCard
                   aiName="Mistral"
                   solution={currentBattle.solution_1}

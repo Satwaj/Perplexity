@@ -123,7 +123,7 @@ const Pricing = () => {
                     <li key={i} className="flex items-start gap-3">
                       <FiCheck
                         size={20}
-                        className={`flex-shrink-0 mt-1 ${
+                        className={`shrink-0 mt-1 ${
                           theme.isDark ? "text-gray-400" : "text-gray-700"
                         }`}
                       />

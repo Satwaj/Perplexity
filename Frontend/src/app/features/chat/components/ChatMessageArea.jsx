@@ -33,6 +33,14 @@ const ChatMessageArea = ({ messages = [] }) => {
   const [likedMessages, setLikedMessages] = useState(new Set());
   const [dislikedMessages, setDislikedMessages] = useState(new Set());
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return "Good morning";
+    if (hour >= 12 && hour < 17) return "Good afternoon";
+    if (hour >= 17 && hour < 21) return "Good evening";
+    return "Good night";
+  };
+
   const handleCopy = (text, index) => {
     navigator.clipboard.writeText(text);
     setCopiedIndex(index);
@@ -169,57 +177,59 @@ const ChatMessageArea = ({ messages = [] }) => {
   if (messages.length === 0) {
     return (
       <div
-        className={`flex-1 flex flex-col items-center justify-center px-6 py-12 transition-colors duration-200 relative overflow-hidden`}
+        className={`flex-1 flex flex-col items-center justify-center px-4 md:px-6 py-8 md:py-12 transition-colors duration-200 relative overflow-hidden`}
       >
         <style>{arenaPromotionStyles}</style>
 
         {/* Animated Arena Promotion Banner */}
         <div
           onClick={() => navigate("/battle")}
-          className={`absolute top-12 left-0 right-0 cursor-pointer px-4`}
+          className={`absolute top-20 md:top-24 left-0 right-0 cursor-pointer px-3 md:px-4 z-10`}
         >
           <div
-            className={`flex items-center gap-3 p-4 rounded-lg transition-all hover:shadow-lg ${
+            className={`flex items-center gap-2 md:gap-3 p-3 md:p-4 rounded-lg transition-all hover:shadow-lg ${
               theme.isDark
                 ? "bg-slate-700 hover:bg-slate-600 border border-slate-600"
                 : "bg-slate-300 hover:bg-slate-400 border border-slate-400"
             }`}
           >
-            <div className="arena-icon-pulse flex-shrink-0">
+            <div className="arena-icon-pulse shrink-0">
               <GiSwordman
-                size={24}
+                size={20}
                 className={theme.isDark ? "text-gray-200" : "text-gray-800"}
               />
             </div>
-            <div className="arena-slide flex-1">
+            <div className="arena-slide flex-1 min-w-0">
               <p
-                className={`font-bold text-sm ${theme.isDark ? "text-gray-100" : "text-gray-900"}`}
+                className={`font-bold text-xs md:text-sm ${theme.isDark ? "text-gray-100" : "text-gray-900"}`}
               >
-                ⚔️ Try the New Arena Battle Feature!
+                ⚔️ Try Arena Battle!
               </p>
               <p
                 className={`text-xs ${theme.isDark ? "text-gray-300" : "text-gray-700"}`}
               >
-                Compare AI solutions side-by-side →
+                Compare AI solutions →
               </p>
             </div>
           </div>
         </div>
 
-        <div className="text-center max-w-2xl">
-          <h1 className={`text-5xl font-bold ${theme.text.primary} mb-4`}>
-            Good Evening,{" "}
+        <div className="text-center max-w-2xl mt-8 md:mt-32">
+          <h1
+            className={`text-3xl md:text-5xl font-bold ${theme.text.primary} mb-2 md:mb-4`}
+          >
+            {getGreeting()},{" "}
             <span
               className={
                 theme.isDark
                   ? "text-gray-200"
-                  : "bg-gradient-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent"
+                  : "bg-linear-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent"
               }
             >
               Satwaj
             </span>
           </h1>
-          <p className={`text-xl ${theme.text.secondary}`}>
+          <p className={`text-base md:text-xl ${theme.text.secondary}`}>
             How can I help you today?
           </p>
         </div>
@@ -229,21 +239,21 @@ const ChatMessageArea = ({ messages = [] }) => {
 
   return (
     <div
-      className={`flex-1 overflow-y-auto px-6 py-8 transition-colors duration-200 scrollbar-hide`}
+      className={`flex-1 overflow-y-auto px-3 md:px-6 py-4 md:py-8 transition-colors duration-200 scrollbar-hide`}
     >
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="max-w-3xl mx-auto space-y-4 md:space-y-6">
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`flex gap-4 animate-fade-in ${
+            className={`flex gap-2 md:gap-4 animate-fade-in ${
               message.sender === "user" ? "justify-end" : "justify-start"
             }`}
           >
             {/* Avatar */}
             {message.sender === "assistant" && (
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div
-                  className={`w-9 h-9 rounded-full ${theme.isDark ? "bg-gray-700" : "bg-gray-300"} flex items-center justify-center ${theme.isDark ? "text-gray-50" : "text-gray-900"} font-bold text-lg`}
+                  className={`w-8 md:w-9 h-8 md:h-9 rounded-full ${theme.isDark ? "bg-gray-700" : "bg-gray-300"} flex items-center justify-center ${theme.isDark ? "text-gray-50" : "text-gray-900"} font-bold text-lg`}
                 >
                   🤖
                 </div>
@@ -252,10 +262,12 @@ const ChatMessageArea = ({ messages = [] }) => {
 
             {/* Message */}
             <div
-              className={`max-w-2xl ${message.sender === "user" ? "order-2" : ""}`}
+              className={`max-w-xs md:max-w-2xl ${
+                message.sender === "user" ? "order-2" : ""
+              }`}
             >
               <div
-                className={`px-4 py-3 rounded-2xl transition-colors duration-200 ${
+                className={`px-3 md:px-4 py-2 md:py-3 rounded-2xl transition-colors duration-200 text-sm md:text-base ${
                   message.sender === "user"
                     ? theme.isDark
                       ? "bg-gray-800 text-white"
@@ -360,7 +372,7 @@ const ChatMessageArea = ({ messages = [] }) => {
 
             {/* User Avatar */}
             {message.sender === "user" && (
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div
                   className={`w-9 h-9 rounded-full ${theme.isDark ? "bg-gray-800" : "bg-gray-700"} flex items-center justify-center ${theme.isDark ? "text-white" : "text-white"} font-bold text-sm`}
                 >

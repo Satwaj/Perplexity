@@ -22,9 +22,6 @@ const solutionNode = async (state) => {
         groqModel.invoke(state.problem)
     ]);
 
-    console.log("Mistral Response:", mistralResponse);
-    console.log("Groq Response:", groqResponse);
-
     // Extract content from LangChain message objects
     const mistralContent = mistralResponse?.content || mistralResponse?.text || mistralResponse;
     const groqContent = groqResponse?.content || groqResponse?.text || groqResponse;
@@ -63,8 +60,6 @@ Return ONLY valid JSON in this format:
 }
 `);
 
-    console.log("Judge Response:", judgeResponse);
-
     // Extract content from LangChain message objects
     const content =
         typeof judgeResponse.content === "string"
@@ -73,7 +68,6 @@ Return ONLY valid JSON in this format:
             ? judgeResponse.text
             : judgeResponse.content?.[0]?.text || JSON.stringify(judgeResponse);
 
-    console.log("Parsed content:", content);
 
     try {
         const parsed = JSON.parse(content);

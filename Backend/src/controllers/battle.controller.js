@@ -9,10 +9,7 @@ export const battleController = async (req, res) => {
       return res.status(400).json({ error: "Problem is required" });
     }
 
-    console.log("Starting battle with problem:", problem);
-
     const result = await runBattle(problem);
-    console.log("Battle result:", result);
 
     const battle = await battleModel.create({
       problem,

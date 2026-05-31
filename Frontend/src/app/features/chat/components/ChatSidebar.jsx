@@ -217,7 +217,7 @@ const ChatSidebar = () => {
           onClick={() => navigate("/pricing")}
         >
           <div className="flex items-start gap-3">
-            <FiZap className="text-yellow-500 flex-shrink-0 mt-1" size={20} />
+            <FiZap className="text-yellow-500 shrink-0 mt-1" size={20} />
             <div className="flex-1">
               <p className={`text-sm font-bold ${theme.text.primary}`}>
                 Upgrade to Pro

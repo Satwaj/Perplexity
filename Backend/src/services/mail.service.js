@@ -48,7 +48,6 @@ transporter.verify()
     }
 
      const details = await transporter.sendMail(mailOptions)
-     console.log("Email sent successfully",details)
   }
  
 

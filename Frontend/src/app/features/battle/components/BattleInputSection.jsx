@@ -31,7 +31,7 @@ export const BattleInputSection = ({ onStartBattle, loading }) => {
               className={`flex items-start gap-3 ${inputBg} px-6 py-5 rounded-xl border-2 ${theme.isDark ? "border-slate-600" : "border-gray-300"} focus-within:${theme.isDark ? "border-slate-500" : "border-gray-500"} transition-all`}
             >
               <MdOutlineQuestionAnswer
-                className={`text-3xl mt-2 flex-shrink-0 ${iconColor}`}
+                className={`text-3xl mt-2 shrink-0 ${iconColor}`}
               />
               <textarea
                 value={problem}
@@ -48,7 +48,7 @@ export const BattleInputSection = ({ onStartBattle, loading }) => {
           <button
             type="submit"
             disabled={loading || !problem.trim()}
-            className={`flex items-center justify-center gap-2 px-7 py-5 rounded-xl font-bold text-white transition-all flex-shrink-0 shadow-lg hover:shadow-xl transform hover:scale-105 ${
+            className={`flex items-center justify-center gap-2 px-7 py-5 rounded-xl font-bold text-white transition-all shrink-0 shadow-lg hover:shadow-xl transform hover:scale-105 ${
               loading || !problem.trim()
                 ? "bg-gray-800 cursor-not-allowed opacity-100"
                 : "bg-black hover:bg-black"
