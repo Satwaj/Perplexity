@@ -22,9 +22,16 @@ const solutionNode = async (state) => {
         groqModel.invoke(state.problem)
     ]);
 
+    console.log("Mistral Response:", mistralResponse);
+    console.log("Groq Response:", groqResponse);
+
+    // Extract content from LangChain message objects
+    const mistralContent = mistralResponse?.content || mistralResponse?.text || mistralResponse;
+    const groqContent = groqResponse?.content || groqResponse?.text || groqResponse;
+
     return {
-        solution_1: mistralResponse.text,
-        solution_2: groqResponse.text
+        solution_1: typeof mistralContent === 'string' ? mistralContent : JSON.stringify(mistralContent),
+        solution_2: typeof groqContent === 'string' ? groqContent : JSON.stringify(groqContent)
     };
 };
 
@@ -56,16 +63,27 @@ Return ONLY valid JSON in this format:
 }
 `);
 
+    console.log("Judge Response:", judgeResponse);
+
+    // Extract content from LangChain message objects
     const content =
         typeof judgeResponse.content === "string"
             ? judgeResponse.content
-            : judgeResponse.content[0]?.text;
+            : typeof judgeResponse.text === "string"
+            ? judgeResponse.text
+            : judgeResponse.content?.[0]?.text || JSON.stringify(judgeResponse);
 
-    const parsed = JSON.parse(content);
+    console.log("Parsed content:", content);
 
-    return {
-        judge: parsed
-    };
+    try {
+        const parsed = JSON.parse(content);
+        return {
+            judge: parsed
+        };
+    } catch (jsonError) {
+        console.error("JSON Parse Error:", jsonError, "Content was:", content);
+        throw new Error(`Failed to parse judge response: ${jsonError.message}`);
+    }
 };
 
 

@@ -11,6 +11,7 @@ import {
   FiTrash2,
   FiZap,
 } from "react-icons/fi";
+import { GiSwordman } from "react-icons/gi";
 import { useTheme } from "../../../context/ThemeContext";
 import { useChat } from "../hooks/useChat";
 import { useEffect } from "react";
@@ -47,7 +48,16 @@ const ChatSidebar = () => {
   };
 
   const navigationItems = [
-    { icon: <FiMessageSquare size={20} />, label: "Chats" },
+    {
+      icon: <FiMessageSquare size={20} />,
+      label: "Chats",
+      action: () => navigate("/"),
+    },
+    {
+      icon: <GiSwordman size={20} />,
+      label: "Arena",
+      action: () => navigate("/battle"),
+    },
     { icon: <FiFolder size={20} />, label: "Projects" },
     { icon: <FiBox size={20} />, label: "Artifacts" },
     { icon: <FiTool size={20} />, label: "Tools" },
@@ -88,16 +98,16 @@ const ChatSidebar = () => {
       {/* Navigation */}
       <nav className="flex-1 p-3">
         {navigationItems.map((item, index) => (
-          <a
+          <button
             key={index}
-            href="#"
-            className={`flex items-center gap-3 px-3 py-2 ${theme.text.secondary} rounded-lg transition-colors ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`}
+            onClick={item.action}
+            className={`w-full flex items-center gap-3 px-3 py-2 ${theme.text.secondary} rounded-lg transition-colors ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`}
           >
             <span className={theme.text.tertiary}>{item.icon}</span>
             {!isCollapsed && (
               <span className="text-sm font-medium">{item.label}</span>
             )}
-          </a>
+          </button>
         ))}
       </nav>
 

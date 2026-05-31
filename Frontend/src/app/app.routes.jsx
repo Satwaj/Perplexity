@@ -5,6 +5,7 @@ import Dashboard from "./features/chat/pages/Dashboard";
 import Protected from "./features/chat/components/Protected";
 import { ChatInterface } from "./features/chat/components";
 import Pricing from "./features/pricing/pages/Pricing";
+import BattleArena from "./features/battle/pages/BattleArena";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +25,14 @@ export const router = createBrowserRouter([
     element: (
       <Protected>
         <ChatInterface />
+      </Protected>
+    ),
+  },
+  {
+    path: "/battle",
+    element: (
+      <Protected>
+        <BattleArena />
       </Protected>
     ),
   },
