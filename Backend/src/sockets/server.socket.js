@@ -6,7 +6,10 @@ export function initSocket(httpServer){
 
   io = new Server (httpServer,{
     cors:{
-      origin:"http://localhost:5173",
+      origin: [
+        "http://localhost:5173",
+        "https://perplexity-bay.vercel.app"
+      ],
       credentials:true
     }
   })
