@@ -26,6 +26,10 @@ export function useAuth() {
         try {
             dispatch(setLoading(true))
             const data = await login(email, password)
+            // Save token to localStorage
+            if (data.token) {
+                localStorage.setItem('authToken', data.token)
+            }
             dispatch(setUser(data.user))
             return data.user
         } catch (err) {
@@ -50,10 +54,16 @@ export function useAuth() {
         }
     }
 
+    function handleLogout() {
+        localStorage.removeItem('authToken')
+        dispatch(setUser(null))
+    }
+
     return {
         handleRegister,
         handleLogin,
         handleGetMe,
+        handleLogout,
     }
 
 }
