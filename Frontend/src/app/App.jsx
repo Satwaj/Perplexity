@@ -8,15 +8,19 @@ const App = () => {
   const { handleGetMe } = useAuth();
   const [showLoading, setShowLoading] = useState(true);
 
-  useEffect(() => {
-    handleGetMe();
-    // Show loading for at least 2 seconds
-    const timer = setTimeout(() => {
-      setShowLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, [handleGetMe]);
+ useEffect(() => {
+   const init = async () => {
+     try {
+       await handleGetMe();
+     } finally {
+       setShowLoading(false);
+     }
+   };
 
+   init();
+ }, [handleGetMe]);
+
+ 
   return (
     <>
       {showLoading && <Loading />}
