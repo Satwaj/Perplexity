@@ -35,12 +35,22 @@ const mistralModel = new ChatMistralAI({
 })
 
 const agent = createReactAgent({
-    llm: geminiModel,
+    llm: mistralModel,
     tools: [searchInternetTool],
 })
 
 
-export async function generateResponse(messages) {
+export async function generateResponse(messages, emitProgress) {
+    
+    if (emitProgress) {
+        emitProgress({
+            stage: "thinking",
+            progress: 55,
+            message: "Analyzing your question...",
+            timestamp: Date.now()
+        });
+    }
+
     const response = await agent.invoke({
         messages: [
             new SystemMessage(`
@@ -56,6 +66,15 @@ export async function generateResponse(messages) {
                 }
             })) ]
     });
+
+    if (emitProgress) {
+        emitProgress({
+            stage: "generating",
+            progress: 75,
+            message: "Formatting response...",
+            timestamp: Date.now()
+        });
+    }
 
     return response.messages[ response.messages.length - 1 ].text;
 

@@ -1,5 +1,6 @@
 import runBattle from "../services/battle.graph.js";
 import battleModel from "../models/battle.model.js";
+import { getIO } from "../sockets/server.socket.js";
 
 export const battleController = async (req, res) => {
   try {
@@ -9,7 +10,23 @@ export const battleController = async (req, res) => {
       return res.status(400).json({ error: "Problem is required" });
     }
 
-    const result = await runBattle(problem);
+    // Get socket.io instance and emit progress
+    const io = getIO();
+    
+    const emitProgress = (progressData) => {
+      // Broadcast to all connected clients
+      io.emit("battleProgress", progressData);
+    };
+
+    // Emit initial progress
+    emitProgress({
+      stage: "initializing",
+      progress: 5,
+      message: " Starting battle...",
+      timestamp: Date.now()
+    });
+
+    const result = await runBattle(problem, emitProgress);
 
     const battle = await battleModel.create({
       problem,

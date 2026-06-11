@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "../../../context/ThemeContext";
 import { useNavigate } from "react-router";
-import { BattleInputSection, SolutionCard, JudgeResult } from "../components";
+import {
+  BattleInputSection,
+  SolutionCard,
+  JudgeResult,
+  BattleRealProgressLoader,
+} from "../components";
 import { useBattle } from "../hooks/useBattle";
 import { FiTrash2 } from "react-icons/fi";
 import { GiCrossedSwords } from "react-icons/gi";
@@ -271,25 +276,7 @@ const BattleArena = () => {
               </div>
             </div>
           ) : loading ? (
-            <div className="h-full flex items-center justify-center">
-              <div className="space-y-4 text-center">
-                <div
-                  className={`w-10 h-10 border-3 ${theme.isDark ? "border-slate-700 border-t-gray-400" : "border-gray-200 border-t-gray-800"} rounded-full animate-spin mx-auto`}
-                ></div>
-                <div className="space-y-1">
-                  <p
-                    className={`font-semibold ${theme.isDark ? "text-white" : "text-slate-900"}`}
-                  >
-                    Battle in progress...
-                  </p>
-                  <p
-                    className={`text-sm ${theme.isDark ? "text-slate-400" : "text-slate-600"}`}
-                  >
-                    Gathering solutions from AI models
-                  </p>
-                </div>
-              </div>
-            </div>
+            <BattleRealProgressLoader />
           ) : (
             <div className="w-full mx-auto space-y-6 md:space-y-10 px-2 md:px-4">
               {/* Problem */}

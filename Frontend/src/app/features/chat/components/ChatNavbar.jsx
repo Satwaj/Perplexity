@@ -11,6 +11,7 @@ import { useTheme } from "../../../context/ThemeContext";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import UserDetailsModal from "./UserDetailsModal";
+import blinklyLogo from "../../../../assets/blinkly-logo.svg";
 
 const ChatNavbar = () => {
   const theme = useTheme();
@@ -25,7 +26,7 @@ const ChatNavbar = () => {
       {/* Left Side - Blinkly Logo and Brand */}
       <div className="flex items-center gap-4">
         <img
-          src="/blinkly-logo.svg"
+          src={blinklyLogo}
           alt="Blinkly Logo"
           className="w-10 h-10 rounded-lg"
         />

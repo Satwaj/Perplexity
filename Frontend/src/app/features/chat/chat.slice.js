@@ -10,7 +10,13 @@ const chatSlice = createSlice({
     chats:{},
     currentChatId:null,
     isLoading:false,
-    error:null
+    error:null,
+    chatProgress: {
+      stage: null,
+      progress: 0,
+      message: "",
+      timestamp: null,
+    },
      
   },
   reducers:{
@@ -53,10 +59,21 @@ const chatSlice = createSlice({
       if(state.currentChatId === chatId){
         state.currentChatId = null
       }
+    },
+    setChatProgress:(state,action)=>{
+      state.chatProgress = action.payload
+    },
+    resetChatProgress:(state)=>{
+      state.chatProgress = {
+        stage: null,
+        progress: 0,
+        message: "",
+        timestamp: null,
+      }
     }
   }
 
 })
 
-export const {setChats,setCurrentChatId,setLoading,setError, createNewChat, addNewMessage,addMessages,deleteChat } = chatSlice.actions
+export const {setChats,setCurrentChatId,setLoading,setError, createNewChat, addNewMessage,addMessages,deleteChat, setChatProgress, resetChatProgress } = chatSlice.actions
 export default chatSlice.reducer

@@ -5,3 +5,4 @@ export { default as ChatMessageArea } from './ChatMessageArea';
 export { default as ChatInput } from './ChatInput';
 export { default as ChatToolButtons } from './ChatToolButtons';
 export { default as ChatInterface } from './ChatInterface';
+export { ChatProgressLoader } from './ChatProgressLoader';

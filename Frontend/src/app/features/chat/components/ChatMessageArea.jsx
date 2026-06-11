@@ -3,8 +3,10 @@ import { FiCopy, FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 import { GiSwordman } from "react-icons/gi";
 import { useTheme } from "../../../context/ThemeContext";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { ChatProgressLoader } from "./ChatProgressLoader";
 
 // Add arena promotion animation
 const arenaPromotionStyles = `
@@ -32,6 +34,7 @@ const ChatMessageArea = ({ messages = [] }) => {
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [likedMessages, setLikedMessages] = useState(new Set());
   const [dislikedMessages, setDislikedMessages] = useState(new Set());
+  const isLoading = useSelector((state) => state.chat.isLoading);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -382,6 +385,9 @@ const ChatMessageArea = ({ messages = [] }) => {
             )}
           </div>
         ))}
+
+        {/* Show Progress Loader When Loading */}
+        {isLoading && <ChatProgressLoader />}
       </div>
     </div>
   );

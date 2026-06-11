@@ -1,7 +1,8 @@
-import { initializeSocketConnection } from "../service/chat.socket";
+import { initializeSocketConnection, initializeChatSocket, onChatProgress } from "../service/chat.socket";
 import { sendMessage, getChats,getMessages,deleteChat } from "../service/chat.api";
-import { setLoading , setChats ,setCurrentChatId ,setError , createNewChat, addNewMessage,addMessages, deleteChat as deleteChatAction} from "../chat.slice";
+import { setLoading , setChats ,setCurrentChatId ,setError , createNewChat, addNewMessage,addMessages, deleteChat as deleteChatAction, setChatProgress, resetChatProgress } from "../chat.slice";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 
 
@@ -12,9 +13,26 @@ export const useChat = () => {
   
   // Get chats from Redux store
   const chats = useSelector((state) => state.chat.chats);
+  const chatProgress = useSelector((state) => state.chat.chatProgress);
+
+  // Setup socket listener for chat progress
+  useEffect(() => {
+    // Initialize persistent socket for progress tracking
+    initializeChatSocket();
+
+    const unsubscribe = onChatProgress((progressData) => {
+      dispatch(setChatProgress(progressData));
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [dispatch]);
 
    async function handleSendmessage({message, chatId}){
    dispatch(setLoading(true))
+   dispatch(resetChatProgress())
+   
    const data = await  sendMessage(message, chatId)
    const  {chat, aiMessage} = data
   
@@ -99,14 +117,13 @@ export const useChat = () => {
     }
   }
   
-
-
   return {
     chats,
-  initializeSocketConnection,
-  handleSendmessage,
-  handleGetChats,
-  handleOpenChat,
-  handleDeleteChat
+    chatProgress,
+    initializeSocketConnection,
+    handleSendmessage,
+    handleGetChats,
+    handleOpenChat,
+    handleDeleteChat
   }
 }

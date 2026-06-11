@@ -15,16 +15,42 @@ const state = new StateSchema({
     })
 });
 
-const solutionNode = async (state) => {
+const solutionNode = async (state, emitProgress) => {
+    if (emitProgress) {
+        emitProgress({
+            stage: "generating",
+            progress: 15,
+            message: " Mistral is thinking...",
+            timestamp: Date.now()
+        });
+    }
 
     const [mistralResponse, groqResponse] = await Promise.all([
         mistralModel.invoke(state.problem),
         groqModel.invoke(state.problem)
     ]);
 
+    if (emitProgress) {
+        emitProgress({
+            stage: "generating",
+            progress: 45,
+            message: " Groq is thinking...",
+            timestamp: Date.now()
+        });
+    }
+
     // Extract content from LangChain message objects
     const mistralContent = mistralResponse?.content || mistralResponse?.text || mistralResponse;
     const groqContent = groqResponse?.content || groqResponse?.text || groqResponse;
+
+    if (emitProgress) {
+        emitProgress({
+            stage: "generating",
+            progress: 60,
+            message: "✅ Both solutions generated!",
+            timestamp: Date.now()
+        });
+    }
 
     return {
         solution_1: typeof mistralContent === 'string' ? mistralContent : JSON.stringify(mistralContent),
@@ -32,7 +58,15 @@ const solutionNode = async (state) => {
     };
 };
 
-const judgeNode = async (state) => {
+const judgeNode = async (state, emitProgress) => {
+    if (emitProgress) {
+        emitProgress({
+            stage: "judging",
+            progress: 70,
+            message: "⚖️ Judge is evaluating solutions...",
+            timestamp: Date.now()
+        });
+    }
 
     const { problem, solution_1, solution_2 } = state;
 
@@ -60,6 +94,15 @@ Return ONLY valid JSON in this format:
 }
 `);
 
+    if (emitProgress) {
+        emitProgress({
+            stage: "judging",
+            progress: 85,
+            message: " Calculating scores...",
+            timestamp: Date.now()
+        });
+    }
+
     // Extract content from LangChain message objects
     const content =
         typeof judgeResponse.content === "string"
@@ -71,6 +114,16 @@ Return ONLY valid JSON in this format:
 
     try {
         const parsed = JSON.parse(content);
+        
+        if (emitProgress) {
+            emitProgress({
+                stage: "complete",
+                progress: 100,
+                message: " Battle complete!",
+                timestamp: Date.now()
+            });
+        }
+        
         return {
             judge: parsed
         };
@@ -84,15 +137,24 @@ Return ONLY valid JSON in this format:
 
 
 
-const graph = new StateGraph(state)
-    .addNode("solution", solutionNode)
-    .addNode("judge_node", judgeNode)
-    .addEdge(START, "solution")
-    .addEdge("solution", "judge_node")
-    .addEdge("judge_node", END)
-    .compile();
+export default async function runBattle(problem, emitProgress = null) {
+    // Create wrapper functions that capture emitProgress
+    const solutionNodeWrapper = async (state) => {
+        return solutionNode(state, emitProgress);
+    };
 
-export default async function runBattle(problem) {
+    const judgeNodeWrapper = async (state) => {
+        return judgeNode(state, emitProgress);
+    };
+
+    // Create graph with wrapper nodes
+    const graph = new StateGraph(state)
+        .addNode("solution", solutionNodeWrapper)
+        .addNode("judge_node", judgeNodeWrapper)
+        .addEdge(START, "solution")
+        .addEdge("solution", "judge_node")
+        .addEdge("judge_node", END)
+        .compile();
 
     const result = await graph.invoke({
         problem

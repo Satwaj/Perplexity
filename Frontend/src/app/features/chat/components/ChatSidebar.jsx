@@ -13,6 +13,7 @@ import { useChat } from "../hooks/useChat";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import UserDetailsModal from "./UserDetailsModal";
+import blinklyLogo from "../../../../assets/blinkly-logo.svg";
 
 // Add animation styles
 const arenaAnimationStyles = `
@@ -81,7 +82,7 @@ const ChatSidebar = () => {
       >
         <div className="flex items-center gap-3 mb-3">
           <img
-            src="/blinkly-logo.svg"
+            src={blinklyLogo}
             alt="Blinkly Logo"
             className="w-8 h-8 rounded-lg"
           />

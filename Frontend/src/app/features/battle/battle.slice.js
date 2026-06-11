@@ -5,6 +5,12 @@ const initialState = {
   battles: {},
   loading: false,
   error: null,
+  battleProgress: {
+    stage: null,
+    progress: 0,
+    message: "",
+    timestamp: null,
+  },
 };
 
 const battleSlice = createSlice({
@@ -51,6 +57,17 @@ const battleSlice = createSlice({
     clearBattle: (state) => {
       state.currentBattle = null;
     },
+    setBattleProgress: (state, action) => {
+      state.battleProgress = action.payload;
+    },
+    resetBattleProgress: (state) => {
+      state.battleProgress = {
+        stage: null,
+        progress: 0,
+        message: "",
+        timestamp: null,
+      };
+    },
   },
 });
 
@@ -62,6 +79,8 @@ export const {
   setCurrentBattle,
   deleteBattle,
   clearBattle,
+  setBattleProgress,
+  resetBattleProgress,
 } = battleSlice.actions;
 
 export default battleSlice.reducer;
