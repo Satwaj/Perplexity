@@ -39,3 +39,7 @@ export async function logout() {
     return response.data
 }
 
+export function getGoogleAuthURL() {
+    return `${baseURL}/api/auth/google`
+}
+

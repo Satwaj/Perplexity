@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
+import { getGoogleAuthURL } from "../services/api.auth";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
 
@@ -50,7 +51,7 @@ const Register = () => {
 
           {/* Google OAuth Button */}
           <a
-            href="http://localhost:3000/api/auth/google"
+            href={getGoogleAuthURL()}
             className="mt-8 flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-600 bg-zinc-900/50 px-4 py-3 font-semibold text-zinc-100 transition hover:bg-zinc-800/70 focus:outline-none focus:shadow-[0_0_0_3px_rgba(49,184,198,0.35)]"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
