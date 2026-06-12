@@ -1,10 +1,13 @@
-import { Router } from "express"
-import {  register,login,getMe,verifyEmail } from "../controllers/auth.controller.js"
+﻿import { Router } from "express"
+import {  register,login,getMe,logout,verifyEmail , googleCallback} from "../controllers/auth.controller.js"
 import { registerValidator, loginValidator } from "../validators/auth.validator.js"
 import { authUser } from "../middlewares/auth.middleware.js"
+import passport from "passport"
+import dotenv from "dotenv"
+import config from "dotenv"
 
 const authRouter = Router()
-
+config.config()
 
 
 /**
@@ -13,9 +16,7 @@ const authRouter = Router()
  * @access Public
  * @body { username, email, password }
  */
-
-
-authRouter.post("/register",registerValidator,register)
+authRouter.post("/register", registerValidator, register)
 
 /**
  * @route POST /api/auth/login
@@ -23,8 +24,7 @@ authRouter.post("/register",registerValidator,register)
  * @access Public
  * @body { email, password }
  */
-
-authRouter.post("/login",loginValidator,login)
+authRouter.post("/login", loginValidator, login)
 
 /** 
  * @route GET /api/auth/get-me
@@ -32,9 +32,15 @@ authRouter.post("/login",loginValidator,login)
  * @access Private
  * @header { Authorization: "Bearer <token>" }
  */
+authRouter.get("/get-me", authUser, getMe)
 
-authRouter.get("/get-me",authUser,getMe)
-
+/**
+ * @route POST /api/auth/logout
+ * @desc Logout user (clear token on client side)
+ * @access Private
+ * @header { Authorization: "Bearer <token>" }
+ */
+authRouter.post("/logout", authUser, logout)
 
 /**
  * @route GET /api/auth/verify-email
@@ -42,16 +48,20 @@ authRouter.get("/get-me",authUser,getMe)
  * @access Public
  * @query { token }
  */
+authRouter.get("/verify-email", verifyEmail)
 
-authRouter.get("/verify-email",verifyEmail)
+/**
+ * @route GET /api/auth/google
+ * @desc Initialize Google OAuth authentication
+ * @access Public
+ */
+authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }))
 
-// /**
-//  * @route POST /api/auth/logout
-//  * @desc Logout user by clearing the token cookie
-//  * @access Private
-//  * @header { Authorization: "Bearer <token>" }
-//  */ 
-// authRouter.post("/logout",authUser,logout)
-
+/**
+ * @route GET /api/auth/google/callback
+ * @desc Google OAuth callback
+ * @access Public
+ */
+authRouter.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login", session: false }), googleCallback)
 
 export default authRouter

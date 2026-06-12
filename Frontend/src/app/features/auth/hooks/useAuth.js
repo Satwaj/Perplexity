@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { register, login, getMe } from "../services/api.auth";
+import { register, login, getMe, logout } from "../services/api.auth";
 import { setUser, setLoading, setError } from "../auth.slice";
 
 
@@ -12,6 +12,10 @@ export function useAuth() {
         try {
             dispatch(setLoading(true))
             const data = await register(email, username, password)
+            // Save token to localStorage
+            if (data.token) {
+                localStorage.setItem('authToken', data.token)
+            }
             dispatch(setUser(data.user))
             return data.user
         } catch (error) {
@@ -33,7 +37,6 @@ export function useAuth() {
             dispatch(setUser(data.user))
             return data.user
         } catch (err) {
-            console.log("Login error full response:", err.response?.data);
             const errorMessage = err.response?.data?.message || err.response?.data?.err || "Login failed";
             dispatch(setError(errorMessage))
             return null
@@ -55,8 +58,14 @@ export function useAuth() {
     }
 
     function handleLogout() {
-        localStorage.removeItem('authToken')
-        dispatch(setUser(null))
+        try {
+            // Call logout endpoint
+            logout().catch(err => console.log("Logout API error:", err.message))
+        } finally {
+            // Clear local storage and Redux state regardless of API response
+            localStorage.removeItem('authToken')
+            dispatch(setUser(null))
+        }
     }
 
     return {

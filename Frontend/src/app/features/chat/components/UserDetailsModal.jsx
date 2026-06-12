@@ -2,18 +2,17 @@ import React from "react";
 import { FiX, FiMail, FiUser, FiZap, FiLogOut } from "react-icons/fi";
 import { useTheme } from "../../../context/ThemeContext";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 const UserDetailsModal = ({ isOpen, onClose, user }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-
-  
+  const { handleLogout } = useAuth();
 
   if (!isOpen) return null;
 
-  const handleLogout = () => {
-    // Clear user data and navigate to login
-    localStorage.removeItem("authToken");
+  const handleLogoutClick = () => {
+    handleLogout();
     navigate("/login");
     onClose();
   };
@@ -26,8 +25,8 @@ const UserDetailsModal = ({ isOpen, onClose, user }) => {
       <div
         className={`${
           theme.isDark
-            ? "bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950"
-            : "bg-gradient-to-br from-stone-50 via-stone-100 to-stone-50"
+            ? "bg-linear-to-br from-gray-950 via-gray-900 to-gray-950"
+            : "bg-linear-to-br from-stone-50 via-stone-100 to-stone-50"
         } rounded-2xl shadow-2xl w-96 ${theme.border.primary} border transition-all`}
         onClick={(e) => e.stopPropagation()}
       >
@@ -35,8 +34,8 @@ const UserDetailsModal = ({ isOpen, onClose, user }) => {
         <div
           className={`flex items-center justify-between p-6 ${
             theme.isDark
-              ? "bg-gradient-to-r from-gray-900 to-gray-800 border-gray-700"
-              : "bg-gradient-to-r from-stone-100 to-stone-50 border-stone-200"
+              ? "bg-linear-to-r from-gray-900 to-gray-800 border-gray-700"
+              : "bg-linear-to-r from-stone-100 to-stone-50 border-stone-200"
           } ${theme.border.primary} border-b rounded-t-2xl`}
         >
           <h2 className={`text-xl font-bold ${theme.text.primary}`}>
@@ -59,8 +58,8 @@ const UserDetailsModal = ({ isOpen, onClose, user }) => {
             <div
               className={`w-20 h-20 rounded-full ${
                 theme.isDark
-                  ? "bg-gradient-to-br from-gray-700 to-gray-800 shadow-lg"
-                  : "bg-gradient-to-br from-stone-300 to-stone-400 shadow-md"
+                  ? "bg-linear-to-br from-gray-700 to-gray-800 shadow-lg"
+                  : "bg-linear-to-br from-stone-300 to-stone-400 shadow-md"
               } flex items-center justify-center ${
                 theme.isDark ? "text-gray-50" : "text-stone-900"
               } font-bold text-3xl border-2 ${theme.border.primary}`}
@@ -178,7 +177,7 @@ const UserDetailsModal = ({ isOpen, onClose, user }) => {
               Upgrade
             </button>
             <button
-              onClick={handleLogout}
+              onClick={handleLogoutClick}
               className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all hover:scale-95 flex items-center justify-center gap-2 ${
                 theme.isDark
                   ? "bg-red-900/50 hover:bg-red-900 text-red-200 border border-red-800"

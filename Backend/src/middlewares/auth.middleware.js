@@ -14,7 +14,11 @@ if(!token && req.headers.authorization) {
 }
 
 if(!token){
-  return next(); // Proceed without auth for now
+  return res.status(401).json({
+    success: false,
+    message: "No token provided",
+    err: "Unauthorized"
+  });
 }
 
 try {
@@ -25,7 +29,11 @@ try {
 
 } catch (error) {
   console.log("Token verification failed:", error.message);
-  return next(); // Proceed without auth for debugging
+  return res.status(401).json({
+    success: false,
+    message: "Invalid or expired token",
+    err: error.message
+  });
 }
 
 }
