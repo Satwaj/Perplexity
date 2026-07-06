@@ -6,6 +6,7 @@ const Login = lazy(() => import("./features/auth/pages/Login"));
 const Register = lazy(() => import("./features/auth/pages/Register"));
 const Pricing = lazy(() => import("./features/pricing/pages/Pricing"));
 const BattleArena = lazy(() => import("./features/battle/pages/BattleArena"));
+const Home = lazy(() => import("./features/home/pages/Home"));
 const ChatInterface = lazy(() =>
   import("./features/chat/components").then((module) => ({
     default: module.ChatInterface,
@@ -42,11 +43,17 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Protected>
-        <Suspense fallback={<Loader />}>
-          <BattleArena />
-        </Suspense>
-      </Protected>
+      <Suspense fallback={<Loader />}>
+        <Home />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/arena",
+    element: (
+      <Suspense fallback={<Loader />}>
+        <BattleArena />
+      </Suspense>
     ),
   },
   {
@@ -61,10 +68,14 @@ export const router = createBrowserRouter([
   },
   {
     path: "/battle",
-    element: <Navigate to="/" replace />,
+    element: <Navigate to="/arena" replace />,
   },
   {
     path: "/dashboard",
+    element: <Navigate to="/" replace />,
+  },
+  {
+    path: "*",
     element: <Navigate to="/" replace />,
   },
 ]);

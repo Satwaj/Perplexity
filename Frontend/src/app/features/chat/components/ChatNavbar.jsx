@@ -39,7 +39,19 @@ const ChatNavbar = ({ setSidebarOpen }) => {
             onClick={() => navigate("/")}
             className="cursor-pointer hover:text-[#1A1C1B] transition-colors"
           >
+            HOME
+          </span>
+          <span
+            onClick={() => navigate("/arena")}
+            className="cursor-pointer hover:text-[#1A1C1B] transition-colors"
+          >
             ARENA
+          </span>
+          <span
+            onClick={() => navigate("/chat")}
+            className="cursor-pointer text-[#1A1C1B] border-b-2 border-black pb-0.5"
+          >
+            CHAT
           </span>
           <span
             onClick={() => navigate("/pricing")}
@@ -51,21 +63,37 @@ const ChatNavbar = ({ setSidebarOpen }) => {
 
         <div className="h-6 w-[2px] bg-[#1A1C1B] hidden sm:block" />
 
-        {/* Profile Avatar Badge */}
-        {user && (
-          <div className="flex items-center gap-2 border-2 border-[#1A1C1B] bg-[#F1F1EF] px-3 py-1.5 font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B]">
-            <FiUser size={13} className="stroke-[2.5]" />
-            <span className="hidden md:inline">{user.fullname || user.username}</span>
+        {/* Profile Section */}
+        {user ? (
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 border-2 border-[#1A1C1B] bg-[#F1F1EF] px-3 py-1.5 font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B]">
+              <FiUser size={13} className="stroke-[2.5]" />
+              <span className="hidden md:inline">{user.fullname || user.username}</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="p-2 rounded-lg hover:bg-red-500/10 text-[#7E7576] hover:text-red-600 transition-colors cursor-pointer"
+              title="Sign out"
+            >
+              <FiLogOut size={16} />
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate("/login")}
+              className="px-3 py-1.5 border-2 border-black bg-white font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer uppercase tracking-wider"
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => navigate("/register")}
+              className="px-3 py-1.5 border-2 border-black bg-[#F5D3B8] font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer uppercase tracking-wider"
+            >
+              Sign Up
+            </button>
           </div>
         )}
-
-        <button
-          onClick={handleLogout}
-          className="p-2 rounded-lg hover:bg-red-500/10 text-[#7E7576] hover:text-red-600 transition-colors cursor-pointer"
-          title="Sign out"
-        >
-          <FiLogOut size={16} />
-        </button>
       </div>
     </div>
   );

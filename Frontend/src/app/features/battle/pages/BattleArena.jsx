@@ -38,9 +38,19 @@ const BattleArena = () => {
   const heroRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
+  const onStartBattleWithAuth = async (problem) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    await handleStartBattle(problem);
+  };
+
   useEffect(() => {
-    handleGetBattles();
-  }, [handleGetBattles]);
+    if (user) {
+      handleGetBattles();
+    }
+  }, [handleGetBattles, user]);
 
   // Auto-scroll to end on new battle or loading status change
   useEffect(() => {
@@ -59,26 +69,14 @@ const BattleArena = () => {
     setSidebarOpen(false);
   }, [currentBattle]);
 
-  // GSAP animation for initial hero state
+  // Instant display without GSAP animation delays
   useEffect(() => {
-    if (!currentBattle && heroRef.current) {
-      gsap.fromTo(
-        heroRef.current.children,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power4.out" }
-      );
-    }
+    // Initial hero render done instantly by React
   }, [currentBattle]);
 
-  // GSAP animation for battle results when loaded
+  // Instant display of battle results when loaded
   useEffect(() => {
-    if (currentBattle && !loading && resultsRef.current) {
-      gsap.fromTo(
-        resultsRef.current.children,
-        { y: 25, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out" }
-      );
-    }
+    // Battle results render instantly by React
   }, [currentBattle, loading]);
 
   const getInitials = (name) => {
@@ -122,7 +120,13 @@ const BattleArena = () => {
         {/* New Chat Button (Peach button matching screenshot) */}
         <div className="p-6 border-b-2 border-[#1A1C1B] shrink-0">
           <button
-            onClick={() => handleOpenBattle(null)}
+            onClick={() => {
+              if (!user) {
+                navigate("/login");
+              } else {
+                handleOpenBattle(null);
+              }
+            }}
             className="w-full flex items-center justify-center gap-3 border-2 border-[#1A1C1B] bg-[#F5D3B8] p-3 text-sm font-black text-[#1A1C1B] shadow-[4px_4px_0px_0px_#1A1C1B] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#1A1C1B] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer"
           >
             <FiPlus size={16} className="stroke-[3]" />
@@ -166,7 +170,11 @@ const BattleArena = () => {
               <span className="text-[10px] font-black uppercase tracking-widest text-[#7E7576] block mb-3 px-1">
                 Past Battles
               </span>
-              {battles.length === 0 ? (
+              {!user ? (
+                <p className="text-xs text-[#7E7576] italic px-1">
+                  Sign in to view battle history.
+                </p>
+              ) : battles.length === 0 ? (
                 <p className="text-xs text-[#7E7576] italic px-1">
                   No battles recorded.
                 </p>
@@ -238,12 +246,21 @@ const BattleArena = () => {
             <button className="flex items-center gap-3 text-xs font-bold text-[#536255] hover:text-[#1A1C1B] transition-colors cursor-pointer text-left">
               <FiHelpCircle size={15} /> Help
             </button>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-3 text-xs font-bold text-[#7E7576] hover:text-red-600 transition-colors cursor-pointer text-left"
-            >
-              <FiLogOut size={15} /> Logout
-            </button>
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-3 text-xs font-bold text-[#7E7576] hover:text-red-600 transition-colors cursor-pointer text-left"
+              >
+                <FiLogOut size={15} /> Logout
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate("/login")}
+                className="flex items-center gap-3 text-xs font-bold text-[#008080] hover:text-[#1A1C1B] transition-colors cursor-pointer text-left"
+              >
+                <FiUser size={15} /> Sign In
+              </button>
+            )}
           </div>
         </div>
       </aside>
@@ -275,16 +292,43 @@ const BattleArena = () => {
 
           <div className="flex items-center gap-6">
             <div className="hidden sm:flex items-center gap-5 text-xs font-black tracking-widest text-[#536255]">
+              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigate("/")}>HOME</span>
+              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors text-[#1A1C1B] border-b-2 border-black pb-0.5">ARENA</span>
               <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigate("/chat")}>CHAT</span>
+              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigate("/pricing")}>PRICING</span>
             </div>
             
             <div className="h-6 w-[2px] bg-[#1A1C1B] hidden sm:block" />
 
-            {/* Profile Avatar Badge */}
-            {user && (
-              <div className="flex items-center gap-2 border-2 border-[#1A1C1B] bg-[#F1F1EF] px-3 py-1.5 font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B]">
-                <FiUser size={13} className="stroke-[2.5]" />
-                <span className="hidden md:inline">{user.fullname || user.username}</span>
+            {/* Profile Section */}
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 border-2 border-[#1A1C1B] bg-[#F1F1EF] px-3 py-1.5 font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B]">
+                  <FiUser size={13} className="stroke-[2.5]" />
+                  <span className="hidden md:inline">{user.fullname || user.username}</span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="p-2 rounded-lg hover:bg-red-500/10 text-[#7E7576] hover:text-red-600 transition-colors cursor-pointer"
+                  title="Sign out"
+                >
+                  <FiLogOut size={16} />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => navigate("/login")}
+                  className="px-3 py-1.5 border-2 border-black bg-white font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer uppercase tracking-wider"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => navigate("/register")}
+                  className="px-3 py-1.5 border-2 border-black bg-[#F5D3B8] font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer uppercase tracking-wider"
+                >
+                  Sign Up
+                </button>
               </div>
             )}
           </div>
@@ -378,7 +422,7 @@ const BattleArena = () => {
             {/* Floating Lower Input Area */}
             <div className="w-full max-w-4xl mx-auto px-6 mb-6">
               <BattleInputSection
-                onStartBattle={handleStartBattle}
+                onStartBattle={onStartBattleWithAuth}
                 loading={loading}
               />
             </div>
