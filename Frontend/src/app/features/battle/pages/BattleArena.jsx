@@ -246,6 +246,59 @@ const BattleArena = () => {
           </button>
         </div>
 
+        {/* Sidebar Navigation Menu (Visible in Mobile and Web View) */}
+        <div className="px-6 py-4 border-b-2 border-[#1A1C1B] flex flex-col gap-2 shrink-0 bg-white/30">
+          <span className="text-[10px] font-black uppercase tracking-widest text-[#7E7576] block mb-1">
+            Navigation Menu
+          </span>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => {
+                setSidebarOpen(false);
+                navigateTo("/");
+              }}
+              className={`flex items-center justify-center gap-1.5 border-2 border-[#1A1C1B] p-2 text-xs font-bold transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+                location.pathname === "/" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+              }`}
+            >
+              Home
+            </button>
+            <button
+              onClick={() => {
+                setSidebarOpen(false);
+                navigateTo("/arena");
+              }}
+              className={`flex items-center justify-center gap-1.5 border-2 border-[#1A1C1B] p-2 text-xs font-bold transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+                location.pathname === "/arena" || location.pathname === "/battle" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+              }`}
+            >
+              Arena
+            </button>
+            <button
+              onClick={() => {
+                setSidebarOpen(false);
+                navigateTo("/chat");
+              }}
+              className={`flex items-center justify-center gap-1.5 border-2 border-[#1A1C1B] p-2 text-xs font-bold transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+                location.pathname === "/chat" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+              }`}
+            >
+              Chat
+            </button>
+            <button
+              onClick={() => {
+                setSidebarOpen(false);
+                navigateTo("/pricing");
+              }}
+              className={`flex items-center justify-center gap-1.5 border-2 border-[#1A1C1B] p-2 text-xs font-bold transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+                location.pathname === "/pricing" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+              }`}
+            >
+              Pricing
+            </button>
+          </div>
+        </div>
+
         {/* Navigation / History section */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           <div className="space-y-3">

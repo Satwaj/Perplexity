@@ -1,14 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { FiUser, FiLogOut, FiTrendingUp, FiCpu, FiMessageSquare, FiCompass, FiShield } from "react-icons/fi";
 import { GiCrossedSwords } from "react-icons/gi";
+import { HiMenu, HiX } from "react-icons/hi";
 import gsap from "gsap";
 
 const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
   const { user } = useSelector((state) => state.auth || {});
   const { handleLogout } = useAuth();
 
@@ -215,6 +217,12 @@ const Home = () => {
       {/* 2. Top Navbar */}
       <nav className="h-16 shrink-0 border-b-2 border-[#1A1C1B] bg-white flex items-center justify-between px-6 md:px-12 z-30 sticky top-0">
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden p-1.5 border-2 border-black bg-white text-black shrink-0 cursor-pointer shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#000]"
+          >
+            {menuOpen ? <HiX size={20} /> : <HiMenu size={20} />}
+          </button>
           <span
             onClick={() => navigateTo("/")}
             className="font-extrabold text-lg tracking-[0.25em] text-[#1A1C1B] uppercase cursor-pointer"
@@ -285,6 +293,59 @@ const Home = () => {
           )}
         </div>
       </nav>
+
+      {/* Mobile Dropdown Menu */}
+      {menuOpen && (
+        <div className="absolute top-16 left-0 right-0 bg-white border-b-2 border-[#1A1C1B] z-40 p-4 md:hidden shadow-[4px_4px_0px_0px_#1A1C1B] flex flex-col gap-2.5">
+          <span className="text-[9px] font-black uppercase tracking-widest text-[#7E7576] px-1 mb-1">
+            Navigation Menu
+          </span>
+          <button
+            onClick={() => {
+              setMenuOpen(false);
+              navigateTo("/");
+            }}
+            className={`w-full text-left border-2 border-[#1A1C1B] p-3 text-xs font-black uppercase tracking-wider transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+              location.pathname === "/" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+            }`}
+          >
+            Home
+          </button>
+          <button
+            onClick={() => {
+              setMenuOpen(false);
+              navigateTo("/arena");
+            }}
+            className={`w-full text-left border-2 border-[#1A1C1B] p-3 text-xs font-black uppercase tracking-wider transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+              location.pathname === "/arena" || location.pathname === "/battle" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+            }`}
+          >
+            Arena
+          </button>
+          <button
+            onClick={() => {
+              setMenuOpen(false);
+              navigateTo("/chat");
+            }}
+            className={`w-full text-left border-2 border-[#1A1C1B] p-3 text-xs font-black uppercase tracking-wider transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+              location.pathname === "/chat" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+            }`}
+          >
+            Chat
+          </button>
+          <button
+            onClick={() => {
+              setMenuOpen(false);
+              navigateTo("/pricing");
+            }}
+            className={`w-full text-left border-2 border-[#1A1C1B] p-3 text-xs font-black uppercase tracking-wider transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+              location.pathname === "/pricing" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+            }`}
+          >
+            Pricing
+          </button>
+        </div>
+      )}
 
       {/* 3. Hero & Workspace */}
       <main className="flex-1 max-w-7xl mx-auto px-6 py-12 md:py-20 flex flex-col justify-center items-center w-full z-10">

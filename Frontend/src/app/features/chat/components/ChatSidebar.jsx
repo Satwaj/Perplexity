@@ -2,14 +2,24 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FiPlus, FiTrash2, FiLogOut, FiHelpCircle } from "react-icons/fi";
 import { HiX } from "react-icons/hi";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useChat } from "../hooks/useChat";
 import { useAuth } from "../../auth/hooks/useAuth";
 
 const ChatSidebar = ({ setSidebarOpen }) => {
   const currentChatId = useSelector((state) => state.chat.currentChatId);
   const navigate = useNavigate();
+  const location = useLocation();
   const { handleLogout } = useAuth();
+
+  const navigateTo = (path, replace = true) => {
+    if (setSidebarOpen) {
+      setSidebarOpen(false);
+    }
+    if (location.pathname !== path) {
+      navigate(path, { replace });
+    }
+  };
 
   const {
     chats,
@@ -64,6 +74,47 @@ const ChatSidebar = ({ setSidebarOpen }) => {
         </button>
       </div>
 
+      {/* Sidebar Navigation Menu (Visible in Mobile and Web View) */}
+      <div className="px-6 py-4 border-b-2 border-[#1A1C1B] flex flex-col gap-2 shrink-0 bg-white/30">
+        <span className="text-[10px] font-black uppercase tracking-widest text-[#7E7576] block mb-1">
+          Navigation Menu
+        </span>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            onClick={() => navigateTo("/")}
+            className={`flex items-center justify-center gap-1.5 border-2 border-[#1A1C1B] p-2 text-xs font-bold transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+              location.pathname === "/" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+            }`}
+          >
+            Home
+          </button>
+          <button
+            onClick={() => navigateTo("/arena")}
+            className={`flex items-center justify-center gap-1.5 border-2 border-[#1A1C1B] p-2 text-xs font-bold transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+              location.pathname === "/arena" || location.pathname === "/battle" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+            }`}
+          >
+            Arena
+          </button>
+          <button
+            onClick={() => navigateTo("/chat")}
+            className={`flex items-center justify-center gap-1.5 border-2 border-[#1A1C1B] p-2 text-xs font-bold transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+              location.pathname === "/chat" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+            }`}
+          >
+            Chat
+          </button>
+          <button
+            onClick={() => navigateTo("/pricing")}
+            className={`flex items-center justify-center gap-1.5 border-2 border-[#1A1C1B] p-2 text-xs font-bold transition-all shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] cursor-pointer ${
+              location.pathname === "/pricing" ? "bg-[#1A1C1B] text-white" : "bg-white text-[#1A1C1B] hover:bg-neutral-50"
+            }`}
+          >
+            Pricing
+          </button>
+        </div>
+      </div>
+
       {/* Chat History List */}
       <div className="flex-1 overflow-y-auto p-6 space-y-2">
         <span className="text-[10px] font-black uppercase tracking-widest text-[#7E7576] block mb-3 px-1">
@@ -116,7 +167,7 @@ const ChatSidebar = ({ setSidebarOpen }) => {
       {/* Sidebar Bottom Upgrade Section */}
       <div className="p-6 border-t-2 border-[#1A1C1B] space-y-4 bg-white/20 shrink-0">
         <button
-          onClick={() => navigate("/pricing")}
+          onClick={() => navigateTo("/pricing", false)}
           className="w-full flex items-center justify-center border-2 border-[#1A1C1B] bg-[#1A1C1B] text-white p-3 text-xs font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_#C5A880] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#C5A880] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_#C5A880] transition-all cursor-pointer"
         >
           Upgrade Plan
