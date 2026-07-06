@@ -13,7 +13,6 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@langchain/community": "^1.1.28",
     "@langchain/core": "^1.1.47",
     "@langchain/google": "^0.1.10",
     "@langchain/google-genai": "^2.1.26",
