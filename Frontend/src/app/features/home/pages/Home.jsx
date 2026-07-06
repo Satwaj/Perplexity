@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { FiUser, FiLogOut, FiTrendingUp, FiCpu, FiMessageSquare, FiCompass, FiShield } from "react-icons/fi";
@@ -8,8 +8,15 @@ import gsap from "gsap";
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useSelector((state) => state.auth || {});
   const { handleLogout } = useAuth();
+
+  const navigateTo = (path, replace = true) => {
+    if (location.pathname !== path) {
+      navigate(path, { replace });
+    }
+  };
   
   const heroRef = useRef(null);
   const cardsRef = useRef(null);
@@ -209,7 +216,7 @@ const Home = () => {
       <nav className="h-16 shrink-0 border-b-2 border-[#1A1C1B] bg-white flex items-center justify-between px-6 md:px-12 z-30 sticky top-0">
         <div className="flex items-center gap-3">
           <span
-            onClick={() => navigate("/")}
+            onClick={() => navigateTo("/")}
             className="font-extrabold text-lg tracking-[0.25em] text-[#1A1C1B] uppercase cursor-pointer"
           >
             ARENA AI
@@ -219,25 +226,25 @@ const Home = () => {
         {/* Center Links */}
         <div className="hidden md:flex items-center gap-8 text-xs font-black tracking-widest text-[#536255]">
           <span
-            onClick={() => navigate("/")}
+            onClick={() => navigateTo("/")}
             className="cursor-pointer text-[#1A1C1B] border-b-2 border-black pb-1 hover:text-[#1A1C1B] transition-colors"
           >
             HOME
           </span>
           <span
-            onClick={() => navigate("/arena")}
+            onClick={() => navigateTo("/arena")}
             className="cursor-pointer hover:text-[#1A1C1B] transition-colors"
           >
             ARENA
           </span>
           <span
-            onClick={() => navigate("/chat")}
+            onClick={() => navigateTo("/chat")}
             className="cursor-pointer hover:text-[#1A1C1B] transition-colors"
           >
             CHAT
           </span>
           <span
-            onClick={() => navigate("/pricing")}
+            onClick={() => navigateTo("/pricing")}
             className="cursor-pointer hover:text-[#1A1C1B] transition-colors"
           >
             PRICING
@@ -263,13 +270,13 @@ const Home = () => {
           ) : (
             <div className="flex items-center gap-2">
               <button
-                onClick={() => navigate("/login")}
+                onClick={() => navigateTo("/login", false)}
                 className="px-3.5 py-1.5 border-2 border-black bg-white font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer uppercase tracking-wider"
               >
                 Sign In
               </button>
               <button
-                onClick={() => navigate("/register")}
+                onClick={() => navigateTo("/register", false)}
                 className="px-3.5 py-1.5 border-2 border-black bg-[#F5D3B8] font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer uppercase tracking-wider"
               >
                 Sign Up
@@ -303,7 +310,7 @@ const Home = () => {
         >
           {/* Card A: Battle Arena */}
           <div
-            onClick={() => navigate("/arena")}
+            onClick={() => navigateTo("/arena", false)}
             className="group cursor-pointer bg-[#F5D3B8]/20 border-2 border-[#1A1C1B] p-8 shadow-[8px_8px_0px_0px_#1A1C1B] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#1A1C1B] hover:bg-[#F5D3B8]/30 transition-all flex flex-col justify-between min-h-[340px]"
           >
             <div className="space-y-4">
@@ -326,7 +333,7 @@ const Home = () => {
 
           {/* Card B: Chat Hub */}
           <div
-            onClick={() => navigate("/chat")}
+            onClick={() => navigateTo("/chat", false)}
             className="group cursor-pointer bg-white border-2 border-[#1A1C1B] p-8 shadow-[8px_8px_0px_0px_#1A1C1B] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#1A1C1B] hover:bg-neutral-50 transition-all flex flex-col justify-between min-h-[340px]"
           >
             <div className="space-y-4">
@@ -393,7 +400,7 @@ const Home = () => {
       <footer className="border-t-2 border-[#1A1C1B] bg-white py-6 px-12 flex flex-col md:flex-row items-center justify-between text-[10px] font-black tracking-widest text-[#536255] uppercase gap-4 mt-auto">
         <span>© 2026 ARENA AI SYSTEMS. ALL RIGHTS RESERVED.</span>
         <div className="flex items-center gap-8">
-          <span className="cursor-pointer hover:underline" onClick={() => navigate("/pricing")}>PRICING</span>
+          <span className="cursor-pointer hover:underline" onClick={() => navigateTo("/pricing", false)}>PRICING</span>
           <span className="cursor-pointer hover:underline">TERMS OF SERVICE</span>
         </div>
       </footer>

@@ -52,9 +52,6 @@ const Register = () => {
     const newUser = await handleRegister(payload);
     if (newUser) {
       setRegistrationSuccess(true);
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500);
     }
   };
 
@@ -137,7 +134,7 @@ const Register = () => {
           <form onSubmit={submitForm} className="space-y-5">
             {registrationSuccess && (
               <div className="rounded-none border-2 border-green-500 bg-green-500/5 p-3 text-xs font-bold text-green-700 animate-bounce">
-                ✓ Registration successful! Redirecting to login...
+                ✓ Registration successful! Redirecting to home...
               </div>
             )}
             {error && (

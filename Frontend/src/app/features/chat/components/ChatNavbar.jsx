@@ -2,15 +2,22 @@ import React, { useState } from "react";
 import { FiLogOut, FiUser } from "react-icons/fi";
 import { HiMenu } from "react-icons/hi";
 import { useTheme } from "../../../context/ThemeContext";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { useAuth } from "../../auth/hooks/useAuth";
 
 const ChatNavbar = ({ setSidebarOpen }) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useSelector((state) => state.auth || {});
   const { handleLogout } = useAuth();
+
+  const navigateTo = (path, replace = true) => {
+    if (location.pathname !== path) {
+      navigate(path, { replace });
+    }
+  };
 
   return (
     <div
@@ -25,7 +32,7 @@ const ChatNavbar = ({ setSidebarOpen }) => {
           <HiMenu size={20} />
         </button>
         <span
-          onClick={() => navigate("/")}
+          onClick={() => navigateTo("/")}
           className="font-extrabold text-lg tracking-[0.25em] text-[#1A1C1B] uppercase cursor-pointer"
         >
           AI COMPARISON
@@ -36,25 +43,25 @@ const ChatNavbar = ({ setSidebarOpen }) => {
       <div className="flex items-center gap-6">
         <div className="hidden sm:flex items-center gap-5 text-xs font-black tracking-widest text-[#536255]">
           <span
-            onClick={() => navigate("/")}
+            onClick={() => navigateTo("/")}
             className="cursor-pointer hover:text-[#1A1C1B] transition-colors"
           >
             HOME
           </span>
           <span
-            onClick={() => navigate("/arena")}
+            onClick={() => navigateTo("/arena")}
             className="cursor-pointer hover:text-[#1A1C1B] transition-colors"
           >
             ARENA
           </span>
           <span
-            onClick={() => navigate("/chat")}
+            onClick={() => navigateTo("/chat")}
             className="cursor-pointer text-[#1A1C1B] border-b-2 border-black pb-0.5"
           >
             CHAT
           </span>
           <span
-            onClick={() => navigate("/pricing")}
+            onClick={() => navigateTo("/pricing")}
             className="cursor-pointer hover:text-[#1A1C1B] transition-colors"
           >
             PRICING
@@ -81,13 +88,13 @@ const ChatNavbar = ({ setSidebarOpen }) => {
         ) : (
           <div className="flex items-center gap-2">
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => navigateTo("/login", false)}
               className="px-3 py-1.5 border-2 border-black bg-white font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer uppercase tracking-wider"
             >
               Sign In
             </button>
             <button
-              onClick={() => navigate("/register")}
+              onClick={() => navigateTo("/register", false)}
               className="px-3 py-1.5 border-2 border-black bg-[#F5D3B8] font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer uppercase tracking-wider"
             >
               Sign Up

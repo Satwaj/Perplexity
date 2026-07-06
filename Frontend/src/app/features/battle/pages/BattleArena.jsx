@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "../../../context/ThemeContext";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { useAuth } from "../../auth/hooks/useAuth";
 import {
@@ -18,10 +18,17 @@ import gsap from "gsap";
 const BattleArena = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("history"); // history or settings
   const { handleLogout } = useAuth();
   const user = useSelector((state) => state.auth?.user);
+
+  const navigateTo = (path, replace = true) => {
+    if (location.pathname !== path) {
+      navigate(path, { replace });
+    }
+  };
   
   const {
     battles,
@@ -47,7 +54,7 @@ const BattleArena = () => {
 
   const onStartBattleWithAuth = async (problem) => {
     if (!user) {
-      navigate("/login");
+      navigateTo("/login", false);
       return;
     }
     await handleStartBattle(problem);
@@ -227,7 +234,7 @@ const BattleArena = () => {
           <button
             onClick={() => {
               if (!user) {
-                navigate("/login");
+                navigateTo("/login", false);
               } else {
                 handleOpenBattle(null);
               }
@@ -341,7 +348,7 @@ const BattleArena = () => {
         {/* Sidebar Bottom Upgrade Section */}
         <div className="p-6 border-t-2 border-[#1A1C1B] space-y-4 bg-white/20 shrink-0">
           <button
-            onClick={() => navigate("/pricing")}
+            onClick={() => navigateTo("/pricing", false)}
             className="w-full flex items-center justify-center border-2 border-[#1A1C1B] bg-[#1A1C1B] text-white p-3 text-xs font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_#C5A880] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#C5A880] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_#C5A880] transition-all cursor-pointer"
           >
             Upgrade Plan
@@ -360,7 +367,7 @@ const BattleArena = () => {
               </button>
             ) : (
               <button
-                onClick={() => navigate("/login")}
+                onClick={() => navigateTo("/login", false)}
                 className="flex items-center gap-3 text-xs font-bold text-[#008080] hover:text-[#1A1C1B] transition-colors cursor-pointer text-left"
               >
                 <FiUser size={15} /> Sign In
@@ -397,10 +404,10 @@ const BattleArena = () => {
 
           <div className="flex items-center gap-6">
             <div className="hidden sm:flex items-center gap-5 text-xs font-black tracking-widest text-[#536255]">
-              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigate("/")}>HOME</span>
+              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigateTo("/")}>HOME</span>
               <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors text-[#1A1C1B] border-b-2 border-black pb-0.5">ARENA</span>
-              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigate("/chat")}>CHAT</span>
-              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigate("/pricing")}>PRICING</span>
+              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigateTo("/chat")}>CHAT</span>
+              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigateTo("/pricing")}>PRICING</span>
             </div>
             
             <div className="h-6 w-[2px] bg-[#1A1C1B] hidden sm:block" />
@@ -423,13 +430,13 @@ const BattleArena = () => {
             ) : (
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigateTo("/login", false)}
                   className="px-3 py-1.5 border-2 border-black bg-white font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer uppercase tracking-wider"
                 >
                   Sign In
                 </button>
                 <button
-                  onClick={() => navigate("/register")}
+                  onClick={() => navigateTo("/register", false)}
                   className="px-3 py-1.5 border-2 border-black bg-[#F5D3B8] font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer uppercase tracking-wider"
                 >
                   Sign Up

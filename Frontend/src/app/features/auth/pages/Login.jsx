@@ -46,10 +46,7 @@ const Login = () => {
       password,
     };
 
-    const loginUser = await handleLogin(payload);
-    if (loginUser) {
-      navigate("/");
-    }
+    await handleLogin(payload);
   };
 
   if (!loading && user) {
