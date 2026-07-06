@@ -38,6 +38,13 @@ const BattleArena = () => {
   const heroRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
+  // Background shape animation refs
+  const shape1Ref = useRef(null);
+  const shape2Ref = useRef(null);
+  const shape3Ref = useRef(null);
+  const shape4Ref = useRef(null);
+  const workspaceRef = useRef(null);
+
   const onStartBattleWithAuth = async (problem) => {
     if (!user) {
       navigate("/login");
@@ -79,6 +86,87 @@ const BattleArena = () => {
     // Battle results render instantly by React
   }, [currentBattle, loading]);
 
+  // Floating background shapes animation loops & mouse parallax
+  useEffect(() => {
+    gsap.to(shape1Ref.current, {
+      x: "random(-20, 20)",
+      y: "random(-30, 30)",
+      rotation: 360,
+      duration: 12,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+
+    gsap.to(shape2Ref.current, {
+      x: "random(-30, 30)",
+      y: "random(-20, 20)",
+      rotation: -360,
+      duration: 10,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+
+    gsap.to(shape3Ref.current, {
+      x: "random(-25, 25)",
+      y: "random(-25, 25)",
+      scale: "random(0.9, 1.15)",
+      duration: 8,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+
+    gsap.to(shape4Ref.current, {
+      x: "random(-15, 15)",
+      y: "random(-35, 35)",
+      rotation: 180,
+      duration: 14,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut"
+    });
+
+    const handleMouseMove = (e) => {
+      const { clientX, clientY } = e;
+      const xPos = (clientX / window.innerWidth - 0.5) * 35;
+      const yPos = (clientY / window.innerHeight - 0.5) * 35;
+
+      gsap.to([shape1Ref.current, shape2Ref.current], {
+        x: `+=${xPos * 0.4}`,
+        y: `+=${yPos * 0.4}`,
+        overwrite: "auto",
+        duration: 1.2,
+        ease: "power1.out"
+      });
+
+      gsap.to([shape3Ref.current, shape4Ref.current], {
+        x: `-=${xPos * 0.3}`,
+        y: `-=${yPos * 0.3}`,
+        overwrite: "auto",
+        duration: 1.2,
+        ease: "power1.out"
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  // Entrance stagger for workspace components
+  useEffect(() => {
+    if (workspaceRef.current) {
+      gsap.fromTo(
+        workspaceRef.current.children,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out" }
+      );
+    }
+  }, [currentBattle]);
+
   const getInitials = (name) => {
     if (!name) return "U";
     return name
@@ -91,6 +179,23 @@ const BattleArena = () => {
 
   return (
     <div className="h-screen flex flex-row bg-[#F9F9F7] text-[#1A1C1B] overflow-hidden font-sans relative">
+      
+      {/* Floating Neobrutalist Geometric Background Shapes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div ref={shape1Ref} className="absolute top-24 left-[15%] text-6xl text-[#F5D3B8]/30 select-none hidden md:block">✦</div>
+        <div ref={shape2Ref} className="absolute top-80 right-[10%] w-12 h-12 bg-[#008080]/5 border border-[#1A1C1B]/10 shadow-[3px_3px_0px_0px_rgba(26,28,27,0.03)] hidden md:block" />
+        <div ref={shape3Ref} className="absolute bottom-32 left-[20%] w-20 h-20 rounded-full border-2 border-dashed border-[#C5A880]/15 hidden md:block" />
+        <div ref={shape4Ref} className="absolute bottom-48 right-[18%] text-7xl text-[#1A1C1B]/5 font-serif select-none hidden md:block">✖</div>
+      </div>
+
+      {/* Neobrutalist background grid pattern */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-[0.04] z-0" 
+        style={{
+          backgroundImage: "radial-gradient(#1A1C1B 1.5px, transparent 0)",
+          backgroundSize: "24px 24px"
+        }}
+      />
       
       {/* 1. Left Sidebar (Neobrutalist layout from screenshot) */}
       <aside
@@ -274,7 +379,7 @@ const BattleArena = () => {
       )}
 
       {/* 2. Right Side Workspace Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+      <div ref={workspaceRef} className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         
         {/* Top Navbar */}
         <nav className="h-16 shrink-0 border-b-2 border-[#1A1C1B] bg-white flex items-center justify-between px-6 z-30">

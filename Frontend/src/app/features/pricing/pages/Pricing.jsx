@@ -1,11 +1,41 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useTheme } from "../../../context/ThemeContext";
 import { FiCheck, FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router";
+import gsap from "gsap";
 
 const Pricing = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const headerRef = useRef(null);
+  const cardsRef = useRef(null);
+  const faqRef = useRef(null);
+
+  useEffect(() => {
+    if (headerRef.current) {
+      gsap.fromTo(
+        headerRef.current.children,
+        { y: 35, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.12, ease: "power3.out" }
+      );
+    }
+
+    if (cardsRef.current) {
+      gsap.fromTo(
+        cardsRef.current.children,
+        { y: 45, opacity: 0, scale: 0.96 },
+        { y: 0, opacity: 1, scale: 1, duration: 1, stagger: 0.15, ease: "power4.out", delay: 0.15 }
+      );
+    }
+
+    if (faqRef.current) {
+      gsap.fromTo(
+        faqRef.current.children,
+        { y: 25, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power2.out", delay: 0.5 }
+      );
+    }
+  }, []);
 
   const plans = [
     {
@@ -55,7 +85,7 @@ const Pricing = () => {
     <div className="min-h-screen bg-[#F9F9F7] text-[#1A1C1B] pb-16 font-sans">
       {/* Header */}
       <div className="border-b-2 border-[#1A1C1B] bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-10">
+        <div ref={headerRef} className="max-w-7xl mx-auto px-6 py-10">
           <button
             onClick={() => navigate("/")}
             className="flex items-center gap-2 border-2 border-[#1A1C1B] bg-white px-4 py-2 text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer mb-8"
@@ -78,7 +108,7 @@ const Pricing = () => {
 
       {/* Pricing Cards Grid */}
       <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-3 gap-8">
+        <div ref={cardsRef} className="grid md:grid-cols-3 gap-8">
           {plans.map((plan, index) => (
             <div
               key={index}
@@ -156,7 +186,7 @@ const Pricing = () => {
             Frequently Asked Questions
           </h2>
 
-          <div className="space-y-6">
+          <div ref={faqRef} className="space-y-6">
             {[
               {
                 q: "Can I upgrade or downgrade anytime?",
