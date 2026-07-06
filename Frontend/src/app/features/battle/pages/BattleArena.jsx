@@ -275,9 +275,7 @@ const BattleArena = () => {
 
           <div className="flex items-center gap-6">
             <div className="hidden sm:flex items-center gap-5 text-xs font-black tracking-widest text-[#536255]">
-              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors">CHATS</span>
-              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors">ANALYTICS</span>
-              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigate("/pricing")}>MODELS</span>
+              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigate("/chat")}>CHAT</span>
             </div>
             
             <div className="h-6 w-[2px] bg-[#1A1C1B] hidden sm:block" />

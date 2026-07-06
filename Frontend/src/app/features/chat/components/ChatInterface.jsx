@@ -3,12 +3,9 @@ import ChatSidebar from "./ChatSidebar";
 import ChatNavbar from "./ChatNavbar";
 import ChatMessageArea from "./ChatMessageArea";
 import ChatInput from "./ChatInput";
-import { useTheme } from "../../../context/ThemeContext";
 import { useSelector } from "react-redux";
-import { HiMenu, HiX } from "react-icons/hi";
 
 const ChatInterface = () => {
-  const theme = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Get messages from Redux store
@@ -41,67 +38,58 @@ const ChatInterface = () => {
     });
 
   return (
-    <div
-      className={`flex h-screen ${theme.bg.primary} transition-colors duration-200 relative`}
-    >
-      {/* Mobile Overlay */}
+    <div className="flex h-screen w-screen overflow-hidden bg-[#F9F9F7] font-sans selection:bg-[#F5D3B8]">
+      
+      {/* 1. Left Sidebar Area */}
+      <aside
+        className={`fixed md:static inset-y-0 left-0 w-80 h-full bg-[#F1F1EF] border-r-2 border-[#1A1C1B] z-50 transition-transform duration-300 md:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <ChatSidebar setSidebarOpen={setSidebarOpen} />
+      </aside>
+
+      {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-30"
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Sidebar - Mobile Responsive */}
-      <div
-        className={`fixed md:static w-72 h-screen md:h-auto ${theme.bg.primary} flex flex-col overflow-hidden transition-transform duration-300 z-40 md:z-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        }`}
-      >
-        {/* Close Button - Mobile Only */}
-        <button
-          onClick={() => setSidebarOpen(false)}
-          className="md:hidden absolute top-4 right-4 p-2 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg z-50"
-        >
-          <HiX
-            size={24}
-            className={theme.isDark ? "text-white" : "text-black"}
-          />
-        </button>
-        <ChatSidebar />
-      </div>
+      {/* 2. Right Side Workspace Area */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+        
+        {/* Top Navbar */}
+        <ChatNavbar setSidebarOpen={setSidebarOpen} />
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col w-full overflow-hidden">
-        {/* Mobile Header - Menu + Title */}
-        <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-slate-700">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
-          >
-            <HiMenu
-              size={24}
-              className={theme.isDark ? "text-white" : "text-black"}
-            />
-          </button>
-          <h1
-            className={`font-bold text-sm ${theme.isDark ? "text-white" : "text-black"}`}
-          >
-            Blinkly AI
-          </h1>
-          <div className="w-10" /> {/* Spacer */}
+        {/* Workspace Main Area */}
+        <div className="flex-1 flex flex-col justify-between overflow-hidden">
+          
+          {/* Scrollable results columns */}
+          <div className="flex-1 overflow-y-auto bg-[#F9F9F7]">
+            <ChatMessageArea messages={formattedMessages} />
+          </div>
+
+          {/* Fixed Footer/Input Area (Non-scrollable) */}
+          <div className="shrink-0 bg-[#F9F9F7] pt-2">
+            {/* Floating Lower Input Area */}
+            <div className="w-full max-w-4xl mx-auto px-6 mb-6">
+              <ChatInput />
+            </div>
+
+            {/* Neobrutalist Footer */}
+            <footer className="border-t-2 border-[#1A1C1B] bg-white py-4 px-6 flex flex-col sm:flex-row items-center justify-between text-[10px] font-black tracking-widest text-[#536255] uppercase gap-2">
+              <span>© 2026 ARCHITECTURAL AI. ALL RIGHTS RESERVED.</span>
+              <div className="flex items-center gap-6">
+                <span className="cursor-pointer hover:underline">PRIVACY POLICY</span>
+                <span className="cursor-pointer hover:underline">TERMS OF SERVICE</span>
+              </div>
+            </footer>
+          </div>
+
         </div>
 
-        {/* Navbar - Desktop Only (Hide on Mobile) */}
-        <div className="hidden md:block">
-          <ChatNavbar />
-        </div>
-
-        {/* Messages - Pass messages from Redux */}
-        <ChatMessageArea messages={formattedMessages} />
-
-        {/* Input - Pass hasMessages flag */}
-        <ChatInput hasMessages={messages.length > 0} />
       </div>
     </div>
   );

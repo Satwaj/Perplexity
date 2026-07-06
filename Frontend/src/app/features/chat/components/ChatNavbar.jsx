@@ -1,85 +1,70 @@
 import React, { useState } from "react";
-import {
-  FiArrowUp,
-  FiGlobe,
-  FiVolume2,
-  FiUser,
-  FiMoon,
-  FiSun,
-} from "react-icons/fi";
+import { FiLogOut, FiUser } from "react-icons/fi";
+import { HiMenu } from "react-icons/hi";
 import { useTheme } from "../../../context/ThemeContext";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
-import UserDetailsModal from "./UserDetailsModal";
-import blinklyLogo from "../../../../assets/blinkly-logo.svg";
+import { useAuth } from "../../auth/hooks/useAuth";
 
-const ChatNavbar = () => {
+const ChatNavbar = ({ setSidebarOpen }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth || {});
-  const [showUserModal, setShowUserModal] = useState(false);
+  const { handleLogout } = useAuth();
 
   return (
     <div
-      className={`w-full h-16 ${theme.bg.primary} ${theme.border.primary} border-b flex items-center justify-between px-6 transition-colors duration-200`}
+      className="w-full h-16 bg-white border-b-2 border-[#1A1C1B] flex items-center justify-between px-6 z-30"
     >
-      {/* Left Side - Blinkly Logo and Brand */}
-      <div className="flex items-center gap-4">
-        <img
-          src={blinklyLogo}
-          alt="Blinkly Logo"
-          className="w-10 h-10 rounded-lg"
-        />
-        <div
-          className={`inline-flex items-center gap-2 px-4 py-2 ${theme.bg.secondary} ${theme.border.primary} border rounded-full transition-colors duration-200`}
+      {/* Left Brand Title */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="md:hidden p-1.5 border-2 border-black bg-white text-black shrink-0"
         >
-          <span className="text-lg">⚡</span>
-          <span className={`text-sm font-medium ${theme.text.secondary}`}>
-            Free Plan - Upgrade for more usage
-          </span>
-        </div>
+          <HiMenu size={20} />
+        </button>
+        <span
+          onClick={() => navigate("/")}
+          className="font-extrabold text-lg tracking-[0.25em] text-[#1A1C1B] uppercase cursor-pointer"
+        >
+          AI COMPARISON
+        </span>
       </div>
 
       {/* Right Side - Actions */}
-      <div className="flex items-center gap-3">
-        <button
-          onClick={() => navigate("/pricing")}
-          className={`px-4 py-2 ${theme.button.primary} text-white rounded-lg font-medium transition-all hover:shadow-md hover:scale-95 flex items-center gap-2`}
-        >
-          <FiArrowUp size={16} />
-          Upgrade to Pro
-        </button>
-        <button
-          className={`w-9 h-9 rounded-lg ${theme.border.primary} border ${theme.text.tertiary} hover:${theme.bg.tertiary} flex items-center justify-center transition-colors`}
-        >
-          <FiGlobe size={18} />
-        </button>
-        <button
-          className={`w-9 h-9 rounded-lg ${theme.border.primary} border ${theme.text.tertiary} hover:${theme.bg.tertiary} flex items-center justify-center transition-colors`}
-        >
-          <FiVolume2 size={18} />
-        </button>
-        <button
-          onClick={() => setShowUserModal(true)}
-          className={`w-9 h-9 rounded-lg ${theme.border.primary} border ${theme.text.tertiary} hover:${theme.bg.tertiary} flex items-center justify-center transition-colors hover:scale-95`}
-          title="View profile"
-        >
-          <FiUser size={18} />
-        </button>
-        {/* Theme Toggle Button */}
-        <button
-          onClick={theme.toggleTheme}
-          className={`w-9 h-9 rounded-lg ${theme.border.primary} border ${theme.text.secondary} hover:${theme.bg.tertiary} flex items-center justify-center transition-colors ml-2`}
-          title="Toggle dark mode"
-        >
-          {theme.isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
+      <div className="flex items-center gap-6">
+        <div className="hidden sm:flex items-center gap-5 text-xs font-black tracking-widest text-[#536255]">
+          <span
+            onClick={() => navigate("/")}
+            className="cursor-pointer hover:text-[#1A1C1B] transition-colors"
+          >
+            ARENA
+          </span>
+          <span
+            onClick={() => navigate("/pricing")}
+            className="cursor-pointer hover:text-[#1A1C1B] transition-colors"
+          >
+            PRICING
+          </span>
+        </div>
 
-          {/* User Details Modal */}
-          <UserDetailsModal
-            isOpen={showUserModal}
-            onClose={() => setShowUserModal(false)}
-            user={user}
-          />
+        <div className="h-6 w-[2px] bg-[#1A1C1B] hidden sm:block" />
+
+        {/* Profile Avatar Badge */}
+        {user && (
+          <div className="flex items-center gap-2 border-2 border-[#1A1C1B] bg-[#F1F1EF] px-3 py-1.5 font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B]">
+            <FiUser size={13} className="stroke-[2.5]" />
+            <span className="hidden md:inline">{user.fullname || user.username}</span>
+          </div>
+        )}
+
+        <button
+          onClick={handleLogout}
+          className="p-2 rounded-lg hover:bg-red-500/10 text-[#7E7576] hover:text-red-600 transition-colors cursor-pointer"
+          title="Sign out"
+        >
+          <FiLogOut size={16} />
         </button>
       </div>
     </div>

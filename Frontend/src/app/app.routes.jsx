@@ -50,6 +50,16 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/chat",
+    element: (
+      <Protected>
+        <Suspense fallback={<Loader />}>
+          <ChatInterface />
+        </Suspense>
+      </Protected>
+    ),
+  },
+  {
     path: "/battle",
     element: <Navigate to="/" replace />,
   },

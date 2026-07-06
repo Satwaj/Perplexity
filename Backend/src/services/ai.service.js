@@ -76,7 +76,8 @@ export async function generateResponse(messages, emitProgress) {
         });
     }
 
-    return response.messages[ response.messages.length - 1 ].text;
+    const lastMessage = response.messages[ response.messages.length - 1 ];
+    return lastMessage?.content || lastMessage?.text || "";
 
 }
 
@@ -95,7 +96,7 @@ export async function generateChatTitle(message) {
             `)
     ])
 
-    return response.text;
+    return response?.content || response?.text || "New Chat";
 
 }
 

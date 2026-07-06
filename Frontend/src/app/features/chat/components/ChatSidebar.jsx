@@ -1,38 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import {
-  FiPlus,
-  FiMessageSquare,
-  FiChevronRight,
-  FiTrash2,
-  FiZap,
-} from "react-icons/fi";
-import { GiSwordman } from "react-icons/gi";
-import { useTheme } from "../../../context/ThemeContext";
-import { useChat } from "../hooks/useChat";
-import { useEffect } from "react";
+import { FiPlus, FiTrash2, FiLogOut, FiHelpCircle } from "react-icons/fi";
+import { HiX } from "react-icons/hi";
 import { useNavigate } from "react-router";
-import UserDetailsModal from "./UserDetailsModal";
-import blinklyLogo from "../../../../assets/blinkly-logo.svg";
+import { useChat } from "../hooks/useChat";
+import { useAuth } from "../../auth/hooks/useAuth";
 
-// Add animation styles
-const arenaAnimationStyles = `
-  @keyframes subtle-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(100, 116, 139, 0.3); }
-    50% { box-shadow: 0 0 0 6px rgba(100, 116, 139, 0); }
-  }
-  .arena-pulse {
-    animation: subtle-pulse 3s infinite;
-  }
-`;
-
-const ChatSidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [showUserModal, setShowUserModal] = useState(false);
-  const { user } = useSelector((state) => state.auth || {});
+const ChatSidebar = ({ setSidebarOpen }) => {
   const currentChatId = useSelector((state) => state.chat.currentChatId);
-  const theme = useTheme();
   const navigate = useNavigate();
+  const { handleLogout } = useAuth();
 
   const {
     chats,
@@ -43,9 +20,8 @@ const ChatSidebar = () => {
   } = useChat();
 
   useEffect(() => {
-    // Fetch chats when component mounts
     handleGetChats();
-  }, []);
+  }, [handleGetChats]);
 
   const openChat = (chatId) => {
     handleOpenChat(chatId, chats);
@@ -55,220 +31,109 @@ const ChatSidebar = () => {
     handleSendmessage({ message: "Hello!", chatId: null });
   };
 
-  const navigationItems = [
-    {
-      icon: <FiMessageSquare size={20} />,
-      label: "Chats",
-      action: () => navigate("/"),
-    },
-    {
-      icon: <GiSwordman size={20} />,
-      label: "Arena",
-      action: () => navigate("/battle"),
-      highlight: true,
-      description: "Compare AI solutions side-by-side",
-    },
-  ];
-
   return (
-    <div
-      className={`${
-        isCollapsed ? "w-20" : "w-64"
-      } h-screen ${theme.bg.primary} ${theme.border.primary} border-r flex flex-col transition-all duration-300 relative overflow-y-auto scrollbar-hide`}
-    >
-      {/* Header */}
-      <div
-        className={`p-5 ${theme.border.primary} border-b transition-colors duration-200`}
-      >
-        <div className="flex items-center gap-3 mb-3">
-          <img
-            src={blinklyLogo}
-            alt="Blinkly Logo"
-            className="w-8 h-8 rounded-lg"
-          />
-          {!isCollapsed && (
-            <h2 className={`text-lg font-bold ${theme.text.primary}`}>
-              Blinkly
-            </h2>
-          )}
+    <div className="w-full h-full bg-[#F1F1EF] flex flex-col overflow-hidden">
+      {/* Sidebar Header */}
+      <div className="p-6 border-b-2 border-[#1A1C1B] flex items-center justify-between shrink-0">
+        <div>
+          <h2 className="font-extrabold text-2xl tracking-wider text-[#1A1C1B]">
+            DASHBOARD
+          </h2>
+          <span className="text-[10px] font-bold tracking-widest text-[#7E7576] block mt-0.5">
+            V1.0.4 - CHAT ASSISTANT
+          </span>
         </div>
+        {setSidebarOpen && (
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="md:hidden p-1.5 border-2 border-black bg-white shadow-[2px_2px_0px_0px_#000] text-black"
+          >
+            <HiX size={18} />
+          </button>
+        )}
+      </div>
+
+      {/* New Chat Peach Button */}
+      <div className="p-6 border-b-2 border-[#1A1C1B] shrink-0">
         <button
           onClick={createNewChat}
-          className={`w-full px-3 py-2 ${theme.button.primary} cursor-pointer hover:scale-95 text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-all hover:shadow-md`}
+          className="w-full flex items-center justify-center gap-3 border-2 border-[#1A1C1B] bg-[#F5D3B8] p-3 text-sm font-black text-[#1A1C1B] shadow-[4px_4px_0px_0px_#1A1C1B] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#1A1C1B] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer"
         >
-          <FiPlus size={18} />
-          {!isCollapsed && <span>New Chat</span>}
+          <FiPlus size={16} className="stroke-[3]" />
+          New Chat
         </button>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 p-3 space-y-2">
-        <style>{arenaAnimationStyles}</style>
-        {navigationItems.map((item, index) => (
-          <div key={index}>
-            <button
-              onClick={item.action}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all relative ${
-                item.highlight
-                  ? `${theme.isDark ? "bg-slate-700 hover:bg-slate-600" : "bg-slate-200 hover:bg-slate-300"} ${theme.isDark ? "text-gray-100" : "text-gray-900"} font-bold arena-pulse`
-                  : `${theme.text.secondary} ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`
-              }`}
-              title={item.description}
-            >
-              <span
-                className={
-                  item.highlight
-                    ? theme.isDark
-                      ? "text-gray-100"
-                      : "text-gray-900"
-                    : theme.text.tertiary
-                }
+      {/* Chat History List */}
+      <div className="flex-1 overflow-y-auto p-6 space-y-2">
+        <span className="text-[10px] font-black uppercase tracking-widest text-[#7E7576] block mb-3 px-1">
+          Recent Chats
+        </span>
+        {chats && Object.values(chats).length > 0 ? (
+          Object.values(chats).map((chat) => {
+            const isActive = currentChatId === chat.id;
+            return (
+              <div
+                key={chat.id}
+                className={`p-3 border-2 transition-all group ${
+                  isActive
+                    ? "bg-white border-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B]"
+                    : "border-transparent hover:bg-white/40 hover:border-[#1A1C1B]/30"
+                }`}
               >
-                {item.icon}
-              </span>
-              {!isCollapsed && (
-                <span className="text-sm font-medium">{item.label}</span>
-              )}
-              {item.highlight && !isCollapsed && (
-                <span
-                  className={`ml-auto text-xs px-2 py-0.5 rounded-full font-semibold ${
-                    theme.isDark
-                      ? "bg-slate-600 text-gray-100"
-                      : "bg-slate-400 text-white"
-                  }`}
-                >
-                  NEW
-                </span>
-              )}
-            </button>
-            {item.highlight && !isCollapsed && (
-              <p className={`text-xs ${theme.text.tertiary} px-3 py-1 ml-1`}>
-                {item.description}
-              </p>
-            )}
-          </div>
-        ))}
-      </nav>
-
-      {/* Recent Chats */}
-      {!isCollapsed && (
-        <div
-          className={`px-3 py-4 ${theme.border.primary} border-t max-h-64 overflow-y-auto transition-colors duration-200 scrollbar-hide`}
-        >
-          <h3
-            className={`text-xs font-semibold ${theme.text.tertiary} uppercase mb-3 px-2`}
-          >
-            Recent Chats
-          </h3>
-          <div className="space-y-2">
-            {chats && Object.values(chats).length > 0 ? (
-              Object.values(chats).map((chat) => (
-                <div
-                  key={chat.id}
-                  className={`flex items-center gap-2 px-2 py-2 cursor-pointer text-sm rounded-lg transition-colors group ${
-                    currentChatId === chat.id
-                      ? theme.isDark
-                        ? "bg-gray-800 border-l-2 border-l-gray-500"
-                        : "bg-gray-200 border-l-2 border-l-gray-600"
-                      : theme.isDark
-                        ? "hover:bg-gray-800"
-                        : "hover:bg-gray-200"
-                  }`}
-                >
-                  <button
+                <div className="flex items-start justify-between gap-3">
+                  <div
                     onClick={() => openChat(chat.id)}
-                    className="flex-1 text-left"
+                    className="flex-1 cursor-pointer min-w-0"
                   >
-                    <p
-                      className={`${theme.text.secondary} truncate font-medium`}
-                    >
+                    <p className="text-xs font-extrabold text-[#1A1C1B] truncate">
                       {chat.title}
                     </p>
-                    <p className={`text-xs ${theme.text.tertiary}`}>
+                    <p className="text-[9px] text-[#7E7576] mt-1 font-bold">
                       {chat.lastUpdated}
                     </p>
-                  </button>
+                  </div>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDeleteChat(chat.id);
                     }}
-                    className={`p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity ${
-                      theme.isDark ? "hover:bg-gray-600" : "hover:bg-black-500"
-                    }`}
-                    title="Delete chat"
+                    className="p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/10 text-[#7E7576] hover:text-red-600 cursor-pointer shrink-0"
                   >
-                    <FiTrash2 size={16} className="text-red-300" />
+                    <FiTrash2 size={13} />
                   </button>
                 </div>
-              ))
-            ) : (
-              <p className={`text-xs ${theme.text.tertiary} px-2`}>
-                No chats yet. Start a conversation!
-              </p>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Upgrade to Pro */}
-      {!isCollapsed && (
-        <div
-          className={`mx-3 mb-3 p-4 ${theme.bg.secondary} ${theme.border.primary} border rounded-lg cursor-pointer hover:scale-95 transition-all`}
-          onClick={() => navigate("/pricing")}
-        >
-          <div className="flex items-start gap-3">
-            <FiZap className="text-yellow-500 shrink-0 mt-1" size={20} />
-            <div className="flex-1">
-              <p className={`text-sm font-bold ${theme.text.primary}`}>
-                Upgrade to Pro
-              </p>
-              <p className={`text-xs ${theme.text.tertiary} mt-1`}>
-                Unlock unlimited chats & features
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* User Profile */}
-      <div
-        className={`p-3 ${theme.border.primary} border-t transition-colors duration-200`}
-      >
-        <button
-          onClick={() => setShowUserModal(true)}
-          className={`w-full flex items-center gap-3 px-2 py-2 ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"} rounded-lg cursor-pointer transition-colors`}
-        >
-          <div
-            className={`w-9 h-9 rounded-full ${theme.isDark ? "bg-gray-700" : "bg-gray-300"} flex items-center justify-center ${theme.isDark ? "text-gray-50" : "text-gray-900"} font-bold text-sm`}
-          >
-            {user?.email?.[0]?.toUpperCase() || "S"}
-          </div>
-          {!isCollapsed && (
-            <div className="flex-1 text-left">
-              <p className={`text-sm font-medium ${theme.text.primary}`}>
-                {user?.email?.split("@")[0] || "User"}
-              </p>
-              <p className={`text-xs ${theme.text.tertiary}`}>Free Plan</p>
-            </div>
-          )}
-        </button>
+              </div>
+            );
+          })
+        ) : (
+          <p className="text-xs text-[#7E7576] italic px-1">
+            No chats started yet.
+          </p>
+        )}
       </div>
 
-      {/* User Details Modal */}
-      <UserDetailsModal
-        isOpen={showUserModal}
-        onClose={() => setShowUserModal(false)}
-        user={user}
-      />
-
-      {/* Collapse Toggle */}
-      <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className={`absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 ${theme.isDark ? "bg-gray-800 hover:bg-gray-700" : "bg-gray-700 hover:bg-gray-800"} text-white rounded-full flex items-center justify-center transition-all shadow-lg`}
-      >
-        <FiChevronRight size={14} className={isCollapsed ? "rotate-180" : ""} />
-      </button>
+      {/* Sidebar Bottom Upgrade Section */}
+      <div className="p-6 border-t-2 border-[#1A1C1B] space-y-4 bg-white/20 shrink-0">
+        <button
+          onClick={() => navigate("/pricing")}
+          className="w-full flex items-center justify-center border-2 border-[#1A1C1B] bg-[#1A1C1B] text-white p-3 text-xs font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_#C5A880] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#C5A880] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_#C5A880] transition-all cursor-pointer"
+        >
+          Upgrade Plan
+        </button>
+        
+        <div className="flex flex-col gap-2.5 pt-2">
+          <button className="flex items-center gap-3 text-xs font-bold text-[#536255] hover:text-[#1A1C1B] transition-colors cursor-pointer text-left">
+            <FiHelpCircle size={15} /> Help
+          </button>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 text-xs font-bold text-[#7E7576] hover:text-red-600 transition-colors cursor-pointer text-left"
+          >
+            <FiLogOut size={15} /> Logout
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

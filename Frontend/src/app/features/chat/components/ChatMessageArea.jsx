@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FiCopy, FiThumbsUp, FiThumbsDown } from "react-icons/fi";
 import { GiSwordman } from "react-icons/gi";
 import { useTheme } from "../../../context/ThemeContext";
@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ChatProgressLoader } from "./ChatProgressLoader";
+import { useVoice } from "../../battle/hooks/useVoice";
 
 // Add arena promotion animation
 const arenaPromotionStyles = `
@@ -35,6 +36,17 @@ const ChatMessageArea = ({ messages = [] }) => {
   const [likedMessages, setLikedMessages] = useState(new Set());
   const [dislikedMessages, setDislikedMessages] = useState(new Set());
   const isLoading = useSelector((state) => state.chat.isLoading);
+  const { speak, isSpeaking, stopSpeaking, supported } = useVoice();
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: "smooth"
+      });
+    }
+  }, [messages, isLoading]);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -179,207 +191,94 @@ const ChatMessageArea = ({ messages = [] }) => {
 
   if (messages.length === 0) {
     return (
-      <div
-        className={`flex-1 flex flex-col items-center justify-center px-4 md:px-6 py-8 md:py-12 transition-colors duration-200 relative overflow-hidden`}
-      >
-        <style>{arenaPromotionStyles}</style>
+      <div className="h-full max-w-2xl mx-auto flex flex-col justify-center py-10 px-6">
+        <span className="text-[10px] font-black uppercase tracking-widest text-[#008080] bg-[#008080]/10 px-2.5 py-1 border border-[#008080]/20 w-fit">
+          Chat Mode
+        </span>
+        
+        <h1 className="text-4xl md:text-6xl font-serif-brutalist font-bold text-[#1A1C1B] leading-[1.1] my-6 tracking-tight">
+          How can I help you today?
+        </h1>
+        
+        <div className="w-20 border-b-2 border-black mb-8"></div>
 
-        {/* Animated Arena Promotion Banner */}
-        <div
-          onClick={() => navigate("/battle")}
-          className={`absolute top-20 md:top-24 left-0 right-0 cursor-pointer px-3 md:px-4 z-10`}
+        <p className="text-base text-[#536255] max-w-lg mb-8 leading-relaxed font-semibold">
+          Ask questions, analyze concepts, draft code, or brainstorm ideas with the AI Assistant inside a clean neobrutalist frame.
+        </p>
+
+        <button
+          onClick={() => {
+            document.querySelector("textarea")?.focus();
+          }}
+          className="w-fit cursor-pointer border-2 border-[#1A1C1B] bg-[#1A1C1B] text-white font-extrabold px-8 py-3.5 shadow-[4px_4px_0px_0px_#C5A880] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#C5A880] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_#C5A880] transition-all text-sm uppercase tracking-wider"
         >
-          <div
-            className={`flex items-center gap-2 md:gap-3 p-3 md:p-4 rounded-lg transition-all hover:shadow-lg ${
-              theme.isDark
-                ? "bg-slate-700 hover:bg-slate-600 border border-slate-600"
-                : "bg-slate-300 hover:bg-slate-400 border border-slate-400"
-            }`}
-          >
-            <div className="arena-icon-pulse shrink-0">
-              <GiSwordman
-                size={20}
-                className={theme.isDark ? "text-gray-200" : "text-gray-800"}
-              />
-            </div>
-            <div className="arena-slide flex-1 min-w-0">
-              <p
-                className={`font-bold text-xs md:text-sm ${theme.isDark ? "text-gray-100" : "text-gray-900"}`}
-              >
-                ⚔️ Try Arena Battle!
-              </p>
-              <p
-                className={`text-xs ${theme.isDark ? "text-gray-300" : "text-gray-700"}`}
-              >
-                Compare AI solutions →
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-center max-w-2xl mt-8 md:mt-32">
-          <h1
-            className={`text-3xl md:text-5xl font-bold ${theme.text.primary} mb-2 md:mb-4`}
-          >
-            {getGreeting()},{" "}
-            <span
-              className={
-                theme.isDark
-                  ? "text-gray-200"
-                  : "bg-linear-to-r from-orange-500 to-pink-500 bg-clip-text text-transparent"
-              }
-            >
-              Satwaj
-            </span>
-          </h1>
-          <p className={`text-base md:text-xl ${theme.text.secondary}`}>
-            How can I help you today?
-          </p>
-        </div>
+          Type Message Below
+        </button>
       </div>
     );
   }
 
   return (
     <div
-      className={`flex-1 overflow-y-auto px-3 md:px-6 py-4 md:py-8 transition-colors duration-200 scrollbar-hide`}
+      ref={scrollRef}
+      className="flex-1 overflow-y-auto px-4 md:px-6 py-6 md:py-10 scrollbar-hide"
     >
-      <div className="max-w-3xl mx-auto space-y-4 md:space-y-6">
+      <div className="max-w-3xl mx-auto space-y-8">
         {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`flex gap-2 md:gap-4 animate-fade-in ${
-              message.sender === "user" ? "justify-end" : "justify-start"
-            }`}
-          >
-            {/* Avatar */}
-            {message.sender === "assistant" && (
-              <div className="shrink-0">
-                <div
-                  className={`w-8 md:w-9 h-8 md:h-9 rounded-full ${theme.isDark ? "bg-gray-700" : "bg-gray-300"} flex items-center justify-center ${theme.isDark ? "text-gray-50" : "text-gray-900"} font-bold text-lg`}
-                >
-                  🤖
-                </div>
-              </div>
-            )}
-
-            {/* Message */}
-            <div
-              className={`max-w-xs md:max-w-2xl ${
-                message.sender === "user" ? "order-2" : ""
-              }`}
-            >
-              <div
-                className={`px-3 md:px-4 py-2 md:py-3 rounded-2xl transition-colors duration-200 text-sm md:text-base ${
-                  message.sender === "user"
-                    ? theme.isDark
-                      ? "bg-gray-800 text-white"
-                      : "bg-gray-800 text-white"
-                    : theme.isDark
-                      ? "bg-gray-900 text-gray-100"
-                      : "bg-gray-100 text-gray-900"
-                }`}
-              >
-                {message.sender === "assistant" ? (
-                  <div className="prose prose-sm max-w-none">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      components={markdownComponents}
-                    >
-                      {message.text}
-                    </ReactMarkdown>
+          <div key={index}>
+            {message.sender === "user" ? (
+              /* User Message */
+              <div className="flex justify-end gap-3 animate-fade-in">
+                <div className="max-w-xl">
+                  <div className="border-2 border-[#1A1C1B] bg-[#F1F1EF] p-4 text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] text-sm font-semibold">
+                    <p className="whitespace-pre-wrap">{message.text}</p>
                   </div>
-                ) : (
-                  <p className="text-sm font-medium">{message.text}</p>
-                )}
+                </div>
+                <div className="w-8 h-8 rounded-full border-2 border-black bg-[#C5A880] flex items-center justify-center font-bold text-xs text-[#1A1C1B] shrink-0">
+                  U
+                </div>
               </div>
-
-              {/* Actions for AI Messages */}
-              {message.sender === "assistant" && (
-                <div className="flex gap-2 mt-2 opacity-0 hover:opacity-100 transition-opacity">
-                  <button
-                    onClick={() => handleCopy(message.text, index)}
-                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
-                      copiedIndex === index
-                        ? "bg-black text-white"
-                        : `${theme.text.tertiary} ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`
-                    }`}
-                    title={copiedIndex === index ? "Copied!" : "Copy"}
-                  >
-                    <FiCopy size={16} />
-                  </button>
-                  <button
-                    onClick={() => handleLike(index)}
-                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
-                      likedMessages.has(index)
-                        ? "bg-black text-white fill-black"
-                        : `${theme.text.tertiary} ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`
-                    }`}
-                    title="Like"
-                  >
-                    <FiThumbsUp size={16} />
-                  </button>
-                  <button
-                    onClick={() => handleDislike(index)}
-                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
-                      dislikedMessages.has(index)
-                        ? "bg-black text-white fill-black"
-                        : `${theme.text.tertiary} ${theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"}`
-                    }`}
-                    title="Dislike"
-                  >
-                    <FiThumbsDown size={16} />
-                  </button>
+            ) : (
+              /* Assistant Message */
+              <div className="flex justify-start gap-3 animate-fade-in">
+                <div className="w-8 h-8 rounded-full border-2 border-black bg-[#1A1C1B] flex items-center justify-center font-bold text-xs text-white shrink-0">
+                  A
                 </div>
-              )}
-
-              {/* Actions for User Messages */}
-              {message.sender === "user" && (
-                <div className="flex gap-2 mt-2 opacity-0 hover:opacity-100 transition-opacity">
-                  <button
-                    onClick={() => handleCopy(message.text, index)}
-                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
-                      copiedIndex === index
-                        ? "bg-black text-white"
-                        : `text-gray-300 ${theme.isDark ? "hover:bg-gray-800" : "hover:bg-gray-700"}`
-                    }`}
-                    title={copiedIndex === index ? "Copied!" : "Copy"}
-                  >
-                    <FiCopy size={16} />
-                  </button>
-                  <button
-                    onClick={() => handleLike(index)}
-                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
-                      likedMessages.has(index)
-                        ? "bg-black text-white fill-black"
-                        : `text-gray-300 ${theme.isDark ? "hover:bg-gray-800" : "hover:bg-gray-700"}`
-                    }`}
-                    title="Like"
-                  >
-                    <FiThumbsUp size={16} />
-                  </button>
-                  <button
-                    onClick={() => handleDislike(index)}
-                    className={`p-1.5 rounded-lg transition-all hover:scale-95 ${
-                      dislikedMessages.has(index)
-                        ? "bg-black text-white fill-black"
-                        : `text-gray-300 ${theme.isDark ? "hover:bg-gray-800" : "hover:bg-gray-700"}`
-                    }`}
-                    title="Dislike"
-                  >
-                    <FiThumbsDown size={16} />
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* User Avatar */}
-            {message.sender === "user" && (
-              <div className="shrink-0">
-                <div
-                  className={`w-9 h-9 rounded-full ${theme.isDark ? "bg-gray-800" : "bg-gray-700"} flex items-center justify-center ${theme.isDark ? "text-white" : "text-white"} font-bold text-sm`}
-                >
-                  S
+                <div className="max-w-2xl flex-1">
+                  <div className="card-brutalist bg-white p-5 space-y-4">
+                    {/* Header */}
+                    <div className="flex items-center justify-between pb-3 border-b-2 border-[#1A1C1B]">
+                      <div className="border-2 border-[#1A1C1B] bg-[#F1F1EF] px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1A1C1B]">
+                        AI ASSISTANT
+                      </div>
+                      {supported.synthesis && (
+                        <button
+                          onClick={() => {
+                            if (isSpeaking) {
+                              stopSpeaking();
+                            } else {
+                              speak(message.text);
+                            }
+                          }}
+                          className={`p-1.5 border-2 border-transparent hover:border-[#1A1C1B] hover:bg-[#F1F1EF] transition-all cursor-pointer shrink-0 ${
+                            isSpeaking ? "bg-[#008080]/15 text-[#008080]" : "text-[#536255] hover:text-[#1A1C1B]"
+                          }`}
+                          title={isSpeaking ? "Stop speaking" : "Speak answer"}
+                        >
+                          <span className="text-base select-none">🔊</span>
+                        </button>
+                      )}
+                    </div>
+                    {/* Text Markdown */}
+                    <div className="prose prose-sm max-w-none text-[#1A1C1B] text-sm font-semibold">
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={markdownComponents}
+                      >
+                        {message.text}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
