@@ -213,16 +213,17 @@ catch(error){
 // }
 
 export const googleCallback = async (req, res) => {
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
     try {
         if (!req.user) {
-            return res.redirect("http://localhost:5173/login?error=GoogleAuthFailed");
+            return res.redirect(`${frontendUrl}/login?error=GoogleAuthFailed`);
         }
 
         const { id, displayName, emails, photos } = req.user;
         const email = emails?.[0]?.value;
 
         if (!email) {
-            return res.redirect("http://localhost:5173/login?error=NoEmailFromGoogle");
+            return res.redirect(`${frontendUrl}/login?error=NoEmailFromGoogle`);
         }
 
         const normalizedEmail = email.toLowerCase();
@@ -254,9 +255,10 @@ export const googleCallback = async (req, res) => {
 
         res.cookie("token", token);
 
-        res.redirect(`http://localhost:5173/?token=${token}&userId=${user._id}`);
+        res.redirect(`${frontendUrl}/?token=${token}&userId=${user._id}`);
     } catch (error) {
-        res.redirect(`http://localhost:5173/login?error=${encodeURIComponent(error.message)}`);
+        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+        res.redirect(`${frontendUrl}/login?error=${encodeURIComponent(error.message)}`);
     }
 }
 

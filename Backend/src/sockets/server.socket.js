@@ -8,7 +8,8 @@ export function initSocket(httpServer){
     cors:{
       origin: [
         "http://localhost:5173",
-        "https://perplexity-bay.vercel.app"
+        "https://perplexity-bay.vercel.app",
+        "https://perplexity-hm481if51-satwajs-projects.vercel.app"
       ],
       credentials:true
     }
