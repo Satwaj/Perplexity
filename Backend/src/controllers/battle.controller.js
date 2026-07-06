@@ -29,6 +29,7 @@ export const battleController = async (req, res) => {
     const result = await runBattle(problem, emitProgress);
 
     const battle = await battleModel.create({
+      user: req.user.id,
       problem,
       solution_1: result.solution_1,
       solution_2: result.solution_2,
@@ -65,7 +66,7 @@ export const battleController = async (req, res) => {
 export const getAllBattles = async (req, res) => {
   try {
     const battles = await battleModel
-      .find()
+      .find({ user: req.user.id })
       .sort({ createdAt: -1 });
 
     res.status(200).json({ battles });
@@ -79,7 +80,10 @@ export const deleteBattle = async (req, res) => {
   try {
     const { battleId } = req.params;
 
-    await battleModel.findByIdAndDelete(battleId);
+    const result = await battleModel.findOneAndDelete({ _id: battleId, user: req.user.id });
+    if (!result) {
+      return res.status(404).json({ error: "Battle not found or unauthorized" });
+    }
     res.status(200).json({ message: "Battle deleted successfully" });
   } catch (error) {
     console.error("Delete Battle Error:", error);

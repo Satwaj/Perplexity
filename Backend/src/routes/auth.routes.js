@@ -1,4 +1,4 @@
-﻿import { Router } from "express"
+import { Router } from "express"
 import {  register,login,getMe,logout,verifyEmail , googleCallback} from "../controllers/auth.controller.js"
 import { registerValidator, loginValidator } from "../validators/auth.validator.js"
 import { authUser } from "../middlewares/auth.middleware.js"
@@ -62,6 +62,12 @@ authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "
  * @desc Google OAuth callback
  * @access Public
  */
-authRouter.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login", session: false }), googleCallback)
+authRouter.get("/google/callback", (req, res, next) => {
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+  passport.authenticate("google", {
+    failureRedirect: `${frontendUrl}/login?error=GoogleAuthFailed`,
+    session: false
+  })(req, res, next);
+}, googleCallback)
 
 export default authRouter

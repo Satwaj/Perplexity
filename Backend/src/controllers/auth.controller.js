@@ -60,14 +60,20 @@ export async function login(req,res){
   try {
     const {email,password} = req.body
 
-    const user = await usermodel.findOne({email: email.toLowerCase()})
+    const trimmedInput = email.trim();
+    const user = await usermodel.findOne({
+      $or: [
+        { email: trimmedInput.toLowerCase() },
+        { username: trimmedInput }
+      ]
+    });
 
     if(!user){
       return res.status(400).json({
         message:"Invalid credentials",
         success:false,
         err:"User not found"
-      })
+      });
     }
 
     const isPasswordValid = await user.comparePassword(password)

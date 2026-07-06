@@ -15,18 +15,18 @@ const RenderInitializing = () => {
 
   return (
     <div
-      className={`fixed inset-0 ${theme.bg.primary} flex items-center justify-center z-50`}
+      className="fixed inset-0 bg-[#F9F9F7] flex items-center justify-center z-50"
     >
       <style>{`
         @keyframes pulse-ring {
           0% {
-            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            box-shadow: 0 0 0 0 rgba(0, 128, 128, 0.4);
           }
           70% {
-            box-shadow: 0 0 0 30px rgba(59, 130, 246, 0);
+            box-shadow: 0 0 0 30px rgba(0, 128, 128, 0);
           }
           100% {
-            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            box-shadow: 0 0 0 0 rgba(0, 128, 128, 0);
           }
         }
 
@@ -35,7 +35,7 @@ const RenderInitializing = () => {
             transform: translateY(0px) scale(1);
           }
           50% {
-            transform: translateY(-15px) scale(1.05);
+            transform: translateY(-12px) scale(1.03);
           }
         }
 
@@ -57,6 +57,7 @@ const RenderInitializing = () => {
 
         .ring-pulse {
           animation: pulse-ring 2s infinite;
+          border-radius: 50%;
         }
 
         .status-dot {
@@ -65,24 +66,24 @@ const RenderInitializing = () => {
         }
       `}</style>
 
-      <div className="flex flex-col items-center justify-center gap-12">
+      <div className="flex flex-col items-center justify-center gap-10 max-w-md px-6 text-center">
         {/* Server Icon with Pulse Ring */}
-        <div className="relative w-24 h-24">
+        <div className="relative w-20 h-20 mb-2">
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="ring-pulse absolute inset-0"></div>
-            <div className={`server-pulse text-blue-400`}>
-              <FiServer size={64} strokeWidth={1.5} />
+            <div className="ring-pulse absolute inset-0 border border-[#008080]/30"></div>
+            <div className="server-pulse text-[#008080]">
+              <FiServer size={48} strokeWidth={1.5} />
             </div>
           </div>
         </div>
 
         {/* Status Text */}
-        <div className="text-center space-y-4">
-          <h2 className={`text-3xl font-bold ${theme.text.primary}`}>
-            Render Platform
+        <div className="space-y-3">
+          <h2 className="text-2xl font-bold tracking-tight text-[#1A1C1B]">
+            Arena Platform
           </h2>
-          <p className={`text-lg ${theme.text.secondary} font-medium`}>
-            Waking up servers
+          <p className="text-sm font-medium text-[#536255]">
+            Waking up server instances
             <span className="status-dot">.</span>
             <span className="status-dot" style={{ animationDelay: "0.3s" }}>
               .
@@ -92,19 +93,16 @@ const RenderInitializing = () => {
             </span>
           </p>
           <p
-            className={`text-sm ${theme.text.secondary} opacity-75 flex items-center justify-center gap-2`}
+            className="text-xs text-[#7E7576] flex items-center justify-center gap-2"
           >
-            <FiZap size={16} className="text-yellow-400" />
-            Cold start initialization in progress
+            <FiZap size={14} className="text-[#C5A880]" />
+            Initializing battle engines (can take 30-40s)
           </p>
         </div>
 
         {/* Info Text */}
-        <div
-          className={`text-center text-xs ${theme.text.secondary} opacity-60 max-w-xs`}
-        >
-          Your app is deployed on Render's free tier with automatic sleep. First
-          load takes 30-60 seconds.
+        <div className="text-xs text-[#7E7576]/80 leading-relaxed border-t border-[#E2E3E1] pt-6 mt-2 max-w-xs">
+          The service is hosted on a free tier. If the app has been idle, please wait a moment while the server spins back up.
         </div>
       </div>
     </div>

@@ -52,92 +52,93 @@ const Pricing = () => {
   ];
 
   return (
-    <div
-      className={`min-h-screen ${theme.bg.primary} transition-colors duration-200`}
-    >
+    <div className="min-h-screen bg-[#F9F9F7] text-[#1A1C1B] pb-16 font-sans">
       {/* Header */}
-      <div className={`${theme.bg.secondary} border-b ${theme.border.primary}`}>
-        <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="border-b-2 border-[#1A1C1B] bg-white">
+        <div className="max-w-7xl mx-auto px-6 py-10">
           <button
             onClick={() => navigate("/")}
-            className={`flex items-center gap-2 ${theme.text.secondary} hover:${theme.text.primary} transition-colors mb-6`}
+            className="flex items-center gap-2 border-2 border-[#1A1C1B] bg-white px-4 py-2 text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer mb-8"
           >
-            <FiArrowLeft size={20} />
+            <FiArrowLeft size={16} className="stroke-[2.5]" />
             Back to Chat
           </button>
-          <h1 className={`text-4xl font-bold ${theme.text.primary} mb-2`}>
+          
+          <span className="text-[10px] font-black uppercase tracking-widest text-[#008080] bg-[#008080]/10 px-2.5 py-1 border border-[#008080]/20">
+            PRICING OPTIONS
+          </span>
+          <h1 className="text-4xl md:text-5xl font-serif-brutalist font-bold text-[#1A1C1B] tracking-tight mt-4 mb-2">
             Simple, Transparent Pricing
           </h1>
-          <p className={`text-lg ${theme.text.secondary}`}>
-            Choose the perfect plan for your needs
+          <p className="text-sm md:text-base text-[#536255] font-semibold">
+            Choose the perfect battle tier for your inquiries.
           </p>
         </div>
       </div>
 
-      {/* Pricing Cards */}
+      {/* Pricing Cards Grid */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid md:grid-cols-3 gap-8">
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`rounded-xl border-2 overflow-hidden transition-all transform hover:scale-105 ${
+              className={`card-brutalist bg-white flex flex-col justify-between ${
                 plan.highlight
-                  ? `${theme.isDark ? "border-gray-600 bg-gray-900" : "border-gray-400 bg-stone-200"} shadow-2xl`
-                  : `${theme.border.primary} ${theme.bg.secondary}`
+                  ? "shadow-brutalist-lg translate-x-[-2px] translate-y-[-2px]"
+                  : ""
               }`}
             >
               {/* Plan Header */}
               <div
-                className={`px-8 py-8 ${
-                  plan.highlight
-                    ? theme.isDark
-                      ? "bg-gray-800"
-                      : "bg-stone-300"
-                    : theme.isDark
-                      ? "bg-gray-950"
-                      : "bg-stone-100"
+                className={`px-8 py-8 border-b-2 border-[#1A1C1B] ${
+                  plan.highlight ? "bg-[#F5D3B8]" : "bg-[#F1F1EF]"
                 }`}
               >
-                <h3 className={`text-2xl font-bold ${theme.text.primary} mb-2`}>
-                  {plan.name}
-                </h3>
-                <div className="flex items-baseline gap-1 mb-3">
-                  <span className={`text-4xl font-bold ${theme.text.primary}`}>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-2xl font-black uppercase tracking-tight text-[#1A1C1B]">
+                    {plan.name}
+                  </h3>
+                  {plan.highlight && (
+                    <span className="border-2 border-[#1A1C1B] bg-white px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-[#1A1C1B]">
+                      POPULAR
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-baseline gap-1 my-4">
+                  <span className="text-4xl font-extrabold text-[#1A1C1B]">
                     {plan.price}
                   </span>
                   {plan.period && (
-                    <span className={`text-sm ${theme.text.secondary}`}>
+                    <span className="text-sm font-black text-[#536255]">
                       {plan.period}
                     </span>
                   )}
                 </div>
-                <p className={`text-sm ${theme.text.secondary}`}>
+                <p className="text-xs font-semibold text-[#536255]">
                   {plan.description}
                 </p>
               </div>
 
-              {/* Features */}
-              <div className="px-8 py-8">
+              {/* Features List */}
+              <div className="px-8 py-8 flex-1 flex flex-col justify-between">
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <FiCheck
-                        size={20}
-                        className={`shrink-0 mt-1 ${
-                          theme.isDark ? "text-gray-400" : "text-gray-700"
-                        }`}
+                        size={16}
+                        className="shrink-0 mt-0.5 text-[#1A1C1B] stroke-[3]"
                       />
-                      <span className={theme.text.secondary}>{feature}</span>
+                      <span className="text-xs font-bold text-[#536255]">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 {/* CTA Button */}
                 <button
-                  className={`w-full py-3 px-4 rounded-lg font-semibold transition-all hover:scale-95 ${
+                  className={`w-full py-3.5 px-4 border-2 border-[#1A1C1B] font-black uppercase tracking-wider text-xs transition-all cursor-pointer ${
                     plan.highlight
-                      ? `${theme.button.primary} text-white`
-                      : `${theme.bg.tertiary} ${theme.text.primary} hover:${theme.bg.secondary}`
+                      ? "bg-[#1A1C1B] text-white shadow-[4px_4px_0px_0px_#C5A880] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#C5A880] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_#C5A880]"
+                      : "bg-[#F1F1EF] text-[#1A1C1B] hover:bg-white active:translate-x-[1px] active:translate-y-[1px]"
                   }`}
                 >
                   {plan.name === "Free" ? "Current Plan" : "Get Started"}
@@ -149,11 +150,9 @@ const Pricing = () => {
       </div>
 
       {/* FAQ Section */}
-      <div
-        className={`${theme.bg.secondary} border-t ${theme.border.primary} py-16`}
-      >
+      <div className="border-t-2 border-[#1A1C1B] bg-white py-16">
         <div className="max-w-3xl mx-auto px-6">
-          <h2 className={`text-3xl font-bold ${theme.text.primary} mb-8`}>
+          <h2 className="text-3xl font-serif-brutalist font-bold text-[#1A1C1B] mb-8">
             Frequently Asked Questions
           </h2>
 
@@ -176,11 +175,11 @@ const Pricing = () => {
                 a: "Absolutely! Students get 50% off Pro plans with a valid .edu email address.",
               },
             ].map((faq, i) => (
-              <div key={i}>
-                <h3 className={`font-semibold ${theme.text.primary} mb-2`}>
+              <div key={i} className="p-5 border-2 border-[#1A1C1B] bg-[#F9F9F7] shadow-[2px_2px_0px_0px_#1A1C1B]">
+                <h3 className="font-extrabold text-sm text-[#1A1C1B] mb-2">
                   {faq.q}
                 </h3>
-                <p className={theme.text.secondary}>{faq.a}</p>
+                <p className="text-xs font-semibold text-[#536255] leading-relaxed">{faq.a}</p>
               </div>
             ))}
           </div>

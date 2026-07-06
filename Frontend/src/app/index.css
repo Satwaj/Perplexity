@@ -1,15 +1,77 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap");
 @import "tailwindcss";
 
 body {
-	font-family: "Space Grotesk", "Segoe UI", sans-serif;
+	font-family: "Outfit", "Be Vietnam Pro", sans-serif;
+	background-color: #F9F9F7;
+	color: #1A1C1B;
+	overflow-x: hidden;
 }
 
-.app-page-bg {
-	background: linear-gradient(135deg, #8897ae 0%, #a8b2c0 52%, #7f92ab 100%);
+.font-serif-brutalist {
+	font-family: "DM Serif Display", Georgia, serif;
 }
 
-/* Hide scrollbar while keeping functionality */
+.border-brutalist {
+	border: 2px solid #1A1C1B;
+}
+
+.shadow-brutalist {
+	box-shadow: 4px 4px 0px 0px #1A1C1B;
+}
+
+.shadow-brutalist-lg {
+	box-shadow: 6px 6px 0px 0px #1A1C1B;
+}
+
+.btn-brutalist {
+	border: 2px solid #1A1C1B;
+	box-shadow: 4px 4px 0px 0px #1A1C1B;
+	transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-brutalist:hover {
+	transform: translate(-2px, -2px);
+	box-shadow: 6px 6px 0px 0px #1A1C1B;
+}
+
+.btn-brutalist:active {
+	transform: translate(2px, 2px);
+	box-shadow: 0px 0px 0px 0px #1A1C1B;
+}
+
+.card-brutalist {
+	border: 2px solid #1A1C1B;
+	box-shadow: 4px 4px 0px 0px #1A1C1B;
+	background-color: #FFFFFF;
+	transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-brutalist:hover {
+	transform: translate(-3px, -3px);
+	box-shadow: 7px 7px 0px 0px #1A1C1B;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: #F9F9F7;
+	border-left: 2px solid #1A1C1B;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #E2E3E1;
+	border: 2px solid #1A1C1B;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #CFC4C5;
+}
+
 .scrollbar-hide {
 	-ms-overflow-style: none;
 	scrollbar-width: none;

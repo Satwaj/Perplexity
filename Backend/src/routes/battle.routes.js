@@ -1,9 +1,13 @@
 import {Router} from 'express';
 import express from 'express';
 import { battleController, getAllBattles, deleteBattle } from '../controllers/battle.controller.js';
+import { authUser } from '../middlewares/auth.middleware.js';
 
 
 const router = express.Router();
+
+// Secure all battle routes
+router.use(authUser);
 
 // POST - Create new battle
 router.post('/', battleController);

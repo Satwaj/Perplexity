@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTheme } from "../../../context/ThemeContext";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import { useAuth } from "../../auth/hooks/useAuth";
 import {
   BattleInputSection,
   SolutionCard,
@@ -8,15 +10,19 @@ import {
   BattleRealProgressLoader,
 } from "../components";
 import { useBattle } from "../hooks/useBattle";
-import { FiTrash2 } from "react-icons/fi";
+import { FiTrash2, FiLogOut, FiPlus, FiClock, FiSettings, FiHelpCircle, FiUser } from "react-icons/fi";
 import { GiCrossedSwords } from "react-icons/gi";
-import { MdLightbulb, MdEmojiEvents } from "react-icons/md";
 import { HiMenu, HiX } from "react-icons/hi";
+import gsap from "gsap";
 
 const BattleArena = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("history"); // history or settings
+  const { handleLogout } = useAuth();
+  const user = useSelector((state) => state.auth?.user);
+  
   const {
     battles,
     currentBattle,
@@ -27,299 +33,370 @@ const BattleArena = () => {
     handleDeleteBattle,
   } = useBattle();
 
+  const resultsRef = useRef(null);
+  const sidebarRef = useRef(null);
+  const heroRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+
   useEffect(() => {
     handleGetBattles();
   }, [handleGetBattles]);
+
+  // Auto-scroll to end on new battle or loading status change
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      setTimeout(() => {
+        scrollContainerRef.current.scrollTo({
+          top: scrollContainerRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }, 100);
+    }
+  }, [currentBattle, loading]);
 
   // Close sidebar when battle is opened
   useEffect(() => {
     setSidebarOpen(false);
   }, [currentBattle]);
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) return "Good morning";
-    if (hour >= 12 && hour < 17) return "Good afternoon";
-    if (hour >= 17 && hour < 21) return "Good evening";
-    return "Good night";
+  // GSAP animation for initial hero state
+  useEffect(() => {
+    if (!currentBattle && heroRef.current) {
+      gsap.fromTo(
+        heroRef.current.children,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power4.out" }
+      );
+    }
+  }, [currentBattle]);
+
+  // GSAP animation for battle results when loaded
+  useEffect(() => {
+    if (currentBattle && !loading && resultsRef.current) {
+      gsap.fromTo(
+        resultsRef.current.children,
+        { y: 25, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out" }
+      );
+    }
+  }, [currentBattle, loading]);
+
+  const getInitials = (name) => {
+    if (!name) return "U";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .substring(0, 2);
   };
 
-  const bgColor = theme.isDark ? "bg-slate-900" : "bg-white";
-  const sidebarColor = theme.isDark ? "bg-slate-900" : "bg-white";
-
   return (
-    <div
-      className={`h-screen flex ${bgColor} transition-colors duration-200 relative`}
-    >
-      {/* Mobile Overlay */}
+    <div className="h-screen flex flex-row bg-[#F9F9F7] text-[#1A1C1B] overflow-hidden font-sans relative">
+      
+      {/* 1. Left Sidebar (Neobrutalist layout from screenshot) */}
+      <aside
+        ref={sidebarRef}
+        className={`fixed md:static inset-y-0 left-0 w-80 bg-[#F1F1EF] border-r-2 border-[#1A1C1B] flex flex-col z-50 transition-transform duration-300 md:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {/* Sidebar Header */}
+        <div className="p-6 border-b-2 border-[#1A1C1B] flex items-center justify-between shrink-0">
+          <div>
+            <h2 className="font-extrabold text-2xl tracking-wider text-[#1A1C1B]">
+              DASHBOARD
+            </h2>
+            <span className="text-[10px] font-bold tracking-widest text-[#7E7576] block mt-0.5">
+              V1.0.4 - ARENA AI
+            </span>
+          </div>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="md:hidden p-1.5 border-2 border-black bg-white shadow-[2px_2px_0px_0px_#000] text-black"
+          >
+            <HiX size={18} />
+          </button>
+        </div>
+
+        {/* New Chat Button (Peach button matching screenshot) */}
+        <div className="p-6 border-b-2 border-[#1A1C1B] shrink-0">
+          <button
+            onClick={() => handleOpenBattle(null)}
+            className="w-full flex items-center justify-center gap-3 border-2 border-[#1A1C1B] bg-[#F5D3B8] p-3 text-sm font-black text-[#1A1C1B] shadow-[4px_4px_0px_0px_#1A1C1B] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#1A1C1B] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer"
+          >
+            <FiPlus size={16} className="stroke-[3]" />
+            New Chat
+          </button>
+        </div>
+
+        {/* Navigation / History section */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          <div className="space-y-3">
+            {/* History Tab */}
+            <button
+              onClick={() => setActiveTab("history")}
+              className={`w-full flex items-center gap-3 text-sm font-bold p-2.5 transition-colors border-2 ${
+                activeTab === "history"
+                  ? "bg-white border-[#1A1C1B] text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B]"
+                  : "border-transparent text-[#536255] hover:text-[#1A1C1B]"
+              }`}
+            >
+              <FiClock size={16} className="stroke-[2.5]" />
+              History
+            </button>
+
+            {/* Settings Tab */}
+            <button
+              onClick={() => setActiveTab("settings")}
+              className={`w-full flex items-center gap-3 text-sm font-bold p-2.5 transition-colors border-2 ${
+                activeTab === "settings"
+                  ? "bg-white border-[#1A1C1B] text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B]"
+                  : "border-transparent text-[#536255] hover:text-[#1A1C1B]"
+              }`}
+            >
+              <FiSettings size={16} className="stroke-[2.5]" />
+              Settings
+            </button>
+          </div>
+
+          {/* Conditional Sidebar Content */}
+          {activeTab === "history" && (
+            <div className="pt-4 border-t border-[#1A1C1B]/20 space-y-2">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#7E7576] block mb-3 px-1">
+                Past Battles
+              </span>
+              {battles.length === 0 ? (
+                <p className="text-xs text-[#7E7576] italic px-1">
+                  No battles recorded.
+                </p>
+              ) : (
+                battles.map((battle) => {
+                  const isActive = currentBattle?._id === battle._id || currentBattle?.id === battle.id;
+                  return (
+                    <div
+                      key={battle._id || battle.id}
+                      className={`p-3 border-2 transition-all group ${
+                        isActive
+                          ? "bg-white border-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B]"
+                          : "border-transparent hover:bg-white/40 hover:border-[#1A1C1B]/30"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div
+                          onClick={() => handleOpenBattle(battle)}
+                          className="flex-1 cursor-pointer min-w-0"
+                        >
+                          <p className="text-xs font-extrabold text-[#1A1C1B] truncate">
+                            {battle.problem}
+                          </p>
+                          <p className="text-[9px] text-[#7E7576] mt-1 font-bold">
+                            {new Date(battle.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => handleDeleteBattle(battle._id || battle.id)}
+                          className="p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/10 text-[#7E7576] hover:text-red-600 cursor-pointer shrink-0"
+                        >
+                          <FiTrash2 size={13} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          )}
+
+          {activeTab === "settings" && (
+            <div className="pt-4 border-t border-[#1A1C1B]/20 space-y-4">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#7E7576] block px-1">
+                Preference Config
+              </span>
+              <div className="p-3 border-2 border-[#1A1C1B] bg-white space-y-2.5">
+                <p className="text-xs font-bold text-[#1A1C1B]">
+                  Theme: <span className="text-[#008080]">Light Aesthetic</span>
+                </p>
+                <p className="text-[10px] text-[#7E7576] font-medium leading-relaxed">
+                  The application theme is locked permanently to Neobrutalist cream paper design.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar Bottom Upgrade Section */}
+        <div className="p-6 border-t-2 border-[#1A1C1B] space-y-4 bg-white/20 shrink-0">
+          <button
+            onClick={() => navigate("/pricing")}
+            className="w-full flex items-center justify-center border-2 border-[#1A1C1B] bg-[#1A1C1B] text-white p-3 text-xs font-black uppercase tracking-widest shadow-[4px_4px_0px_0px_#C5A880] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#C5A880] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_#C5A880] transition-all cursor-pointer"
+          >
+            Upgrade Plan
+          </button>
+          
+          <div className="flex flex-col gap-2.5 pt-2">
+            <button className="flex items-center gap-3 text-xs font-bold text-[#536255] hover:text-[#1A1C1B] transition-colors cursor-pointer text-left">
+              <FiHelpCircle size={15} /> Help
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-3 text-xs font-bold text-[#7E7576] hover:text-red-600 transition-colors cursor-pointer text-left"
+            >
+              <FiLogOut size={15} /> Logout
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 md:hidden z-30"
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
-      <div
-        className={`fixed md:static w-72 h-screen md:h-auto ${sidebarColor} ${theme.isDark ? "border-slate-700" : "border-gray-200"} border-r flex flex-col overflow-hidden transition-transform duration-300 z-40 md:z-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        }`}
-      >
-        {/* Close Button - Mobile Only */}
-        <button
-          onClick={() => setSidebarOpen(false)}
-          className="md:hidden absolute top-4 right-4 p-2 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg"
-        >
-          <HiX
-            size={24}
-            className={theme.isDark ? "text-white" : "text-black"}
-          />
-        </button>
-        {/* Greeting & New Battle */}
-        <div
-          className={`p-8 pt-16 md:pt-8 space-y-6 ${theme.isDark ? "border-slate-700" : "border-gray-200"} border-b shrink-0`}
-        >
-          <div className="space-y-2">
-            <p
-              className={`text-sm font-medium ${theme.isDark ? "text-gray-400" : "text-gray-600"}`}
+      {/* 2. Right Side Workspace Area */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+        
+        {/* Top Navbar */}
+        <nav className="h-16 shrink-0 border-b-2 border-[#1A1C1B] bg-white flex items-center justify-between px-6 z-30">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden p-1.5 border-2 border-black bg-white text-black"
             >
-              {getGreeting()}
-            </p>
-            <h2
-              className={`text-3xl font-bold ${theme.isDark ? "text-white" : "text-slate-900"}`}
-            >
-              Arena Battle
-            </h2>
-            <p
-              className={`text-sm ${theme.isDark ? "text-slate-400" : "text-slate-600"}`}
-            >
-              Compare AI models side by side
-            </p>
+              <HiMenu size={20} />
+            </button>
+            <span className="font-extrabold text-lg tracking-[0.25em] text-[#1A1C1B] uppercase">
+              AI COMPARISON
+            </span>
           </div>
-          <button
-            onClick={() => {
-              handleOpenBattle(null);
-            }}
-            className={`w-full py-3 px-4 rounded-lg font-semibold transition-all ${
-              theme.isDark
-                ? "bg-gray-700 hover:bg-gray-600 text-white"
-                : "bg-gray-800 hover:bg-gray-900 text-white"
-            }`}
-          >
-            + New Battle
-          </button>
-        </div>
 
-        {/* Battle History */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-3">
-          <p
-            className={`text-xs font-bold ${theme.isDark ? "text-gray-500" : "text-gray-600"} uppercase tracking-widest px-2 mb-4`}
-          >
-            Battle History
-          </p>
-          {battles.length === 0 ? (
-            <p
-              className={`text-sm ${theme.isDark ? "text-slate-500" : "text-slate-500"} px-2 py-8 text-center`}
-            >
-              No battles yet. Start your first battle!
-            </p>
-          ) : (
-            battles.map((battle) => (
-              <div
-                key={battle._id || battle.id}
-                className={`p-3 rounded-lg transition-all group ${
-                  currentBattle?._id === battle._id ||
-                  currentBattle?.id === battle.id
-                    ? theme.isDark
-                      ? "bg-slate-700 shadow-md border border-slate-600"
-                      : "bg-gray-100 shadow-md border border-gray-300"
-                    : theme.isDark
-                      ? "hover:bg-slate-700"
-                      : "hover:bg-gray-50"
-                }`}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div
-                    onClick={() => handleOpenBattle(battle)}
-                    className="flex-1 cursor-pointer"
-                  >
-                    <p
-                      className={`text-sm font-medium ${theme.isDark ? "text-white" : "text-slate-900"} truncate`}
-                    >
-                      {battle.problem.substring(0, 30)}...
-                    </p>
-                    <p
-                      className={`text-xs ${theme.isDark ? "text-slate-400" : "text-slate-600"} mt-1`}
-                    >
-                      {new Date(battle.createdAt).toLocaleDateString()} ·{" "}
-                      {new Date(battle.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => handleDeleteBattle(battle._id || battle.id)}
-                    className={`p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity ${
-                      theme.isDark
-                        ? "hover:bg-red-900 hover:bg-opacity-30 text-red-400"
-                        : "hover:bg-red-100 text-red-600"
-                    }`}
-                    title="Delete battle"
-                  >
-                    <FiTrash2 size={16} />
-                  </button>
-                </div>
+          <div className="flex items-center gap-6">
+            <div className="hidden sm:flex items-center gap-5 text-xs font-black tracking-widest text-[#536255]">
+              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors">CHATS</span>
+              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors">ANALYTICS</span>
+              <span className="cursor-pointer hover:text-[#1A1C1B] transition-colors" onClick={() => navigate("/pricing")}>MODELS</span>
+            </div>
+            
+            <div className="h-6 w-[2px] bg-[#1A1C1B] hidden sm:block" />
+
+            {/* Profile Avatar Badge */}
+            {user && (
+              <div className="flex items-center gap-2 border-2 border-[#1A1C1B] bg-[#F1F1EF] px-3 py-1.5 font-bold text-xs text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B]">
+                <FiUser size={13} className="stroke-[2.5]" />
+                <span className="hidden md:inline">{user.fullname || user.username}</span>
               </div>
-            ))
-          )}
-        </div>
+            )}
+          </div>
+        </nav>
 
-        {/* Back to Chat */}
-        <div
-          className={`p-6 ${theme.isDark ? "border-slate-700" : "border-gray-200"} border-t shrink-0`}
-        >
-          <button
-            onClick={() => navigate("/")}
-            className={`w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
-              theme.isDark
-                ? "hover:bg-slate-700 text-gray-300"
-                : "hover:bg-gray-100 text-gray-700"
-            }`}
-          >
-            ← Back to Chat
-          </button>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden w-full">
-        {/* Mobile Header */}
-        <div className="md:hidden flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg"
-          >
-            <HiMenu
-              size={24}
-              className={theme.isDark ? "text-white" : "text-black"}
-            />
-          </button>
-          <h1
-            className={`font-bold ${theme.isDark ? "text-white" : "text-black"}`}
-          >
-            AI Model Arena
-          </h1>
-          <div className="w-10" /> {/* Spacer */}
-        </div>
-        {/* Input Area */}
-        <div
-          className={`${theme.isDark ? "bg-slate-800 border-slate-700" : "bg-white border-gray-200"} border-b p-4 md:p-8 shrink-0 shadow-sm`}
-        >
-          <BattleInputSection
-            onStartBattle={handleStartBattle}
-            loading={loading}
-          />
-        </div>
-
-        {/* Results Area */}
-        <div
-          className={`flex-1 overflow-y-auto p-4 md:p-12 ${theme.isDark ? "bg-slate-900" : "bg-white"}`}
-        >
-          {!currentBattle ? (
-            <div className="h-full flex items-center justify-center bg-white p-4 md:p-6">
-              <div className="w-full max-w-2xl">
-                {/* Greeting */}
-                <p className="text-xs md:text-sm font-semibold text-black mb-2">
-                  {getGreeting()}, Satwaj
-                </p>
-
-                {/* Hero */}
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-black mb-2 md:mb-3">
-                  Battle Arena
+        {/* Workspace Main Area */}
+        <div className="flex-1 flex flex-col justify-between overflow-hidden">
+          
+          {/* Scrollable results columns */}
+          <div ref={scrollContainerRef} className="p-6 md:p-12 w-full flex-1 overflow-y-auto animate-scroll">
+            {!currentBattle ? (
+              <div
+                ref={heroRef}
+                className="max-w-2xl mx-auto flex flex-col justify-center h-full min-h-[50vh] py-10"
+              >
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#008080] bg-[#008080]/10 px-2.5 py-1 border border-[#008080]/20 w-fit">
+                  Query Origin: User
+                </span>
+                
+                <h1 className="text-4xl md:text-6xl font-serif-brutalist font-bold text-[#1A1C1B] leading-[1.1] my-6 tracking-tight">
+                  Battle Arena: side-by-side comparison.
                 </h1>
-                <p className="text-sm md:text-base text-gray-700 mb-6 md:mb-8">
-                  Pit two AI models against each other and judge the winner
+                
+                <div className="w-20 border-b-2 border-black mb-8"></div>
+
+                <p className="text-base text-[#536255] max-w-lg mb-8 leading-relaxed font-semibold">
+                  Pit two AI engines side-by-side. Analyze speed, reasoning quality, and formatting accuracy instantly under a neobrutalist verdict.
                 </p>
 
-                {/* Features Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
-                  <div className="p-3 md:p-4 bg-stone-100 rounded-lg border border-gray-300">
-                    <h3 className="font-bold text-black mb-1 text-xs md:text-sm">
-                      Ask Anything
-                    </h3>
-                    <p className="text-xs text-gray-700">Enter your question</p>
-                  </div>
-                  <div className="p-3 md:p-4 bg-stone-100 rounded-lg border border-gray-300">
-                    <h3 className="font-bold text-black mb-1 text-xs md:text-sm">
-                      Watch Battle
-                    </h3>
-                    <p className="text-xs text-gray-700">Models compete</p>
-                  </div>
-                  <div className="p-3 md:p-4 bg-stone-100 rounded-lg border border-gray-300">
-                    <h3 className="font-bold text-black mb-1 text-xs md:text-sm">
-                      Judge Winner
-                    </h3>
-                    <p className="text-xs text-gray-700">See the verdict</p>
-                  </div>
-                </div>
-
-                {/* CTA Button */}
                 <button
                   onClick={() => {
                     document.querySelector("textarea")?.focus();
                   }}
-                  className="w-full py-3 md:py-3 px-4 md:px-6 bg-black hover:bg-gray-800 text-white font-bold rounded-lg transition-all text-sm md:text-base"
+                  className="w-fit cursor-pointer border-2 border-[#1A1C1B] bg-[#1A1C1B] text-white font-extrabold px-8 py-3.5 shadow-[4px_4px_0px_0px_#C5A880] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#C5A880] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_#C5A880] transition-all text-sm uppercase tracking-wider"
                 >
-                  Start Battle
+                  Type Inquiry Below
                 </button>
               </div>
-            </div>
-          ) : loading ? (
-            <BattleRealProgressLoader />
-          ) : (
-            <div className="w-full mx-auto space-y-6 md:space-y-10 px-2 md:px-4">
-              {/* Problem */}
-              <div className="space-y-2 md:space-y-3">
-                <p
-                  className={`text-xs font-bold ${theme.isDark ? "text-gray-400" : "text-gray-700"} uppercase tracking-widest`}
-                >
-                  Question
-                </p>
-                <p
-                  className={`text-lg md:text-xl font-semibold ${theme.isDark ? "text-white" : "text-slate-900"} leading-relaxed`}
-                >
-                  {currentBattle.problem}
-                </p>
+            ) : loading ? (
+              <div className="h-full min-h-[60vh] flex items-center justify-center">
+                <BattleRealProgressLoader />
               </div>
+            ) : (
+              <div
+                ref={resultsRef}
+                className="max-w-6xl mx-auto space-y-12"
+              >
+                {/* Header Inquiry */}
+                <div className="space-y-2 pb-6">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[#7E7576]">
+                    Query Origin: User
+                  </span>
+                  <h1 className="text-lg md:text-2xl font-serif-brutalist font-bold text-[#1A1C1B] leading-tight">
+                    {currentBattle.problem}
+                  </h1>
+                  <div className="w-20 border-b-2 border-black mt-4"></div>
+                </div>
 
-              {/* Solutions */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12">
-                <SolutionCard
-                  aiName="Mistral"
-                  solution={currentBattle.solution_1}
-                  score={currentBattle.solution_1_score}
-                  reasoning={currentBattle.solution_1_reasoning}
-                  isWinner={currentBattle.winner === 1}
-                />
-                <SolutionCard
-                  aiName="Groq"
-                  solution={currentBattle.solution_2}
-                  score={currentBattle.solution_2_score}
-                  reasoning={currentBattle.solution_2_reasoning}
-                  isWinner={currentBattle.winner === 2}
-                />
+                {/* Comparative side-by-side grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                  <SolutionCard
+                    aiName="Mistral"
+                    solution={currentBattle.solution_1}
+                    score={currentBattle.solution_1_score}
+                    reasoning={currentBattle.solution_1_reasoning}
+                    isWinner={currentBattle.winner === 1}
+                  />
+                  <SolutionCard
+                    aiName="Groq"
+                    solution={currentBattle.solution_2}
+                    score={currentBattle.solution_2_score}
+                    reasoning={currentBattle.solution_2_reasoning}
+                    isWinner={currentBattle.winner === 2}
+                  />
+                </div>
+
+                {/* Judge Box */}
+                <div className="pt-4">
+                  <JudgeResult
+                    winner={currentBattle.winner}
+                    solution1Score={currentBattle.solution_1_score}
+                    solution2Score={currentBattle.solution_2_score}
+                  />
+                </div>
               </div>
+            )}
+          </div>
 
-              {/* Judge Result */}
-              <JudgeResult
-                winner={currentBattle.winner}
-                solution1Score={currentBattle.solution_1_score}
-                solution2Score={currentBattle.solution_2_score}
+          {/* Fixed Footer/Input Area (Non-scrollable) */}
+          <div className="shrink-0 bg-[#F9F9F7] pt-2">
+            {/* Floating Lower Input Area */}
+            <div className="w-full max-w-4xl mx-auto px-6 mb-6">
+              <BattleInputSection
+                onStartBattle={handleStartBattle}
+                loading={loading}
               />
             </div>
-          )}
+
+            {/* Neobrutalist Footer (from screenshot) */}
+            <footer className="border-t-2 border-[#1A1C1B] bg-white py-4 px-6 flex flex-col sm:flex-row items-center justify-between text-[10px] font-black tracking-widest text-[#536255] uppercase gap-2">
+              <span>© 2026 ARCHITECTURAL AI. ALL RIGHTS RESERVED.</span>
+              <div className="flex items-center gap-6">
+                <span className="cursor-pointer hover:underline">PRIVACY POLICY</span>
+                <span className="cursor-pointer hover:underline">TERMS OF SERVICE</span>
+              </div>
+            </footer>
+          </div>
+
         </div>
+
       </div>
     </div>
   );

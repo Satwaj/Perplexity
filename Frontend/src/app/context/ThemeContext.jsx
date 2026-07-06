@@ -3,36 +3,37 @@ import React, { createContext, useState, useContext } from "react";
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [isDark, setIsDark] = useState(false);
+  // Lock to permanent light aesthetic theme (isDark = false)
+  const isDark = false;
 
   const toggleTheme = () => {
-    setIsDark((prev) => !prev);
+    // Permanent theme, toggling is disabled
   };
 
   const theme = {
     isDark,
     toggleTheme,
     bg: {
-      primary: isDark ? "bg-black" : "bg-stone-50",
-      secondary: isDark ? "bg-gray-950" : "bg-stone-100",
-      tertiary: isDark ? "bg-gray-900" : "bg-stone-200",
+      primary: "bg-[#F9F9F7]", // Premium warm paper off-white
+      secondary: "bg-[#F1F1EF]", // Creamier light gray
+      tertiary: "bg-[#E6E6E3]", // Slightly darker cream overlay
+      card: "bg-white/80 backdrop-blur-md", // Soft frosted light panel
     },
     text: {
-      primary: isDark ? "text-white" : "text-gray-900",
-      secondary: isDark ? "text-gray-200" : "text-gray-700",
-      tertiary: isDark ? "text-gray-400" : "text-gray-600",
+      primary: "text-[#1A1C1B]", // High-contrast warm charcoal
+      secondary: "text-[#536255]", // Soft botanical gray-green
+      tertiary: "text-[#7E7576]", // Clean muted gray
+      accent: "text-[#008080]", // Muted aesthetic teal
     },
     border: {
-      primary: isDark ? "border-gray-800" : "border-gray-200",
-      secondary: isDark ? "border-gray-700" : "border-gray-100",
+      primary: "border-[#E2E3E1]", // Clean subtle outline
+      secondary: "border-[#CFC4C5]", // Stronger border
+      accent: "border-[#008080]/30", // Glow-aligned border
     },
     button: {
-      primary: isDark
-        ? "bg-gray-800 hover:bg-gray-700"
-        : "bg-gray-800 hover:bg-gray-900",
-      secondary: isDark
-        ? "bg-gray-900 hover:bg-gray-800"
-        : "bg-stone-100 border border-gray-200 hover:bg-stone-200",
+      primary: "bg-[#1A1C1B] hover:bg-[#3C4A3E] text-white transition-all duration-300", // Solid charcoal
+      secondary: "bg-[#F1F1EF] border border-[#E2E3E1] hover:bg-[#E6E6E3] text-[#1A1C1B] transition-all duration-300",
+      accent: "bg-[#008080] hover:bg-[#006666] text-white transition-all duration-300", // Teal primary
     },
   };
 

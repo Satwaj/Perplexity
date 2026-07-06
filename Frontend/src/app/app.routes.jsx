@@ -1,42 +1,58 @@
-import { createBrowserRouter, Navigate, Route, Routes } from "react-router";
-import Login from "./features/auth/pages/Login";
-import Register from "./features/auth/pages/Register";
-import Dashboard from "./features/chat/pages/Dashboard";
+import { createBrowserRouter, Navigate } from "react-router";
+import { lazy, Suspense } from "react";
 import Protected from "./features/chat/components/Protected";
-import { ChatInterface } from "./features/chat/components";
-import Pricing from "./features/pricing/pages/Pricing";
-import BattleArena from "./features/battle/pages/BattleArena";
+
+const Login = lazy(() => import("./features/auth/pages/Login"));
+const Register = lazy(() => import("./features/auth/pages/Register"));
+const Pricing = lazy(() => import("./features/pricing/pages/Pricing"));
+const BattleArena = lazy(() => import("./features/battle/pages/BattleArena"));
+const ChatInterface = lazy(() =>
+  import("./features/chat/components").then((module) => ({
+    default: module.ChatInterface,
+  }))
+);
+
+const Loader = () => <div>Loading...</div>;
 
 export const router = createBrowserRouter([
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <Login />
+      </Suspense>
+    ),
   },
   {
     path: "/register",
-    element: <Register />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <Register />
+      </Suspense>
+    ),
   },
   {
     path: "/pricing",
-    element: <Pricing />,
+    element: (
+      <Suspense fallback={<Loader />}>
+        <Pricing />
+      </Suspense>
+    ),
   },
   {
     path: "/",
     element: (
       <Protected>
-        <ChatInterface />
+        <Suspense fallback={<Loader />}>
+          <BattleArena />
+        </Suspense>
       </Protected>
     ),
   },
   {
     path: "/battle",
-    element: (
-      <Protected>
-        <BattleArena />
-      </Protected>
-    ),
+    element: <Navigate to="/" replace />,
   },
-
   {
     path: "/dashboard",
     element: <Navigate to="/" replace />,

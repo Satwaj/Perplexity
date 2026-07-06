@@ -7,40 +7,45 @@ import RenderInitializing from "./features/auth/pages/RenderInitializing";
 
 const App = () => {
   const { handleGetMe } = useAuth();
-  const [showRenderInit, setShowRenderInit] = useState(true);
-  const [showLoading, setShowLoading] = useState(false);
+  const [initializing, setInitializing] = useState(true);
+  const [showWakeUpMessage, setShowWakeUpMessage] = useState(false);
 
   useEffect(() => {
-    // Show Render initialization screen for 6 seconds (accounts for cold start)
-    const renderInitTimer = setTimeout(() => {
-      setShowRenderInit(false);
-      setShowLoading(true);
-    }, 6000);
+    // 1. Capture token from query parameters (Google OAuth callback redirect)
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    if (token) {
+      localStorage.setItem("authToken", token);
+      const cleanUrl = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, document.title, cleanUrl);
+    }
 
-    return () => clearTimeout(renderInitTimer);
-  }, []);
-
-  useEffect(() => {
-    if (!showLoading) return;
-
+    // 2. Perform initialization check immediately
     const init = async () => {
+      // If the backend doesn't respond in 1.5s, assume a Render cold start and show waking up UI
+      const timer = setTimeout(() => {
+        setShowWakeUpMessage(true);
+      }, 1500);
+
       try {
         await handleGetMe();
       } finally {
-        setShowLoading(false);
+        clearTimeout(timer);
+        setInitializing(false);
       }
     };
 
     init();
-  }, [showLoading, handleGetMe]);
+  }, [handleGetMe]);
 
-  return (
-    <>
-      {showRenderInit && <RenderInitializing />}
-      {showLoading && <Loading />}
-      <RouterProvider router={router} />
-    </>
-  );
+  if (initializing) {
+    if (showWakeUpMessage) {
+      return <RenderInitializing />;
+    }
+    return <Loading />;
+  }
+
+  return <RouterProvider router={router} />;
 };
 
 export default App;

@@ -1,12 +1,18 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api` : "http://localhost:3000/api";
 
+const getHeaders = () => {
+  const token = localStorage.getItem("authToken");
+  return {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+};
+
 export const startBattle = async (problem) => {
   try {
     const response = await fetch(`${API_BASE}/battle`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: getHeaders(),
       body: JSON.stringify({ problem }),
     });
 
@@ -26,9 +32,7 @@ export const getBattles = async () => {
   try {
     const response = await fetch(`${API_BASE}/battle`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
@@ -47,9 +51,7 @@ export const deleteBattle = async (battleId) => {
   try {
     const response = await fetch(`${API_BASE}/battle/${battleId}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: getHeaders(),
     });
 
     if (!response.ok) {
