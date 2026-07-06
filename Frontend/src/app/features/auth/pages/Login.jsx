@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setError } from "../auth.slice";
 import { Navigate } from "react-router";
 import gsap from "gsap";
 
@@ -15,10 +16,14 @@ const Login = () => {
 
   const { handleLogin } = useAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const formRef = useRef(null);
   const infoRef = useRef(null);
 
   useEffect(() => {
+    // Clear stale errors on mount
+    dispatch(setError(null));
+
     gsap.fromTo(
       formRef.current,
       { y: 30, opacity: 0 },
