@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FiCopy, FiThumbsUp, FiThumbsDown } from "react-icons/fi";
+import { FiCopy, FiThumbsUp, FiThumbsDown, FiVolume2, FiVolumeX } from "react-icons/fi";
 import { GiSwordman } from "react-icons/gi";
 import { useTheme } from "../../../context/ThemeContext";
 import { useNavigate } from "react-router";
@@ -260,12 +260,16 @@ const ChatMessageArea = ({ messages = [] }) => {
                               speak(message.text);
                             }
                           }}
-                          className={`p-1.5 border-2 border-transparent hover:border-[#1A1C1B] hover:bg-[#F1F1EF] transition-all cursor-pointer shrink-0 ${
-                            isSpeaking ? "bg-[#008080]/15 text-[#008080]" : "text-[#536255] hover:text-[#1A1C1B]"
+                          className={`p-2 border-2 border-[#1A1C1B] bg-white text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] hover:shadow-[3.5px_3.5px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer shrink-0 ${
+                            isSpeaking ? "bg-[#008080]/10 border-[#008080] text-[#008080]" : ""
                           }`}
                           title={isSpeaking ? "Stop speaking" : "Speak answer"}
                         >
-                          <span className="text-base select-none">🔊</span>
+                          {isSpeaking ? (
+                            <FiVolumeX size={16} className="stroke-[2.5]" />
+                          ) : (
+                            <FiVolume2 size={16} className="stroke-[2.5]" />
+                          )}
                         </button>
                       )}
                     </div>
