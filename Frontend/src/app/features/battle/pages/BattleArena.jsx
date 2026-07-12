@@ -10,7 +10,7 @@ import {
   BattleRealProgressLoader,
 } from "../components";
 import { useBattle } from "../hooks/useBattle";
-import { FiTrash2, FiLogOut, FiPlus, FiClock, FiSettings, FiHelpCircle, FiUser, FiGrid } from "react-icons/fi";
+import { FiTrash2, FiLogOut, FiPlus, FiClock, FiSettings, FiHelpCircle, FiUser, FiGrid, FiMessageSquare } from "react-icons/fi";
 import { GiCrossedSwords } from "react-icons/gi";
 import { HiMenu, HiX } from "react-icons/hi";
 import gsap from "gsap";
@@ -22,6 +22,7 @@ const BattleArena = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("history"); 
   const [navOpen, setNavOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const { handleLogout } = useAuth();
   const user = useSelector((state) => state.auth?.user);
 
@@ -170,7 +171,7 @@ const BattleArena = () => {
         <div ref={glow1Ref} className="absolute top-24 left-[15%] w-80 h-80 rounded-full bg-violet-600/5 blur-3xl pointer-events-none" />
         <div ref={glow2Ref} className="absolute top-80 right-[10%] w-72 h-72 rounded-full bg-cyan-600/5 blur-3xl pointer-events-none" />
         <div ref={glow3Ref} className="absolute bottom-32 left-[20%] w-96 h-96 rounded-full bg-fuchsia-600/3 blur-3xl pointer-events-none" />
-        <div ref={glow4Ref} className="absolute bottom-48 right-[18%] w-60 h-60 rounded-full bg-indigo-600/5 blur-2xl pointer-none" />
+        <div ref={glow4Ref} className="absolute bottom-48 right-[18%] w-60 h-60 rounded-full bg-indigo-600/5 blur-2xl pointer-events-none" />
       </div>
 
       {/* Background grid pattern */}
@@ -185,14 +186,14 @@ const BattleArena = () => {
       {/* 1. Left Sidebar */}
       <aside
         ref={sidebarRef}
-        className={`fixed md:static inset-y-0 left-0 w-80 bg-zinc-950/60 backdrop-blur-xl border-r border-white/5 flex flex-col z-50 transition-transform duration-300 md:translate-x-0 ${
+        className={`fixed md:static inset-y-0 left-0 w-80 bg-zinc-955/65 backdrop-blur-xl border-r border-white/5 flex flex-col z-50 transition-transform duration-300 md:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Sidebar Header */}
         <div className="p-6 border-b border-white/5 flex items-center justify-between shrink-0">
           <div>
-            <h2 className="font-extrabold text-2xl tracking-wider text-white">
+            <h2 className="font-extrabold text-2xl tracking-wider text-white font-serif-brutalist">
               DASHBOARD
             </h2>
             <span className="text-[10px] font-bold tracking-widest text-zinc-555 block mt-0.5 font-mono-geist">
@@ -265,7 +266,7 @@ const BattleArena = () => {
                   Sign in to view battle history.
                 </p>
               ) : battles.length === 0 ? (
-                <p className="text-xs text-zinc-550 italic px-1">
+                <p className="text-xs text-zinc-555 italic px-1">
                   No battles recorded.
                 </p>
               ) : (
@@ -315,7 +316,7 @@ const BattleArena = () => {
                 <p className="text-xs font-semibold text-white">
                   Theme: <span className="text-violet-400">Dark Aesthetic</span>
                 </p>
-                <p className="text-[10px] text-zinc-500 font-medium leading-relaxed">
+                <p className="text-[10px] text-zinc-550 font-medium leading-relaxed">
                   The application theme is set permanently to a high-end dark OS style.
                 </p>
               </div>
@@ -336,21 +337,6 @@ const BattleArena = () => {
             <button className="flex items-center gap-3 text-xs font-semibold text-zinc-400 hover:text-white transition-colors cursor-pointer text-left py-1">
               <FiHelpCircle size={15} /> Help
             </button>
-            {user ? (
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-3 text-xs font-semibold text-zinc-500 hover:text-red-400 transition-colors cursor-pointer text-left py-1"
-              >
-                <FiLogOut size={15} /> Logout
-              </button>
-            ) : (
-              <button
-                onClick={() => navigateTo("/login", false)}
-                className="flex items-center gap-3 text-xs font-semibold text-violet-400 hover:text-white transition-colors cursor-pointer text-left py-1"
-              >
-                <FiUser size={15} /> Sign In
-              </button>
-            )}
           </div>
         </div>
       </aside>
@@ -367,7 +353,7 @@ const BattleArena = () => {
       <div ref={workspaceRef} className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         
         {/* Top Navbar */}
-        <nav className="h-16 shrink-0 border-b border-white/5 bg-zinc-950/60 backdrop-blur-md flex items-center justify-between px-6 z-30 relative">
+        <nav className="h-16 shrink-0 border-b border-white/5 bg-zinc-950/60 backdrop-blur-md flex items-center justify-between px-6 z-30 relative select-none">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -375,118 +361,158 @@ const BattleArena = () => {
             >
               <HiMenu size={18} />
             </button>
-            <span className="font-extrabold text-lg tracking-[0.2em] text-white">
+            <span className="font-extrabold text-lg tracking-[0.2em] text-white font-serif-brutalist">
               AI COMPARISON
             </span>
           </div>
 
+          {/* Center Navigation: Premium Floating Glass Capsule */}
+          <div className="hidden md:flex items-center bg-zinc-900/65 border border-white/10 p-1 rounded-full backdrop-blur-xl relative">
+            <button
+              onClick={() => navigateTo("/")}
+              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                location.pathname === "/"
+                  ? "bg-violet-600 text-white shadow-md shadow-violet-500/15"
+                  : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              Home
+            </button>
+            <button
+              onClick={() => navigateTo("/arena")}
+              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                location.pathname === "/arena" || location.pathname === "/battle"
+                  ? "bg-violet-600 text-white shadow-md shadow-violet-500/15"
+                  : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              Arena
+            </button>
+            <button
+              onClick={() => navigateTo("/chat")}
+              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                location.pathname === "/chat"
+                  ? "bg-violet-600 text-white shadow-md shadow-violet-500/15"
+                  : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              Chat
+            </button>
+            <button
+              onClick={() => navigateTo("/pricing")}
+              className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                location.pathname === "/pricing"
+                  ? "bg-violet-600 text-white shadow-md shadow-violet-500/15"
+                  : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              Pricing
+            </button>
+          </div>
+
           <div className="flex items-center gap-4">
-            {/* Navigation Breadcrumb Shortcuts */}
-            <div className="hidden sm:flex items-center gap-3.5 text-[9px] font-bold tracking-widest uppercase text-zinc-550 mr-1 font-mono-geist bg-zinc-900/60 px-3 py-1.5 rounded-xl border border-white/5 select-none">
-              <button 
-                onClick={() => navigateTo("/")} 
-                className="hover:text-white transition-colors cursor-pointer"
-              >
-                Home
-              </button>
-              <span className="text-zinc-800">/</span>
-              <button 
-                onClick={() => navigateTo("/arena")} 
-                className={`hover:text-white transition-colors cursor-pointer ${location.pathname === "/arena" || location.pathname === "/battle" ? "text-violet-400" : ""}`}
-              >
-                Arena
-              </button>
-              <span className="text-zinc-800">/</span>
-              <button 
-                onClick={() => navigateTo("/chat")} 
-                className={`hover:text-white transition-colors cursor-pointer ${location.pathname === "/chat" ? "text-violet-400" : ""}`}
-              >
-                Chat
-              </button>
-            </div>
-
-            {/* Floating grid dropdown navigation */}
+            {/* Profile Dropdown Section */}
             <div className="relative">
-              <button
-                onClick={() => setNavOpen(!navOpen)}
-                className={`p-2 rounded-lg border transition-all cursor-pointer shrink-0 flex items-center justify-center ${
-                  navOpen 
-                    ? "bg-violet-500/15 border-violet-500/30 text-violet-400 shadow-[0_0_15px_rgba(139,92,246,0.15)]" 
-                    : "bg-zinc-900/60 border-white/10 text-zinc-400 hover:text-white hover:bg-zinc-800"
-                }`}
-                title="Open Grid Navigation"
-              >
-                <FiGrid size={16} />
-              </button>
+              {user ? (
+                <button
+                  onClick={() => setProfileOpen(!profileOpen)}
+                  className="flex items-center gap-2 border border-white/10 bg-zinc-900/50 hover:bg-zinc-800/80 px-3.5 py-1.5 rounded-xl font-semibold text-xs text-zinc-200 transition-all cursor-pointer select-none"
+                >
+                  <div className="w-5 h-5 rounded-full bg-violet-600 flex items-center justify-center text-[10px] text-white font-bold uppercase shrink-0">
+                    {user.fullname ? user.fullname[0] : user.username[0]}
+                  </div>
+                  <span className="hidden sm:inline truncate max-w-[100px] font-semibold">{user.fullname || user.username}</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => setProfileOpen(!profileOpen)}
+                  className="p-2 rounded-xl border border-white/10 bg-zinc-900/60 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all cursor-pointer flex items-center justify-center shrink-0"
+                  title="Profile Menu"
+                >
+                  <FiUser size={16} />
+                </button>
+              )}
 
-              {navOpen && (
+              {profileOpen && (
                 <>
-                  <div 
-                    className="fixed inset-0 z-40 bg-transparent" 
-                    onClick={() => setNavOpen(false)} 
-                  />
-                  <div 
-                    className="absolute right-0 mt-2 w-48 bg-zinc-900/95 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl p-2 flex flex-col gap-1 z-50 animate-fade-in"
-                  >
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 px-3 py-1.5 border-b border-white/5 font-mono-geist">
-                      System Grid
-                    </span>
-                    <button
-                      onClick={() => { setNavOpen(false); navigateTo("/"); }}
-                      className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
-                    >
-                      Home
-                    </button>
-                    <button
-                      onClick={() => { setNavOpen(false); navigateTo("/arena"); }}
-                      className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
-                    >
-                      Battle Arena
-                    </button>
-                    <button
-                      onClick={() => { setNavOpen(false); navigateTo("/chat"); }}
-                      className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
-                    >
-                      AI Chat Channel
-                    </button>
+                  <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setProfileOpen(false)} />
+                  
+                  <div className="absolute right-0 mt-2 w-56 bg-zinc-900/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl p-2.5 flex flex-col gap-1.5 z-50 animate-fade-in">
+                    {user ? (
+                      <>
+                        <div className="px-3 py-2 border-b border-white/5 mb-1">
+                          <p className="text-xs font-bold text-white truncate">{user.fullname || user.username}</p>
+                          <p className="text-[10px] text-zinc-550 font-mono-geist truncate mt-0.5">{user.email}</p>
+                        </div>
+                        
+                        <button
+                          onClick={() => {
+                            setProfileOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer flex items-center gap-2"
+                        >
+                          <FiUser size={14} className="text-violet-400 shrink-0" />
+                          Profile Details
+                        </button>
+                        
+                        <button
+                          onClick={() => { setProfileOpen(false); navigateTo("/arena"); }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer flex items-center gap-2"
+                        >
+                          <GiCrossedSwords size={14} className="text-violet-400 shrink-0" />
+                          Battle Arena
+                        </button>
+                        
+                        <button
+                          onClick={() => { setProfileOpen(false); navigateTo("/chat"); }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer flex items-center gap-2"
+                        >
+                          <FiMessageSquare size={14} className="text-violet-400 shrink-0" />
+                          AI Chat Channel
+                        </button>
+
+                        <button
+                          onClick={() => { setProfileOpen(false); navigateTo("/pricing"); }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer flex items-center gap-2 border-t border-white/5 mt-1 pt-2"
+                        >
+                          <FiGrid size={14} className="text-emerald-400 shrink-0" />
+                          Upgrade Plan
+                        </button>
+                        
+                        <button
+                          onClick={() => {
+                            setProfileOpen(false);
+                            handleLogout();
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all cursor-pointer flex items-center gap-2 mt-0.5"
+                        >
+                          <FiLogOut size={14} />
+                          Log Out
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <div className="px-3 py-1.5 border-b border-white/5 mb-1 text-[9px] font-bold text-zinc-550 uppercase tracking-widest font-mono-geist">
+                          Guest Account
+                        </div>
+                        <button
+                          onClick={() => { setProfileOpen(false); navigateTo("/login", false); }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-zinc-200 hover:text-white hover:bg-white/5 transition-all cursor-pointer flex items-center gap-2"
+                        >
+                          Sign In
+                        </button>
+                        <button
+                          onClick={() => { setProfileOpen(false); navigateTo("/register", false); }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-white bg-violet-600 hover:bg-violet-500 transition-all cursor-pointer flex items-center justify-center mt-1"
+                        >
+                          Sign Up
+                        </button>
+                      </>
+                    )}
                   </div>
                 </>
               )}
             </div>
-
-            <div className="h-4 w-px bg-white/10" />
-
-            {/* Profile Section */}
-            {user ? (
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 border border-white/10 bg-zinc-900/50 px-3.5 py-1.5 rounded-xl font-semibold text-xs text-zinc-200">
-                  <FiUser size={13} className="text-violet-400" />
-                  <span className="hidden md:inline">{user.fullname || user.username}</span>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  className="p-2 rounded-lg hover:bg-red-500/10 text-zinc-450 hover:text-red-455 transition-colors cursor-pointer"
-                  title="Sign out"
-                >
-                  <FiLogOut size={16} />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => navigateTo("/login", false)}
-                  className="px-3.5 py-1.5 border border-white/10 bg-zinc-900/40 rounded-xl font-semibold text-xs text-zinc-200 hover:bg-zinc-800 transition-all cursor-pointer uppercase tracking-wider"
-                >
-                  Sign In
-                </button>
-                <button
-                  onClick={() => navigateTo("/register", false)}
-                  className="px-3.5 py-1.5 bg-violet-600 hover:bg-violet-500 rounded-xl font-semibold text-xs text-white transition-all cursor-pointer shadow-[0_4px_12px_rgba(139,92,246,0.2)] uppercase tracking-wider"
-                >
-                  Sign Up
-                </button>
-              </div>
-            )}
           </div>
         </nav>
 

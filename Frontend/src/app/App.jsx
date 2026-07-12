@@ -121,8 +121,14 @@ const App = () => {
     }
 
     const init = async () => {
+      const storedToken = localStorage.getItem("authToken");
+      if (!storedToken) {
+        setInitializing(false);
+        return;
+      }
       try {
-        await handleGetMe();
+        // Fetch user data in the background without blocking the mount
+        handleGetMe();
       } finally {
         setInitializing(false);
       }
