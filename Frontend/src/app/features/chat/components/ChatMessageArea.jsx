@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FiCopy, FiThumbsUp, FiThumbsDown, FiVolume2, FiVolumeX } from "react-icons/fi";
-import { GiSwordman } from "react-icons/gi";
+import { FiCopy, FiThumbsUp, FiThumbsDown, FiVolume2, FiVolumeX, FiCheck, FiArrowRight } from "react-icons/fi";
 import { useTheme } from "../../../context/ThemeContext";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
@@ -8,26 +7,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ChatProgressLoader } from "./ChatProgressLoader";
 import { useVoice } from "../../battle/hooks/useVoice";
-
-// Add arena promotion animation
-const arenaPromotionStyles = `
-  @keyframes slide-in-out {
-    0% { transform: translateX(-100%); opacity: 0; }
-    10% { transform: translateX(0); opacity: 1; }
-    90% { transform: translateX(0); opacity: 1; }
-    100% { transform: translateX(100%); opacity: 0; }
-  }
-  .arena-slide {
-    animation: slide-in-out 5s ease-in-out infinite;
-  }
-  @keyframes pulse-subtle {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-  .arena-icon-pulse {
-    animation: pulse-subtle 2s ease-in-out infinite;
-  }
-`;
 
 const ChatMessageArea = ({ messages = [] }) => {
   const theme = useTheme();
@@ -47,14 +26,6 @@ const ChatMessageArea = ({ messages = [] }) => {
       });
     }
   }, [messages, isLoading]);
-
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) return "Good morning";
-    if (hour >= 12 && hour < 17) return "Good afternoon";
-    if (hour >= 17 && hour < 21) return "Good evening";
-    return "Good night";
-  };
 
   const handleCopy = (text, index) => {
     navigator.clipboard.writeText(text);
@@ -92,128 +63,158 @@ const ChatMessageArea = ({ messages = [] }) => {
     setDislikedMessages(newDisliked);
   };
 
-  // Custom markdown components for styling
+  // Safe React textarea value state injector
+  const handleSuggestionClick = (text) => {
+    const textarea = document.querySelector("textarea");
+    if (textarea) {
+      textarea.value = text;
+      const nativeValueSetter = Object.getOwnPropertyDescriptor(
+        HTMLTextAreaElement.prototype,
+        "value"
+      ).set;
+      nativeValueSetter.call(textarea, text);
+      
+      textarea.dispatchEvent(new Event("input", { bubbles: true }));
+      textarea.dispatchEvent(new Event("change", { bubbles: true }));
+      textarea.focus();
+    }
+  };
+
+  const suggestions = [
+    "Optimize a recursive Fibonacci generator in Python.",
+    "Explain quantum computing in simple terms.",
+    "Draft a clean Express.js boilerplate server.",
+    "How does socket.io state management operate?"
+  ];
+
   const markdownComponents = {
     h1: ({ node, ...props }) => (
       <h1
-        className={`text-2xl font-bold ${theme.text.primary} mt-4 mb-2`}
+        className="text-2xl font-bold text-white mt-5 mb-3"
         {...props}
       />
     ),
     h2: ({ node, ...props }) => (
       <h2
-        className={`text-xl font-bold ${theme.text.primary} mt-3 mb-2`}
+        className="text-xl font-bold text-white mt-4 mb-2.5"
         {...props}
       />
     ),
     h3: ({ node, ...props }) => (
       <h3
-        className={`text-lg font-bold ${theme.text.primary} mt-2 mb-1`}
+        className="text-lg font-bold text-white mt-3.5 mb-2"
         {...props}
       />
     ),
     p: ({ node, ...props }) => (
-      <p className={`${theme.text.secondary} mb-2`} {...props} />
+      <p className="text-zinc-300 mb-3 leading-relaxed" {...props} />
     ),
     ul: ({ node, ...props }) => (
       <ul
-        className={`list-disc list-inside ${theme.text.secondary} mb-2`}
+        className="list-disc list-inside text-zinc-355 space-y-1.5 mb-4 pl-2"
         {...props}
       />
     ),
     ol: ({ node, ...props }) => (
       <ol
-        className={`list-decimal list-inside ${theme.text.secondary} mb-2`}
+        className="list-decimal list-inside text-zinc-355 space-y-1.5 mb-4 pl-2"
         {...props}
       />
     ),
     li: ({ node, ...props }) => (
-      <li className={`${theme.text.secondary} mb-1`} {...props} />
+      <li className="text-zinc-300 mb-0.5" {...props} />
     ),
     code: ({ node, inline, ...props }) =>
       inline ? (
         <code
-          className={`${theme.isDark ? "bg-gray-800" : "bg-gray-200"} ${theme.isDark ? "text-gray-100" : "text-gray-800"} px-2 py-1 rounded text-sm font-mono`}
+          className="bg-zinc-800 text-zinc-200 px-2 py-0.5 rounded-lg text-xs font-mono-geist border border-white/[0.04]"
           {...props}
         />
       ) : (
         <code
-          className={`${theme.isDark ? "bg-gray-800" : "bg-gray-100"} ${theme.text.primary} block p-3 rounded-lg overflow-x-auto text-sm font-mono mb-2 scrollbar-hide`}
+          className="bg-zinc-950/70 text-zinc-200 block p-4 rounded-xl overflow-x-auto text-xs font-mono-geist border border-white/[0.04] mb-3 scrollbar-hide leading-relaxed"
           {...props}
         />
       ),
     pre: ({ node, ...props }) => (
       <pre
-        className={`${theme.isDark ? "bg-gray-800" : "bg-gray-100"} p-3 rounded-lg overflow-x-auto mb-2 scrollbar-hide`}
+        className="bg-zinc-950/40 rounded-xl overflow-hidden mb-3 scrollbar-hide"
         {...props}
       />
     ),
     blockquote: ({ node, ...props }) => (
       <blockquote
-        className={`${theme.isDark ? "border-l-gray-600 bg-gray-900" : "border-l-gray-400 bg-gray-50"} border-l-4 pl-4 py-2 my-2 rounded`}
+        className="border-l-2 border-violet-500/50 bg-zinc-950/30 pl-4 py-2.5 my-3 rounded-r-xl text-zinc-400 italic font-medium"
         {...props}
       />
     ),
     table: ({ node, ...props }) => (
-      <table
-        className={`w-full border-collapse ${theme.isDark ? "bg-gray-800" : "bg-white"} rounded-lg overflow-hidden my-2 border ${theme.isDark ? "border-gray-700" : "border-gray-200"}`}
-        {...props}
-      />
+      <div className="overflow-x-auto mb-4 rounded-xl border border-white/5">
+        <table
+          className="w-full border-collapse bg-zinc-950/20 text-sm"
+          {...props}
+        />
+      </div>
     ),
     thead: ({ node, ...props }) => (
       <thead
-        className={`${theme.isDark ? "bg-gray-700" : "bg-gray-200"}`}
+        className="bg-zinc-900/60 border-b border-white/5"
         {...props}
       />
     ),
     tbody: ({ node, ...props }) => <tbody {...props} />,
     tr: ({ node, ...props }) => (
       <tr
-        className={`border-b ${theme.isDark ? "border-gray-700" : "border-gray-200"}`}
+        className="border-b border-white/[0.04] last:border-0 hover:bg-white/[0.01] transition-colors"
         {...props}
       />
     ),
     td: ({ node, ...props }) => (
-      <td className={`px-4 py-2 ${theme.text.secondary}`} {...props} />
+      <td className="px-4 py-3 text-zinc-300 font-medium" {...props} />
     ),
     th: ({ node, ...props }) => (
       <th
-        className={`px-4 py-2 text-left font-bold ${theme.text.primary}`}
+        className="px-4 py-3 text-left font-semibold text-white"
         {...props}
       />
     ),
     a: ({ node, ...props }) => (
-      <a className="text-gray-300 hover:underline" {...props} />
+      <a className="text-violet-400 hover:text-violet-300 hover:underline underline-offset-4 transition-colors" {...props} />
     ),
-    strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
-    em: ({ node, ...props }) => <em className="italic" {...props} />,
+    strong: ({ node, ...props }) => <strong className="font-semibold text-white" {...props} />,
+    em: ({ node, ...props }) => <em className="italic text-zinc-200" {...props} />,
   };
 
   if (messages.length === 0) {
     return (
-      <div className="h-full max-w-2xl mx-auto flex flex-col justify-center py-10 px-6">
-        <span className="text-[10px] font-black uppercase tracking-widest text-[#008080] bg-[#008080]/10 px-2.5 py-1 border border-[#008080]/20 w-fit">
+      <div className="h-full max-w-2xl mx-auto flex flex-col justify-center py-10 px-6 select-none">
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-violet-400 bg-violet-500/10 px-3 py-1.5 rounded-full border border-violet-500/20 w-fit">
           Chat Mode
         </span>
         
-        <h1 className="text-4xl md:text-6xl font-serif-brutalist font-bold text-[#1A1C1B] leading-[1.1] my-6 tracking-tight">
+        <h1 className="text-4xl md:text-5xl font-serif-brutalist font-bold text-white leading-[1.15] my-6 tracking-tight text-glow-gradient">
           How can I help you today?
         </h1>
         
-        <div className="w-20 border-b-2 border-black mb-8"></div>
+        <div className="w-12 h-0.5 bg-violet-500/50 mb-8 rounded"></div>
 
-        <p className="text-base text-[#536255] max-w-lg mb-8 leading-relaxed font-semibold">
-          Ask questions, analyze concepts, draft code, or brainstorm ideas with the AI Assistant inside a clean neobrutalist frame.
+        <p className="text-sm text-zinc-400 max-w-lg mb-8 leading-relaxed font-semibold">
+          Ask questions, analyze concepts, draft code, or brainstorm ideas with the AI Assistant inside a clean, high-fidelity workspace.
         </p>
 
-        <button
-          onClick={() => {
-            document.querySelector("textarea")?.focus();
-          }}
-          className="w-fit cursor-pointer border-2 border-[#1A1C1B] bg-[#1A1C1B] text-white font-extrabold px-8 py-3.5 shadow-[4px_4px_0px_0px_#C5A880] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_#C5A880] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[0px_0px_0px_0px_#C5A880] transition-all text-sm uppercase tracking-wider"
-        >
-          Type Message Below
-        </button>
+        {/* Dynamic suggestion grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
+          {suggestions.map((sug, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleSuggestionClick(sug)}
+              className="bg-zinc-900/40 hover:bg-zinc-900/80 border border-white/5 hover:border-violet-500/20 rounded-xl p-4 text-left transition-all text-xs font-semibold text-zinc-400 hover:text-white flex justify-between items-center group cursor-pointer"
+            >
+              <span className="truncate pr-3">{sug}</span>
+              <FiArrowRight size={13} className="text-zinc-600 group-hover:text-violet-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+            </button>
+          ))}
+        </div>
       </div>
     );
   }
@@ -227,54 +228,91 @@ const ChatMessageArea = ({ messages = [] }) => {
         {messages.map((message, index) => (
           <div key={index}>
             {message.sender === "user" ? (
-              /* User Message */
-              <div className="flex justify-end gap-3 animate-fade-in">
+              <div className="flex justify-end gap-3.5 animate-fade-in">
                 <div className="max-w-xl">
-                  <div className="border-2 border-[#1A1C1B] bg-[#F1F1EF] p-4 text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] text-sm font-semibold">
-                    <p className="whitespace-pre-wrap">{message.text}</p>
+                  <div className="border border-white/5 bg-zinc-900/60 p-4 rounded-2xl text-zinc-200 text-sm font-medium shadow-md">
+                    <p className="whitespace-pre-wrap leading-relaxed">{message.text}</p>
                   </div>
                 </div>
-                <div className="w-8 h-8 rounded-full border-2 border-black bg-[#C5A880] flex items-center justify-center font-bold text-xs text-[#1A1C1B] shrink-0">
+                <div className="w-8 h-8 rounded-xl border border-violet-500/20 bg-violet-600/10 flex items-center justify-center font-bold text-xs text-violet-400 shrink-0 select-none">
                   U
                 </div>
               </div>
             ) : (
-              /* Assistant Message */
-              <div className="flex justify-start gap-3 animate-fade-in">
-                <div className="w-8 h-8 rounded-full border-2 border-black bg-[#1A1C1B] flex items-center justify-center font-bold text-xs text-white shrink-0">
+              <div className="flex justify-start gap-3.5 animate-fade-in">
+                <div className="w-8 h-8 rounded-xl border border-white/10 bg-zinc-800 flex items-center justify-center font-bold text-xs text-zinc-300 shrink-0 select-none">
                   A
                 </div>
                 <div className="max-w-2xl flex-1">
-                  <div className="card-brutalist bg-white p-5 space-y-4">
+                  <div className="bg-zinc-900/30 border border-white/[0.06] rounded-2xl p-5 space-y-4 shadow-lg">
                     {/* Header */}
-                    <div className="flex items-center justify-between pb-3 border-b-2 border-[#1A1C1B]">
-                      <div className="border-2 border-[#1A1C1B] bg-[#F1F1EF] px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#1A1C1B]">
+                    <div className="flex items-center justify-between pb-3 border-b border-white/5 select-none">
+                      <div className="border border-white/10 bg-zinc-800/50 px-2.5 py-0.5 rounded-full text-[9px] font-semibold tracking-wider text-zinc-400">
                         AI ASSISTANT
                       </div>
-                      {supported.synthesis && (
+                      
+                      <div className="flex items-center gap-2">
+                        {/* High-visibility Audio Synthesis Button */}
+                        {supported.synthesis && (
+                          <button
+                            onClick={() => {
+                              if (isSpeaking) {
+                                stopSpeaking();
+                              } else {
+                                speak(message.text);
+                              }
+                            }}
+                            className={`px-3 py-1.5 rounded-xl border transition-all cursor-pointer shrink-0 flex items-center gap-1.5 text-[10px] font-bold tracking-wider uppercase ${
+                              isSpeaking 
+                                ? "bg-violet-500/15 border-violet-500/30 text-violet-400 shadow-[0_0_15px_rgba(139,92,246,0.15)]" 
+                                : "bg-zinc-800/60 border-white/10 text-zinc-300 hover:text-white hover:bg-zinc-800"
+                            }`}
+                            title={isSpeaking ? "Stop speaking" : "Listen to reply"}
+                          >
+                            {isSpeaking ? (
+                              <FiVolumeX size={16} className="text-violet-400" />
+                            ) : (
+                              <FiVolume2 size={16} />
+                            )}
+                            <span>{isSpeaking ? "STOP" : "LISTEN"}</span>
+                          </button>
+                        )}
+
+                        {/* Copy Action Button */}
                         <button
-                          onClick={() => {
-                            if (isSpeaking) {
-                              stopSpeaking();
-                            } else {
-                              speak(message.text);
-                            }
-                          }}
-                          className={`p-2 border-2 border-[#1A1C1B] bg-white text-[#1A1C1B] shadow-[2px_2px_0px_0px_#1A1C1B] hover:translate-x-[-1.5px] hover:translate-y-[-1.5px] hover:shadow-[3.5px_3.5px_0px_0px_#1A1C1B] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#1A1C1B] transition-all cursor-pointer shrink-0 ${
-                            isSpeaking ? "bg-[#008080]/10 border-[#008080] text-[#008080]" : ""
-                          }`}
-                          title={isSpeaking ? "Stop speaking" : "Speak answer"}
+                          onClick={() => handleCopy(message.text, index)}
+                          className="p-2 rounded-lg border border-transparent hover:border-white/10 hover:bg-white/5 text-zinc-550 hover:text-white transition-all cursor-pointer shrink-0"
+                          title="Copy reply"
                         >
-                          {isSpeaking ? (
-                            <FiVolumeX size={16} className="stroke-[2.5]" />
+                          {copiedIndex === index ? (
+                            <FiCheck size={15} className="text-emerald-400" />
                           ) : (
-                            <FiVolume2 size={16} className="stroke-[2.5]" />
+                            <FiCopy size={15} />
                           )}
                         </button>
-                      )}
+
+                        {/* Likes/Dislikes Action Buttons */}
+                        <button
+                          onClick={() => handleLike(index)}
+                          className={`p-2 rounded-lg border border-transparent hover:border-white/10 hover:bg-white/5 transition-all cursor-pointer shrink-0 ${
+                            likedMessages.has(index) ? "text-violet-400 bg-violet-500/10 border-violet-500/20" : "text-zinc-500 hover:text-white"
+                          }`}
+                        >
+                          <FiThumbsUp size={14} />
+                        </button>
+                        
+                        <button
+                          onClick={() => handleDislike(index)}
+                          className={`p-2 rounded-lg border border-transparent hover:border-white/10 hover:bg-white/5 transition-all cursor-pointer shrink-0 ${
+                            dislikedMessages.has(index) ? "text-red-400 bg-red-500/10 border-red-500/20" : "text-zinc-500 hover:text-white"
+                          }`}
+                        >
+                          <FiThumbsDown size={14} />
+                        </button>
+                      </div>
                     </div>
                     {/* Text Markdown */}
-                    <div className="prose prose-sm max-w-none text-[#1A1C1B] text-sm font-semibold">
+                    <div className="prose prose-sm max-w-none text-zinc-200 text-sm font-medium leading-relaxed">
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={markdownComponents}

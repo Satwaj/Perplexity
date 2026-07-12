@@ -34,36 +34,34 @@ export const ChatProgressLoader = () => {
   const getStageColor = () => {
     switch (progress.stage) {
       case "initializing":
-        return "from-blue-500 to-blue-600";
+        return "from-blue-400 to-indigo-500";
       case "processing":
-        return "from-cyan-500 to-cyan-600";
+        return "from-cyan-400 to-teal-500";
       case "thinking":
-        return "from-purple-500 to-purple-600";
+        return "from-purple-400 to-fuchsia-500";
       case "generating":
-        return "from-indigo-500 to-indigo-600";
+        return "from-violet-400 to-indigo-500";
       case "complete":
-        return "from-green-500 to-green-600";
+        return "from-emerald-400 to-emerald-600";
       default:
-        return "from-blue-500 to-blue-600";
+        return "from-blue-400 to-indigo-500";
     }
   };
 
   const getStageIcon = () => {
     switch (progress.stage) {
       case "initializing":
-        return <FiPlay className="text-3xl animate-bounce" />;
+        return <FiPlay className="text-2xl animate-bounce text-indigo-400" />;
       case "processing":
-        return <FiSearch className="text-3xl animate-pulse text-cyan-500" />;
+        return <FiSearch className="text-2xl animate-pulse text-cyan-400" />;
       case "thinking":
-        return <FiFilter className="text-3xl animate-spin text-purple-500" />;
+        return <FiFilter className="text-2xl animate-spin text-purple-400" />;
       case "generating":
-        return (
-          <FiPenTool className="text-3xl animate-bounce text-indigo-500" />
-        );
+        return <FiPenTool className="text-2xl animate-bounce text-violet-400" />;
       case "complete":
-        return <FiCheck className="text-3xl text-green-500 animate-bounce" />;
+        return <FiCheck className="text-2xl text-emerald-400 animate-bounce" />;
       default:
-        return <FiPlay className="text-3xl animate-bounce" />;
+        return <FiPlay className="text-2xl animate-bounce text-indigo-400" />;
     }
   };
 
@@ -77,42 +75,42 @@ export const ChatProgressLoader = () => {
 
   return (
     <div
-      className={`flex items-center justify-center p-4 md:p-6 space-y-6 ${theme.bg.secondary} rounded-xl ${theme.border.primary} border`}
+      className="flex items-center justify-center p-6 bg-zinc-900/60 backdrop-blur-xl border border-white/[0.06] rounded-2xl shadow-xl w-full max-w-lg mx-auto"
     >
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full space-y-5">
         {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="flex justify-center items-center h-12">
+        <div className="text-center space-y-3">
+          <div className="flex justify-center items-center h-10">
             {getStageIcon()}
           </div>
           <div>
-            <h3 className={`text-lg font-bold ${theme.text.primary}`}>
+            <h3 className="text-base font-bold text-white">
               {progress.stage === "initializing" && "Processing Message"}
               {progress.stage === "processing" && "Searching & Analyzing"}
               {progress.stage === "thinking" && "Thinking"}
               {progress.stage === "generating" && "Generating Response"}
               {progress.stage === "complete" && "Complete"}
             </h3>
-            <p className={`text-xs ${theme.text.tertiary} mt-1`}>
+            <p className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mt-0.5">
               Real-time AI processing
             </p>
           </div>
         </div>
 
         {/* Progress Bar */}
-        <div className="space-y-2">
+        <div className="space-y-3 bg-zinc-950/40 p-4 rounded-xl border border-white/5">
           <div className="flex justify-between items-center">
-            <p className={`text-xs font-medium ${theme.text.secondary}`}>
+            <p className="text-xs font-semibold text-zinc-450">
               Progress
             </p>
             <p
-              className={`text-sm font-bold bg-gradient-to-r ${getStageColor()} bg-clip-text text-transparent`}
+              className={`text-sm font-bold bg-gradient-to-r ${getStageColor()} bg-clip-text text-transparent font-mono-geist`}
             >
               {progress.progress}%
             </p>
           </div>
           <div
-            className={`w-full h-2 ${theme.bg.primary} rounded-full overflow-hidden`}
+            className="w-full h-1.5 bg-zinc-950 rounded-full overflow-hidden"
           >
             <div
               className={`h-full bg-gradient-to-r ${getStageColor()} rounded-full transition-all duration-300 ease-out`}
@@ -122,7 +120,7 @@ export const ChatProgressLoader = () => {
         </div>
 
         {/* Stage Indicators */}
-        <div className="grid grid-cols-5 gap-1.5">
+        <div className="grid grid-cols-5 gap-2">
           {stages.map((stage, index) => {
             const isComplete = progress.progress >= stage.threshold;
             const isActive =
@@ -133,57 +131,52 @@ export const ChatProgressLoader = () => {
             return (
               <div
                 key={stage.name}
-                className={`p-2 rounded-lg text-center transition-all ${
+                className={`p-2 rounded-xl text-center border transition-all ${
                   isComplete
-                    ? theme.isDark
-                      ? "bg-green-900 border border-green-700"
-                      : "bg-green-100 border border-green-300"
+                    ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
                     : isActive
-                      ? theme.isDark
-                        ? "bg-purple-900 border border-purple-700"
-                        : "bg-purple-100 border border-purple-300"
-                      : theme.isDark
-                        ? "bg-slate-700 border border-slate-600"
-                        : "bg-gray-100 border border-gray-300"
+                      ? "bg-violet-500/10 border-violet-500/20 text-violet-400"
+                      : "bg-zinc-950/40 border-white/[0.04] text-zinc-600"
                 }`}
               >
-                <div className="flex justify-center">
+                <div className="flex justify-center mb-1">
                   <Icon
-                    size={16}
+                    size={14}
                     className={
                       isComplete
-                        ? "text-green-400"
+                        ? "text-emerald-400"
                         : isActive
-                          ? "text-purple-400 animate-spin"
-                          : theme.isDark
-                            ? "text-gray-400"
-                            : "text-gray-500"
+                          ? "text-violet-400"
+                          : "text-zinc-650"
                     }
                   />
                 </div>
+                <p className="text-[9px] font-bold tracking-tight">{stage.name}</p>
               </div>
             );
           })}
         </div>
 
-        {/* Timing */}
-        <div className="flex items-center justify-center gap-2">
-          <FiTrendingUp size={14} className={theme.text.tertiary} />
-          <p className={`text-xs ${theme.text.tertiary}`}>
-            {progress.progress > 0
-              ? `${Math.round((Date.now() - progress.timestamp) / 1000)}s elapsed`
-              : "Starting..."}
+        {/* Status Message & Timing */}
+        <div className="flex flex-col items-center gap-2 pt-2 border-t border-white/5 select-none">
+          <p className="text-xs text-zinc-350 font-semibold">
+            {progress.stage === "initializing" && "🚀 Preparing..."}
+            {progress.stage === "processing" && "🔍 Analyzing your message..."}
+            {progress.stage === "thinking" && "🧠 Processing information..."}
+            {progress.stage === "generating" && "✍️ Composing response..."}
+            {progress.stage === "complete" && "✅ Done!"}
           </p>
+          
+          <div className="flex items-center justify-center gap-1.5 text-zinc-500 text-[10px] font-semibold">
+            <FiTrendingUp size={12} className="text-zinc-650" />
+            <span>Elapsed:</span>
+            <span className="font-mono-geist text-zinc-400">
+              {progress.progress > 0
+                ? `${Math.round((Date.now() - progress.timestamp) / 1000)}s`
+                : "0s"}
+            </span>
+          </div>
         </div>
-
-        {/* Status Message */}
-        <p className={`text-xs text-center ${theme.text.secondary}`}>
-          {progress.stage === "initializing" && "🚀 Preparing..."}
-          {progress.stage === "processing" && "🔍 Analyzing your message..."}
-          {progress.stage === "thinking" && "🧠 Processing information..."}
-          {progress.stage === "generating" && "✍️ Composing response..."}
-          {progress.stage === "complete" && "✅ Done!"}
-        </p>
       </div>
     </div>
   );

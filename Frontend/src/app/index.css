@@ -1,75 +1,117 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
 body {
-	font-family: "Outfit", "Be Vietnam Pro", sans-serif;
-	background-color: #F9F9F7;
-	color: #1A1C1B;
+	font-family: "Plus Jakarta Sans", "Sora", sans-serif;
+	background-color: #09090b;
+	color: #f4f4f5;
 	overflow-x: hidden;
 }
 
+/* Custom Typography hooks */
 .font-serif-brutalist {
-	font-family: "DM Serif Display", Georgia, serif;
+	font-family: "Space Grotesk", "Sora", sans-serif;
+	letter-spacing: -0.04em;
 }
 
+.font-mono-geist {
+	font-family: "JetBrains Mono", "Geist Mono", monospace;
+}
+
+.font-sora {
+	font-family: "Sora", sans-serif;
+}
+
+.font-space {
+	font-family: "Space Grotesk", sans-serif;
+}
+
+/* Re-defining Brutalist classes to Premium OS styles */
 .border-brutalist {
-	border: 2px solid #1A1C1B;
+	border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .shadow-brutalist {
-	box-shadow: 4px 4px 0px 0px #1A1C1B;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .shadow-brutalist-lg {
-	box-shadow: 6px 6px 0px 0px #1A1C1B;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 40px rgba(139, 92, 246, 0.05);
 }
 
 .btn-brutalist {
-	border: 2px solid #1A1C1B;
-	box-shadow: 4px 4px 0px 0px #1A1C1B;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	background-color: #18181b;
+	color: #f4f4f5;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	font-family: "Space Grotesk", sans-serif;
 	transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-brutalist:hover {
-	transform: translate(-2px, -2px);
-	box-shadow: 6px 6px 0px 0px #1A1C1B;
+	transform: translateY(-1px);
+	background-color: #27272a;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 255, 255, 0.03);
+	border-color: rgba(255, 255, 255, 0.15);
 }
 
 .btn-brutalist:active {
-	transform: translate(2px, 2px);
-	box-shadow: 0px 0px 0px 0px #1A1C1B;
+	transform: translateY(1px);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 .card-brutalist {
-	border: 2px solid #1A1C1B;
-	box-shadow: 4px 4px 0px 0px #1A1C1B;
-	background-color: #FFFFFF;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+	background-color: rgba(24, 24, 27, 0.65);
+	backdrop-filter: blur(16px);
+	border-radius: 12px;
 	transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-brutalist:hover {
-	transform: translate(-3px, -3px);
-	box-shadow: 7px 7px 0px 0px #1A1C1B;
+	transform: translateY(-2px);
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(139, 92, 246, 0.03);
+	border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Glassmorphism Panel */
+.glass-panel {
+	background: rgba(18, 18, 20, 0.6);
+	backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Soft Ambient Glow Gradients */
+.glow-spot {
+	position: absolute;
+	border-radius: 50%;
+	filter: blur(100px);
+	opacity: 0.12;
+	pointer-events: none;
+	z-index: 0;
+	transition: all 1s ease-in-out;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-	width: 8px;
-	height: 8px;
+	width: 6px;
+	height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-	background: #F9F9F7;
-	border-left: 2px solid #1A1C1B;
+	background: #09090b;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #E2E3E1;
-	border: 2px solid #1A1C1B;
+	background: #27272a;
+	border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #CFC4C5;
+	background: #3f3f46;
 }
 
 .scrollbar-hide {
@@ -79,4 +121,45 @@ body {
 
 .scrollbar-hide::-webkit-scrollbar {
 	display: none;
+}
+
+/* Text Gradient helper */
+.text-glow-gradient {
+	background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.text-violet-gradient {
+	background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #6d28d9 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+/* Custom visual styling for the mockup playground */
+.neon-border {
+	box-shadow: 0 0 15px rgba(139, 92, 246, 0.15), inset 0 0 15px rgba(139, 92, 246, 0.05);
+}
+
+.glow-indigo {
+	box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.glow-cyan {
+	box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+.glow-violet {
+	box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
+}
+
+/* Typing cursor simulator */
+@keyframes blink {
+	50% { opacity: 0; }
+}
+.typing-cursor::after {
+	content: "|";
+	animation: blink 1s step-start infinite;
+	color: #8b5cf6;
+	font-weight: bold;
 }

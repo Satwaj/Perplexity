@@ -15,18 +15,18 @@ const RenderInitializing = () => {
 
   return (
     <div
-      className="fixed inset-0 bg-[#F9F9F7] flex items-center justify-center z-50"
+      className="fixed inset-0 bg-[#09090b] flex items-center justify-center z-50 select-none"
     >
       <style>{`
         @keyframes pulse-ring {
           0% {
-            box-shadow: 0 0 0 0 rgba(0, 128, 128, 0.4);
+            box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
           }
           70% {
-            box-shadow: 0 0 0 30px rgba(0, 128, 128, 0);
+            box-shadow: 0 0 0 30px rgba(139, 92, 246, 0);
           }
           100% {
-            box-shadow: 0 0 0 0 rgba(0, 128, 128, 0);
+            box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
           }
         }
 
@@ -68,21 +68,21 @@ const RenderInitializing = () => {
 
       <div className="flex flex-col items-center justify-center gap-10 max-w-md px-6 text-center">
         {/* Server Icon with Pulse Ring */}
-        <div className="relative w-20 h-20 mb-2">
+        <div className="relative w-24 h-24 mb-2">
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="ring-pulse absolute inset-0 border border-[#008080]/30"></div>
-            <div className="server-pulse text-[#008080]">
-              <FiServer size={48} strokeWidth={1.5} />
+            <div className="ring-pulse absolute inset-0 border border-violet-500/20"></div>
+            <div className="server-pulse text-violet-400">
+              <FiServer size={52} strokeWidth={1.5} />
             </div>
           </div>
         </div>
 
         {/* Status Text */}
-        <div className="space-y-3">
-          <h2 className="text-2xl font-bold tracking-tight text-[#1A1C1B]">
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold tracking-tight text-white">
             Arena Platform
           </h2>
-          <p className="text-sm font-medium text-[#536255]">
+          <p className="text-sm font-semibold text-zinc-400">
             Waking up server instances
             <span className="status-dot">.</span>
             <span className="status-dot" style={{ animationDelay: "0.3s" }}>
@@ -93,15 +93,15 @@ const RenderInitializing = () => {
             </span>
           </p>
           <p
-            className="text-xs text-[#7E7576] flex items-center justify-center gap-2"
+            className="text-xs text-zinc-500 flex items-center justify-center gap-2 font-medium"
           >
-            <FiZap size={14} className="text-[#C5A880]" />
+            <FiZap size={14} className="text-amber-400" />
             Initializing battle engines (can take 30-40s)
           </p>
         </div>
 
         {/* Info Text */}
-        <div className="text-xs text-[#7E7576]/80 leading-relaxed border-t border-[#E2E3E1] pt-6 mt-2 max-w-xs">
+        <div className="text-xs text-zinc-500/80 leading-relaxed border-t border-white/5 pt-6 mt-2 max-w-xs font-medium">
           The service is hosted on a free tier. If the app has been idle, please wait a moment while the server spins back up.
         </div>
       </div>

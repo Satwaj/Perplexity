@@ -9,7 +9,7 @@ const Loading = () => {
     const chars = textRef.current.querySelectorAll(".char");
     
     // Set initial state
-    gsap.set(chars, { y: 60, opacity: 0 });
+    gsap.set(chars, { y: 20, opacity: 0 });
     
     const tl = gsap.timeline();
     tl.to(chars, {
@@ -22,7 +22,7 @@ const Loading = () => {
 
     // Gentle pulse of subtitle
     gsap.to(".loading-subtitle", {
-      opacity: 0.5,
+      opacity: 0.4,
       duration: 1,
       yoyo: true,
       repeat: -1,
@@ -37,13 +37,13 @@ const Loading = () => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 bg-[#F9F9F7] flex flex-col items-center justify-center z-50"
+      className="fixed inset-0 bg-[#09090b] flex flex-col items-center justify-center z-50 select-none"
     >
       <div className="flex flex-col items-center gap-6">
         {/* Animated Text */}
         <div 
           ref={textRef}
-          className="overflow-hidden flex font-sans text-5xl md:text-7xl font-black tracking-widest text-[#1A1C1B]"
+          className="overflow-hidden flex font-sans text-5xl md:text-7xl font-extrabold tracking-[0.2em] text-white"
         >
           {["A", "R", "E", "N", "A"].map((char, index) => (
             <span key={index} className="char inline-block mx-0.5">
@@ -53,20 +53,20 @@ const Loading = () => {
         </div>
         
         {/* Subtitle */}
-        <p className="loading-subtitle text-xs font-semibold tracking-[0.25em] text-[#536255] uppercase">
+        <p className="loading-subtitle text-[10px] font-bold tracking-[0.25em] text-zinc-400 uppercase">
           Initializing Battle Grid
         </p>
 
-        {/* Minimalist loading bar */}
-        <div className="w-32 h-[2px] bg-[#E2E3E1] relative overflow-hidden mt-1">
-          <div className="absolute top-0 bottom-0 bg-[#008080] w-12 rounded animate-[loading-bar_1.5s_infinite_ease-in-out]"></div>
+        {/* Premium Loading Bar */}
+        <div className="w-40 h-[2px] bg-white/5 relative overflow-hidden mt-1 rounded-full">
+          <div className="absolute top-0 bottom-0 bg-linear-to-r from-violet-500 to-indigo-500 w-16 rounded animate-[loading-bar_1.8s_infinite_ease-in-out]"></div>
         </div>
       </div>
 
       <style>{`
         @keyframes loading-bar {
-          0% { left: -50px; }
-          100% { left: 150px; }
+          0% { left: -70px; }
+          100% { left: 170px; }
         }
       `}</style>
     </div>

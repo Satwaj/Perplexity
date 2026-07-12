@@ -25,13 +25,13 @@ const ChatInput = () => {
   return (
     <div className="w-full">
       {/* Floating horizontal input bar */}
-      <div className="border-2 border-[#1A1C1B] bg-white p-3 shadow-[4px_4px_0px_0px_#1A1C1B] flex items-center gap-3">
+      <div className="border border-white/10 bg-zinc-900/70 backdrop-blur-md p-3 rounded-2xl shadow-xl flex items-center gap-3 focus-within:border-violet-500/50 focus-within:shadow-[0_0_20px_rgba(139,92,246,0.15)] transition-all">
         {/* Left attachment options */}
-        <div className="flex items-center gap-1.5 px-1 shrink-0 text-[#7E7576]">
-          <button className="p-1.5 hover:bg-[#F1F1EF] transition-colors rounded-none hover:text-[#1A1C1B] cursor-pointer">
+        <div className="flex items-center gap-1 px-1 shrink-0 text-zinc-400">
+          <button className="p-1.5 hover:bg-white/5 rounded-lg transition-colors hover:text-white cursor-pointer">
             <FiPaperclip size={18} />
           </button>
-          <button className="p-1.5 hover:bg-[#F1F1EF] transition-colors rounded-none hover:text-[#1A1C1B] cursor-pointer">
+          <button className="p-1.5 hover:bg-white/5 rounded-lg transition-colors hover:text-white cursor-pointer">
             <FiMic size={18} />
           </button>
         </div>
@@ -43,21 +43,21 @@ const ChatInput = () => {
           onKeyDown={handleKeyPress}
           placeholder="Ask AI anything..."
           rows={1}
-          className="flex-1 bg-transparent border-none outline-none resize-none text-[#1A1C1B] placeholder-[#7E7576] font-semibold text-sm py-1.5 scrollbar-hide max-h-24 align-middle"
+          className="flex-1 bg-transparent border-none outline-none resize-none text-white placeholder-zinc-555 font-semibold text-sm py-1.5 scrollbar-hide max-h-24 align-middle"
         />
 
         {/* Actions info + Submit button */}
-        <div className="flex items-center gap-4 shrink-0">
-          <span className="hidden sm:inline text-[9px] font-black tracking-widest text-[#7E7576] uppercase">
-            CMD + ENTER
+        <div className="flex items-center gap-4 shrink-0 select-none">
+          <span className="hidden sm:inline text-[9px] font-semibold font-mono-geist tracking-widest text-zinc-550">
+            ENTER TO SEND
           </span>
 
           <button
             onClick={handleSendMessage}
             disabled={!message.trim()}
-            className="cursor-pointer shrink-0 w-10 h-10 border-2 border-[#1A1C1B] bg-[#1A1C1B] text-white flex items-center justify-center shadow-[2px_2px_0px_0px_#C5A880] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#C5A880] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[0px_0px_0px_0px_#C5A880] transition-all disabled:opacity-50 disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-[2px_2px_0px_0px_#C5A880]"
+            className="cursor-pointer shrink-0 w-9 h-9 bg-violet-600 hover:bg-violet-500 text-white flex items-center justify-center rounded-xl shadow-[0_4px_10px_rgba(139,92,246,0.2)] hover:scale-[1.05] active:scale-[0.95] transition-all disabled:opacity-50 disabled:scale-100 disabled:shadow-none"
           >
-            <span className="text-xl font-bold">↗</span>
+            <span className="text-xl font-bold leading-none mt-[-2px]">↗</span>
           </button>
         </div>
       </div>

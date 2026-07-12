@@ -6,10 +6,7 @@ import {
   FiCheck,
   FiTarget,
   FiPlay,
-  FiCpu,
-  FiServer,
   FiTrendingUp,
-  FiAward,
 } from "react-icons/fi";
 
 export const BattleRealProgressLoader = () => {
@@ -34,30 +31,30 @@ export const BattleRealProgressLoader = () => {
   const getStageColor = () => {
     switch (progress.stage) {
       case "initializing":
-        return "from-blue-500 to-blue-600";
+        return "from-blue-400 to-indigo-500";
       case "generating":
-        return "from-purple-500 to-purple-600";
+        return "from-violet-400 to-fuchsia-500";
       case "judging":
-        return "from-orange-500 to-orange-600";
+        return "from-amber-400 to-orange-500";
       case "complete":
-        return "from-green-500 to-green-600";
+        return "from-emerald-400 to-teal-500";
       default:
-        return "from-blue-500 to-blue-600";
+        return "from-blue-400 to-indigo-500";
     }
   };
 
   const getStageIcon = () => {
     switch (progress.stage) {
       case "initializing":
-        return <FiPlay className="text-3xl animate-bounce" />;
+        return <FiPlay className="text-3xl animate-bounce text-indigo-400" />;
       case "generating":
-        return <FiZap className="text-3xl animate-pulse text-purple-500" />;
+        return <FiZap className="text-3xl animate-pulse text-violet-400" />;
       case "judging":
-        return <FiTarget className="text-3xl animate-spin text-orange-500" />;
+        return <FiTarget className="text-3xl animate-spin text-amber-400" />;
       case "complete":
-        return <FiCheck className="text-3xl text-green-500 animate-bounce" />;
+        return <FiCheck className="text-3xl text-emerald-400 animate-bounce" />;
       default:
-        return <FiPlay className="text-3xl animate-bounce" />;
+        return <FiPlay className="text-3xl animate-bounce text-indigo-400" />;
     }
   };
 
@@ -69,40 +66,40 @@ export const BattleRealProgressLoader = () => {
   ];
 
   return (
-    <div className="w-full h-screen flex items-center justify-center">
+    <div className="w-full flex items-center justify-center p-4">
       <div
-        className={`w-full max-w-lg mx-auto p-8 rounded-xl ${theme.bg.secondary} ${theme.border.primary} border space-y-8`}
+        className="w-full max-w-md p-8 rounded-2xl bg-zinc-900/60 backdrop-blur-xl border border-white/[0.06] shadow-2xl space-y-6"
       >
         {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="flex justify-center items-center h-16">
+        <div className="text-center space-y-3">
+          <div className="flex justify-center items-center h-12">
             {getStageIcon()}
           </div>
-          <h2 className={`text-2xl font-bold ${theme.text.primary}`}>
+          <h2 className="text-xl font-bold text-white">
             {progress.stage === "initializing" && "Starting Battle"}
             {progress.stage === "generating" && "Generating Solutions"}
             {progress.stage === "judging" && "Evaluating Solutions"}
             {progress.stage === "complete" && "Battle Complete"}
           </h2>
-          <p className={`text-sm ${theme.text.tertiary}`}>
+          <p className="text-xs text-zinc-550 font-semibold tracking-wider uppercase">
             Real-time AI model competition
           </p>
         </div>
 
         {/* Main Progress Bar */}
-        <div className="space-y-3">
+        <div className="space-y-3 bg-zinc-950/40 p-4 rounded-xl border border-white/5">
           <div className="flex justify-between items-center">
-            <p className={`text-sm font-medium ${theme.text.secondary}`}>
+            <p className="text-xs font-semibold text-zinc-400">
               Overall Progress
             </p>
             <p
-              className={`text-lg font-bold bg-gradient-to-r ${getStageColor()} bg-clip-text text-transparent`}
+              className={`text-base font-bold bg-gradient-to-r ${getStageColor()} bg-clip-text text-transparent font-mono-geist`}
             >
               {progress.progress}%
             </p>
           </div>
           <div
-            className={`w-full h-3 ${theme.bg.primary} rounded-full overflow-hidden shadow-sm`}
+            className="w-full h-2 bg-zinc-950 rounded-full overflow-hidden shadow-inner"
           >
             <div
               className={`h-full bg-gradient-to-r ${getStageColor()} rounded-full transition-all duration-300 ease-out`}
@@ -112,9 +109,9 @@ export const BattleRealProgressLoader = () => {
         </div>
 
         {/* Stage Breakdown */}
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           <p
-            className={`text-xs font-bold ${theme.text.tertiary} uppercase tracking-widest`}
+            className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest"
           >
             Processing Stages
           </p>
@@ -129,40 +126,28 @@ export const BattleRealProgressLoader = () => {
               return (
                 <div
                   key={stage.name}
-                  className={`p-3 rounded-lg text-center transition-all ${
+                  className={`p-2.5 rounded-xl text-center border transition-all ${
                     isComplete
-                      ? theme.isDark
-                        ? "bg-green-900 border border-green-700"
-                        : "bg-green-100 border border-green-300"
+                      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
                       : isActive
-                        ? theme.isDark
-                          ? "bg-purple-900 border border-purple-700"
-                          : "bg-purple-100 border border-purple-300"
-                        : theme.isDark
-                          ? "bg-slate-700 border border-slate-600"
-                          : "bg-gray-100 border border-gray-300"
+                        ? "bg-violet-500/10 border-violet-500/20 text-violet-400"
+                        : "bg-zinc-950/40 border-white/[0.04] text-zinc-600"
                   }`}
                 >
                   <div className="flex justify-center mb-1">
                     <Icon
-                      size={20}
+                      size={18}
                       className={
                         isComplete
-                          ? "text-green-400"
+                          ? "text-emerald-400"
                           : isActive
-                            ? "text-purple-400 animate-spin"
-                            : theme.isDark
-                              ? "text-gray-400"
-                              : "text-gray-500"
+                            ? "text-violet-400"
+                            : "text-zinc-600"
                       }
                     />
                   </div>
                   <p
-                    className={`text-xs font-semibold ${
-                      isComplete || isActive
-                        ? "text-white"
-                        : theme.text.tertiary
-                    }`}
+                    className="text-[9px] font-bold"
                   >
                     {stage.name}
                   </p>
@@ -172,32 +157,25 @@ export const BattleRealProgressLoader = () => {
           </div>
         </div>
 
-
-
-        {/* Timing Info */}
-        <div
-          className={`text-center p-3 ${theme.bg.primary} rounded-lg border ${theme.border.primary}`}
-        >
-          <p className={`text-xs ${theme.text.tertiary}`}>
-            <FiTrendingUp className="inline mr-2" size={14} />
-            Elapsed:{" "}
-            {progress.progress > 0
-              ? `${Math.round((Date.now() - progress.timestamp) / 1000)}s`
-              : "Starting..."}
+        {/* Status Messages */}
+        <div className="text-center p-3 bg-zinc-950/40 border border-white/5 rounded-xl">
+          <p className="text-xs font-semibold text-zinc-300">
+            {progress.stage === "initializing" && "🚀 Preparing for battle..."}
+            {progress.stage === "generating" && "⚡ Both AI models are generating solutions"}
+            {progress.stage === "judging" && "⚖️ Judge is evaluating the solutions"}
+            {progress.stage === "complete" && "🏆 Battle complete! Rendering results..."}
           </p>
         </div>
 
-        {/* Status Messages */}
-        <div className={`text-center p-3 ${theme.bg.primary} rounded-lg`}>
-          <p className={`text-sm font-medium ${theme.text.secondary}`}>
-            {progress.stage === "initializing" && "🚀 Preparing for battle..."}
-            {progress.stage === "generating" &&
-              "⚡ Both AI models are generating solutions"}
-            {progress.stage === "judging" &&
-              "⚖️ Judge is evaluating the solutions"}
-            {progress.stage === "complete" &&
-              "🏆 Battle complete! Rendering results..."}
-          </p>
+        {/* Timing Info */}
+        <div className="flex justify-center items-center gap-1.5 text-zinc-500 text-[10px] font-semibold">
+          <FiTrendingUp size={12} className="text-zinc-650" />
+          <span>Elapsed:</span>
+          <span className="font-mono-geist text-zinc-400">
+            {progress.progress > 0
+              ? `${Math.round((Date.now() - progress.timestamp) / 1000)}s`
+              : "0s"}
+          </span>
         </div>
       </div>
     </div>

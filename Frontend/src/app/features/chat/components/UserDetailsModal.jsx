@@ -19,35 +19,25 @@ const UserDetailsModal = ({ isOpen, onClose, user }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm"
+      className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 backdrop-blur-md select-none"
       onClick={onClose}
     >
       <div
-        className={`${
-          theme.isDark
-            ? "bg-linear-to-br from-gray-950 via-gray-900 to-gray-950"
-            : "bg-linear-to-br from-stone-50 via-stone-100 to-stone-50"
-        } rounded-2xl shadow-2xl w-96 ${theme.border.primary} border transition-all`}
+        className="bg-zinc-900/95 backdrop-blur-2xl border border-white/[0.06] rounded-2xl shadow-2xl w-96 transition-all overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div
-          className={`flex items-center justify-between p-6 ${
-            theme.isDark
-              ? "bg-linear-to-r from-gray-900 to-gray-800 border-gray-700"
-              : "bg-linear-to-r from-stone-100 to-stone-50 border-stone-200"
-          } ${theme.border.primary} border-b rounded-t-2xl`}
+          className="flex items-center justify-between p-6 border-b border-white/5 bg-zinc-950/20"
         >
-          <h2 className={`text-xl font-bold ${theme.text.primary}`}>
+          <h2 className="text-lg font-bold text-white">
             Profile Details
           </h2>
           <button
             onClick={onClose}
-            className={`p-1 rounded-lg ${
-              theme.isDark ? "hover:bg-gray-700" : "hover:bg-gray-200"
-            } transition-all hover:scale-110`}
+            className="p-1.5 rounded-lg border border-transparent hover:border-white/10 hover:bg-white/5 text-zinc-400 hover:text-white transition-all hover:scale-105"
           >
-            <FiX size={20} className={theme.text.secondary} />
+            <FiX size={18} />
           </button>
         </div>
 
@@ -56,135 +46,100 @@ const UserDetailsModal = ({ isOpen, onClose, user }) => {
           {/* User Avatar and Name */}
           <div className="flex items-center gap-4">
             <div
-              className={`w-20 h-20 rounded-full ${
-                theme.isDark
-                  ? "bg-linear-to-br from-gray-700 to-gray-800 shadow-lg"
-                  : "bg-linear-to-br from-stone-300 to-stone-400 shadow-md"
-              } flex items-center justify-center ${
-                theme.isDark ? "text-gray-50" : "text-stone-900"
-              } font-bold text-3xl border-2 ${theme.border.primary}`}
+              className="w-16 h-16 rounded-2xl bg-violet-600/10 border border-violet-500/20 shadow-md flex items-center justify-center text-violet-400 font-bold text-2xl"
             >
               {user?.email?.[0]?.toUpperCase() || "U"}
             </div>
-            <div className="flex-1">
-              <p className={`text-lg font-semibold ${theme.text.primary}`}>
+            <div className="flex-1 min-w-0">
+              <p className="text-base font-bold text-white truncate">
                 {user?.username || "User"}
               </p>
-              <p className={`text-sm ${theme.text.tertiary} mt-1`}>
+              <p className="text-xs text-zinc-450 mt-0.5 truncate">
                 {user?.email || "No email"}
               </p>
             </div>
           </div>
 
           {/* Divider */}
-          <div
-            className={`h-px ${theme.isDark ? "bg-gray-700" : "bg-stone-300"}`}
-          ></div>
+          <div className="h-px bg-white/5"></div>
 
           {/* User Details */}
           <div className="space-y-3">
             <div
-              className={`p-4 rounded-xl transition-all ${
-                theme.isDark
-                  ? "bg-gray-800/50 hover:bg-gray-800/70 border border-gray-700"
-                  : "bg-stone-100/50 hover:bg-stone-100/80 border border-stone-300"
-              }`}
+              className="p-3.5 rounded-xl transition-all bg-zinc-950/40 border border-white/[0.04] hover:border-white/[0.08]"
             >
-              <div className="flex items-center gap-3 mb-2">
-                <div
-                  className={`p-2 rounded-lg ${
-                    theme.isDark ? "bg-gray-700" : "bg-stone-200"
-                  }`}
-                >
-                  <FiUser size={16} className={theme.text.secondary} />
+              <div className="flex items-center gap-3 mb-1.5">
+                <div className="p-1.5 rounded-lg bg-zinc-900 text-zinc-400">
+                  <FiUser size={14} />
                 </div>
                 <span
-                  className={`text-xs font-semibold ${theme.text.tertiary} uppercase tracking-wide`}
+                  className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest"
                 >
                   Username
                 </span>
               </div>
-              <p className={`text-sm font-medium ${theme.text.primary} ml-11`}>
+              <p className="text-sm font-semibold text-zinc-200 ml-10">
                 {user?.username || "N/A"}
               </p>
             </div>
 
             <div
-              className={`p-4 rounded-xl transition-all ${
-                theme.isDark
-                  ? "bg-gray-800/50 hover:bg-gray-800/70 border border-gray-700"
-                  : "bg-stone-100/50 hover:bg-stone-100/80 border border-stone-300"
-              }`}
+              className="p-3.5 rounded-xl transition-all bg-zinc-950/40 border border-white/[0.04] hover:border-white/[0.08]"
             >
-              <div className="flex items-center gap-3 mb-2">
-                <div
-                  className={`p-2 rounded-lg ${
-                    theme.isDark ? "bg-gray-700" : "bg-stone-200"
-                  }`}
-                >
-                  <FiMail size={16} className={theme.text.secondary} />
+              <div className="flex items-center gap-3 mb-1.5">
+                <div className="p-1.5 rounded-lg bg-zinc-900 text-zinc-400">
+                  <FiMail size={14} />
                 </div>
                 <span
-                  className={`text-xs font-semibold ${theme.text.tertiary} uppercase tracking-wide`}
+                  className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest"
                 >
                   Email
                 </span>
               </div>
-              <p className={`text-sm font-medium ${theme.text.primary} ml-11`}>
+              <p className="text-sm font-semibold text-zinc-200 ml-10">
                 {user?.email || "N/A"}
               </p>
             </div>
 
             <div
-              className={`p-4 rounded-xl transition-all ${
-                theme.isDark
-                  ? "bg-gray-800/50 hover:bg-gray-800/70 border border-gray-700"
-                  : "bg-stone-100/50 hover:bg-stone-100/80 border border-stone-300"
-              }`}
+              className="p-3.5 rounded-xl transition-all bg-zinc-950/40 border border-white/[0.04] hover:border-white/[0.08]"
             >
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 rounded-lg bg-yellow-500/20">
-                  <FiZap size={16} className="text-yellow-500" />
+              <div className="flex items-center gap-3 mb-1.5">
+                <div className="p-1.5 rounded-lg bg-yellow-500/10 text-yellow-500">
+                  <FiZap size={14} />
                 </div>
                 <span
-                  className={`text-xs font-semibold ${theme.text.tertiary} uppercase tracking-wide`}
+                  className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest"
                 >
                   Plan
                 </span>
               </div>
-              <p className={`text-sm font-medium ${theme.text.primary} ml-11`}>
+              <p className="text-sm font-semibold text-zinc-200 ml-10">
                 Free Plan
               </p>
             </div>
           </div>
 
           {/* Divider */}
-          <div
-            className={`h-px ${theme.isDark ? "bg-gray-700" : "bg-stone-300"}`}
-          ></div>
+          <div className="h-px bg-white/5"></div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-2">
             <button
-              onClick={() => navigate("/pricing")}
-              className={`flex-1 px-4 py-3 ${theme.button.primary} text-white rounded-lg font-semibold transition-all hover:shadow-lg hover:scale-95 flex items-center justify-center gap-2 ${
-                theme.isDark
-                  ? "hover:shadow-gray-900/50"
-                  : "hover:shadow-stone-400/50"
-              }`}
+              onClick={() => {
+                navigate("/pricing");
+                onClose();
+              }}
+              className="flex-1 px-4 py-3 bg-violet-600 hover:bg-violet-500 text-white rounded-xl font-semibold transition-all hover:shadow-[0_4px_15px_rgba(139,92,246,0.3)] hover:scale-[1.02] flex items-center justify-center gap-2 text-xs uppercase tracking-wider"
             >
-              <FiZap size={16} />
+              <FiZap size={14} />
               Upgrade
             </button>
             <button
               onClick={handleLogoutClick}
-              className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all hover:scale-95 flex items-center justify-center gap-2 ${
-                theme.isDark
-                  ? "bg-red-900/50 hover:bg-red-900 text-red-200 border border-red-800"
-                  : "bg-red-100/50 hover:bg-red-200 text-red-700 border border-red-300"
-              }`}
+              className="flex-1 px-4 py-3 rounded-xl font-semibold transition-all hover:bg-red-500/10 text-red-400 border border-red-500/20 hover:scale-[1.02] flex items-center justify-center gap-2 text-xs uppercase tracking-wider bg-transparent"
             >
-              <FiLogOut size={16} />
+              <FiLogOut size={14} />
               Logout
             </button>
           </div>
