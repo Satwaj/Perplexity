@@ -10,7 +10,7 @@ import {
   BattleRealProgressLoader,
 } from "../components";
 import { useBattle } from "../hooks/useBattle";
-import { FiTrash2, FiLogOut, FiPlus, FiClock, FiSettings, FiHelpCircle, FiUser } from "react-icons/fi";
+import { FiTrash2, FiLogOut, FiPlus, FiClock, FiSettings, FiHelpCircle, FiUser, FiGrid } from "react-icons/fi";
 import { GiCrossedSwords } from "react-icons/gi";
 import { HiMenu, HiX } from "react-icons/hi";
 import gsap from "gsap";
@@ -20,7 +20,8 @@ const BattleArena = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("history"); // history or settings
+  const [activeTab, setActiveTab] = useState("history"); 
+  const [navOpen, setNavOpen] = useState(false);
   const { handleLogout } = useAuth();
   const user = useSelector((state) => state.auth?.user);
 
@@ -169,7 +170,7 @@ const BattleArena = () => {
         <div ref={glow1Ref} className="absolute top-24 left-[15%] w-80 h-80 rounded-full bg-violet-600/5 blur-3xl pointer-events-none" />
         <div ref={glow2Ref} className="absolute top-80 right-[10%] w-72 h-72 rounded-full bg-cyan-600/5 blur-3xl pointer-events-none" />
         <div ref={glow3Ref} className="absolute bottom-32 left-[20%] w-96 h-96 rounded-full bg-fuchsia-600/3 blur-3xl pointer-events-none" />
-        <div ref={glow4Ref} className="absolute bottom-48 right-[18%] w-60 h-60 rounded-full bg-indigo-600/5 blur-2xl pointer-events-none" />
+        <div ref={glow4Ref} className="absolute bottom-48 right-[18%] w-60 h-60 rounded-full bg-indigo-600/5 blur-2xl pointer-none" />
       </div>
 
       {/* Background grid pattern */}
@@ -194,19 +195,19 @@ const BattleArena = () => {
             <h2 className="font-extrabold text-2xl tracking-wider text-white">
               DASHBOARD
             </h2>
-            <span className="text-[10px] font-bold tracking-widest text-zinc-500 block mt-0.5 font-mono-geist">
+            <span className="text-[10px] font-bold tracking-widest text-zinc-555 block mt-0.5 font-mono-geist">
               V1.0.4 - ARENA AI
             </span>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="md:hidden p-2 rounded-lg border border-white/10 bg-zinc-900/60 text-white"
+            className="md:hidden p-2 rounded-lg border border-white/10 bg-zinc-900/60 text-white cursor-pointer"
           >
             <HiX size={18} />
           </button>
         </div>
 
-        {/* New Chat Button */}
+        {/* New Battle Button */}
         <div className="p-6 border-b border-white/5 shrink-0">
           <button
             onClick={() => {
@@ -223,66 +224,13 @@ const BattleArena = () => {
           </button>
         </div>
 
-        {/* Sidebar Navigation Menu */}
-        <div className="px-6 py-4 border-b border-white/5 flex flex-col gap-2 shrink-0 bg-white/[0.01]">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-1">
-            Navigation Menu
-          </span>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => {
-                setSidebarOpen(false);
-                navigateTo("/");
-              }}
-              className={`flex items-center justify-center gap-1.5 border border-white/5 rounded-lg p-2 text-xs font-semibold transition-all cursor-pointer ${
-                location.pathname === "/" ? "bg-white/10 text-white" : "bg-zinc-900/40 text-zinc-400 hover:text-white"
-              }`}
-            >
-              Home
-            </button>
-            <button
-              onClick={() => {
-                setSidebarOpen(false);
-                navigateTo("/arena");
-              }}
-              className={`flex items-center justify-center gap-1.5 border border-white/5 rounded-lg p-2 text-xs font-semibold transition-all cursor-pointer ${
-                location.pathname === "/arena" || location.pathname === "/battle" ? "bg-white/10 text-white" : "bg-zinc-900/40 text-zinc-400 hover:text-white"
-              }`}
-            >
-              Arena
-            </button>
-            <button
-              onClick={() => {
-                setSidebarOpen(false);
-                navigateTo("/chat");
-              }}
-              className={`flex items-center justify-center gap-1.5 border border-white/5 rounded-lg p-2 text-xs font-semibold transition-all cursor-pointer ${
-                location.pathname === "/chat" ? "bg-white/10 text-white" : "bg-zinc-900/40 text-zinc-400 hover:text-white"
-              }`}
-            >
-              Chat
-            </button>
-            <button
-              onClick={() => {
-                setSidebarOpen(false);
-                navigateTo("/pricing");
-              }}
-              className={`flex items-center justify-center gap-1.5 border border-white/5 rounded-lg p-2 text-xs font-semibold transition-all cursor-pointer ${
-                location.pathname === "/pricing" ? "bg-white/10 text-white" : "bg-zinc-900/40 text-zinc-400 hover:text-white"
-              }`}
-            >
-              Pricing
-            </button>
-          </div>
-        </div>
-
         {/* Navigation / History section */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           <div className="flex bg-zinc-900/50 p-1 rounded-xl border border-white/5">
             {/* History Tab */}
             <button
               onClick={() => setActiveTab("history")}
-              className={`flex-1 flex items-center justify-center gap-2 text-xs font-semibold py-2 rounded-lg transition-colors ${
+              className={`flex-1 flex items-center justify-center gap-2 text-xs font-semibold py-2 rounded-lg transition-colors cursor-pointer ${
                 activeTab === "history"
                   ? "bg-white/10 text-white"
                   : "text-zinc-400 hover:text-white"
@@ -295,7 +243,7 @@ const BattleArena = () => {
             {/* Settings Tab */}
             <button
               onClick={() => setActiveTab("settings")}
-              className={`flex-1 flex items-center justify-center gap-2 text-xs font-semibold py-2 rounded-lg transition-colors ${
+              className={`flex-1 flex items-center justify-center gap-2 text-xs font-semibold py-2 rounded-lg transition-colors cursor-pointer ${
                 activeTab === "settings"
                   ? "bg-white/10 text-white"
                   : "text-zinc-400 hover:text-white"
@@ -309,15 +257,15 @@ const BattleArena = () => {
           {/* Conditional Sidebar Content */}
           {activeTab === "history" && (
             <div className="pt-2 space-y-2.5">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-2 px-1">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-550 block mb-2 px-1 font-mono-geist">
                 Past Battles
               </span>
               {!user ? (
-                <p className="text-xs text-zinc-500 italic px-1">
+                <p className="text-xs text-zinc-550 italic px-1">
                   Sign in to view battle history.
                 </p>
               ) : battles.length === 0 ? (
-                <p className="text-xs text-zinc-500 italic px-1">
+                <p className="text-xs text-zinc-550 italic px-1">
                   No battles recorded.
                 </p>
               ) : (
@@ -340,13 +288,13 @@ const BattleArena = () => {
                           <p className="text-xs font-semibold text-zinc-200 group-hover:text-white truncate">
                             {battle.problem}
                           </p>
-                          <p className="text-[9px] text-zinc-500 mt-1 font-semibold font-mono-geist">
+                          <p className="text-[9px] text-zinc-550 mt-1 font-semibold font-mono-geist">
                             {new Date(battle.createdAt).toLocaleDateString()}
                           </p>
                         </div>
                         <button
                           onClick={() => handleDeleteBattle(battle._id || battle.id)}
-                          className="p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/10 text-zinc-500 hover:text-red-400 cursor-pointer shrink-0"
+                          className="p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/10 text-zinc-550 hover:text-red-400 cursor-pointer shrink-0"
                         >
                           <FiTrash2 size={13} />
                         </button>
@@ -360,7 +308,7 @@ const BattleArena = () => {
 
           {activeTab === "settings" && (
             <div className="pt-2 space-y-4">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block px-1">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-550 block px-1 font-mono-geist">
                 Preference Config
               </span>
               <div className="p-4 border border-white/5 bg-zinc-900/20 rounded-xl space-y-2">
@@ -419,11 +367,11 @@ const BattleArena = () => {
       <div ref={workspaceRef} className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         
         {/* Top Navbar */}
-        <nav className="h-16 shrink-0 border-b border-white/5 bg-zinc-950/60 backdrop-blur-md flex items-center justify-between px-6 z-30">
+        <nav className="h-16 shrink-0 border-b border-white/5 bg-zinc-950/60 backdrop-blur-md flex items-center justify-between px-6 z-30 relative">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="md:hidden p-2 rounded-lg border border-white/10 bg-zinc-900/60 text-white"
+              className="md:hidden p-2 rounded-lg border border-white/10 bg-zinc-900/60 text-white shrink-0 cursor-pointer"
             >
               <HiMenu size={18} />
             </button>
@@ -432,26 +380,92 @@ const BattleArena = () => {
             </span>
           </div>
 
-          <div className="flex items-center gap-6">
-            <div className="hidden sm:flex items-center gap-6 text-xs font-semibold tracking-widest text-zinc-400">
-              <span className="cursor-pointer hover:text-white transition-colors" onClick={() => navigateTo("/")}>HOME</span>
-              <span className="cursor-pointer text-white border-b-2 border-violet-500 pb-0.5">ARENA</span>
-              <span className="cursor-pointer hover:text-white transition-colors" onClick={() => navigateTo("/chat")}>CHAT</span>
-              <span className="cursor-pointer hover:text-white transition-colors" onClick={() => navigateTo("/pricing")}>PRICING</span>
+          <div className="flex items-center gap-4">
+            {/* Navigation Breadcrumb Shortcuts */}
+            <div className="hidden sm:flex items-center gap-3.5 text-[9px] font-bold tracking-widest uppercase text-zinc-550 mr-1 font-mono-geist bg-zinc-900/60 px-3 py-1.5 rounded-xl border border-white/5 select-none">
+              <button 
+                onClick={() => navigateTo("/")} 
+                className="hover:text-white transition-colors cursor-pointer"
+              >
+                Home
+              </button>
+              <span className="text-zinc-800">/</span>
+              <button 
+                onClick={() => navigateTo("/arena")} 
+                className={`hover:text-white transition-colors cursor-pointer ${location.pathname === "/arena" || location.pathname === "/battle" ? "text-violet-400" : ""}`}
+              >
+                Arena
+              </button>
+              <span className="text-zinc-800">/</span>
+              <button 
+                onClick={() => navigateTo("/chat")} 
+                className={`hover:text-white transition-colors cursor-pointer ${location.pathname === "/chat" ? "text-violet-400" : ""}`}
+              >
+                Chat
+              </button>
             </div>
-            
-            <div className="h-4 w-px bg-white/10 hidden sm:block" />
+
+            {/* Floating grid dropdown navigation */}
+            <div className="relative">
+              <button
+                onClick={() => setNavOpen(!navOpen)}
+                className={`p-2 rounded-lg border transition-all cursor-pointer shrink-0 flex items-center justify-center ${
+                  navOpen 
+                    ? "bg-violet-500/15 border-violet-500/30 text-violet-400 shadow-[0_0_15px_rgba(139,92,246,0.15)]" 
+                    : "bg-zinc-900/60 border-white/10 text-zinc-400 hover:text-white hover:bg-zinc-800"
+                }`}
+                title="Open Grid Navigation"
+              >
+                <FiGrid size={16} />
+              </button>
+
+              {navOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40 bg-transparent" 
+                    onClick={() => setNavOpen(false)} 
+                  />
+                  <div 
+                    className="absolute right-0 mt-2 w-48 bg-zinc-900/95 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl p-2 flex flex-col gap-1 z-50 animate-fade-in"
+                  >
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 px-3 py-1.5 border-b border-white/5 font-mono-geist">
+                      System Grid
+                    </span>
+                    <button
+                      onClick={() => { setNavOpen(false); navigateTo("/"); }}
+                      className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                    >
+                      Home
+                    </button>
+                    <button
+                      onClick={() => { setNavOpen(false); navigateTo("/arena"); }}
+                      className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                    >
+                      Battle Arena
+                    </button>
+                    <button
+                      onClick={() => { setNavOpen(false); navigateTo("/chat"); }}
+                      className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                    >
+                      AI Chat Channel
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="h-4 w-px bg-white/10" />
 
             {/* Profile Section */}
             {user ? (
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 border border-white/10 bg-zinc-900/50 px-3 py-1.5 rounded-xl font-semibold text-xs text-zinc-200">
+                <div className="flex items-center gap-2 border border-white/10 bg-zinc-900/50 px-3.5 py-1.5 rounded-xl font-semibold text-xs text-zinc-200">
                   <FiUser size={13} className="text-violet-400" />
                   <span className="hidden md:inline">{user.fullname || user.username}</span>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="p-2 rounded-lg hover:bg-red-500/10 text-zinc-450 hover:text-red-450 transition-colors cursor-pointer"
+                  className="p-2 rounded-lg hover:bg-red-500/10 text-zinc-450 hover:text-red-455 transition-colors cursor-pointer"
                   title="Sign out"
                 >
                   <FiLogOut size={16} />
@@ -569,7 +583,7 @@ const BattleArena = () => {
             </div>
 
             {/* Footer */}
-            <footer className="border-t border-white/5 bg-zinc-950/60 py-4 px-6 flex flex-col sm:flex-row items-center justify-between text-[10px] font-semibold tracking-widest text-zinc-550 uppercase gap-2">
+            <footer className="border-t border-white/5 bg-zinc-950/60 py-4 px-6 flex flex-col sm:flex-row items-center justify-between text-[10px] font-semibold tracking-widest text-zinc-555 uppercase gap-2">
               <span>© 2026 ARCHITECTURAL AI. ALL RIGHTS RESERVED.</span>
               <div className="flex items-center gap-6">
                 <span className="cursor-pointer hover:text-white transition-colors">PRIVACY POLICY</span>

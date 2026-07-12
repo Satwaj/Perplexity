@@ -149,7 +149,7 @@ const Login = () => {
             {/* Live Terminal Log Box */}
             <div className="bg-zinc-950/70 rounded-xl p-4 border border-white/5 font-mono-geist text-[10px] h-48 overflow-y-auto space-y-1.5 scrollbar-hide text-zinc-400">
               {logs.map((log, idx) => (
-                <div key={idx} className={`${log.startsWith("[OK]") ? "text-emerald-400" : log.startsWith("[SYSTEM]") ? "text-violet-400 font-bold" : "text-zinc-400"}`}>
+                <div key={idx} className={`${log && log.startsWith("[OK]") ? "text-emerald-400" : log && log.startsWith("[SYSTEM]") ? "text-violet-400 font-bold" : "text-zinc-400"}`}>
                   {log}
                 </div>
               ))}
@@ -201,14 +201,14 @@ const Login = () => {
                 htmlFor="email"
                 className="mb-2 block text-xs font-semibold uppercase tracking-wider text-zinc-400"
               >
-                Email or Username
+                Email Address
               </label>
               <input
                 id="email"
-                type="text"
+                type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@example.com or username"
+                placeholder="you@example.com"
                 required
                 className="w-full bg-zinc-950/40 border border-white/[0.08] rounded-xl p-3.5 text-white font-medium outline-none transition focus:border-violet-500 focus:bg-zinc-950/60 focus:shadow-[0_0_15px_rgba(139,92,246,0.1)] placeholder-zinc-600 text-sm font-mono-geist"
               />

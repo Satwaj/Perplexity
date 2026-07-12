@@ -17,7 +17,8 @@ export const BattleInputSection = ({ onStartBattle, loading }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
       handleSubmit(e);
     }
   };
@@ -77,7 +78,7 @@ export const BattleInputSection = ({ onStartBattle, loading }) => {
           {/* Right Action Helpers */}
           <div className="flex items-center gap-4 shrink-0">
             <span className="hidden sm:inline text-[9px] font-semibold font-mono-geist tracking-widest text-zinc-550">
-              CTRL + ENTER TO SEND
+              ENTER TO SEND
             </span>
 
             {/* Send Button */}

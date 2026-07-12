@@ -1,5 +1,5 @@
-import React from "react";
-import { FiLogOut, FiUser } from "react-icons/fi";
+import React, { useState } from "react";
+import { FiLogOut, FiUser, FiGrid } from "react-icons/fi";
 import { HiMenu } from "react-icons/hi";
 import { useTheme } from "../../../context/ThemeContext";
 import { useNavigate, useLocation } from "react-router";
@@ -12,6 +12,7 @@ const ChatNavbar = ({ setSidebarOpen }) => {
   const location = useLocation();
   const { user } = useSelector((state) => state.auth || {});
   const { handleLogout } = useAuth();
+  const [navOpen, setNavOpen] = useState(false);
 
   const navigateTo = (path, replace = true) => {
     if (location.pathname !== path) {
@@ -21,7 +22,7 @@ const ChatNavbar = ({ setSidebarOpen }) => {
 
   return (
     <div
-      className="w-full h-16 bg-zinc-950/60 border-b border-white/5 backdrop-blur-md flex items-center justify-between px-6 z-30 select-none"
+      className="w-full h-16 bg-zinc-950/60 border-b border-white/5 backdrop-blur-md flex items-center justify-between px-6 z-30 select-none relative"
     >
       {/* Left Brand Title */}
       <div className="flex items-center gap-3">
@@ -40,35 +41,81 @@ const ChatNavbar = ({ setSidebarOpen }) => {
       </div>
 
       {/* Right Side - Actions */}
-      <div className="flex items-center gap-6">
-        <div className="hidden sm:flex items-center gap-6 text-xs font-semibold tracking-widest text-zinc-400">
-          <span
-            onClick={() => navigateTo("/")}
-            className="cursor-pointer hover:text-white transition-colors"
+      <div className="flex items-center gap-4">
+        {/* Navigation Breadcrumb Shortcuts */}
+        <div className="hidden sm:flex items-center gap-3.5 text-[9px] font-bold tracking-widest uppercase text-zinc-550 mr-1 font-mono-geist bg-zinc-900/60 px-3 py-1.5 rounded-xl border border-white/5 select-none">
+          <button 
+            onClick={() => navigateTo("/")} 
+            className="hover:text-white transition-colors cursor-pointer"
           >
-            HOME
-          </span>
-          <span
-            onClick={() => navigateTo("/arena")}
-            className="cursor-pointer hover:text-white transition-colors"
+            Home
+          </button>
+          <span className="text-zinc-800">/</span>
+          <button 
+            onClick={() => navigateTo("/arena")} 
+            className={`hover:text-white transition-colors cursor-pointer ${location.pathname === "/arena" || location.pathname === "/battle" ? "text-violet-400" : ""}`}
           >
-            ARENA
-          </span>
-          <span
-            onClick={() => navigateTo("/chat")}
-            className="cursor-pointer text-white border-b-2 border-violet-500 pb-0.5"
+            Arena
+          </button>
+          <span className="text-zinc-800">/</span>
+          <button 
+            onClick={() => navigateTo("/chat")} 
+            className={`hover:text-white transition-colors cursor-pointer ${location.pathname === "/chat" ? "text-violet-400" : ""}`}
           >
-            CHAT
-          </span>
-          <span
-            onClick={() => navigateTo("/pricing")}
-            className="cursor-pointer hover:text-white transition-colors"
-          >
-            PRICING
-          </span>
+            Chat
+          </button>
         </div>
 
-        <div className="h-4 w-px bg-white/10 hidden sm:block" />
+        {/* Floating grid dropdown trigger */}
+        <div className="relative">
+          <button
+            onClick={() => setNavOpen(!navOpen)}
+            className={`p-2 rounded-lg border transition-all cursor-pointer shrink-0 flex items-center justify-center ${
+              navOpen 
+                ? "bg-violet-500/15 border-violet-500/30 text-violet-400 shadow-[0_0_15px_rgba(139,92,246,0.15)]" 
+                : "bg-zinc-900/60 border-white/10 text-zinc-400 hover:text-white hover:bg-zinc-800"
+            }`}
+            title="Open Grid Navigation"
+          >
+            <FiGrid size={16} />
+          </button>
+
+          {navOpen && (
+            <>
+              <div 
+                className="fixed inset-0 z-40 bg-transparent" 
+                onClick={() => setNavOpen(false)} 
+              />
+              <div 
+                className="absolute right-0 mt-2 w-48 bg-zinc-900/95 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl p-2 flex flex-col gap-1 z-50 animate-fade-in"
+              >
+                <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-500 px-3 py-1.5 border-b border-white/5 font-mono-geist">
+                  System Grid
+                </span>
+                <button
+                  onClick={() => { setNavOpen(false); navigateTo("/"); }}
+                  className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                >
+                  Home
+                </button>
+                <button
+                  onClick={() => { setNavOpen(false); navigateTo("/arena"); }}
+                  className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                >
+                  Battle Arena
+                </button>
+                <button
+                  onClick={() => { setNavOpen(false); navigateTo("/chat"); }}
+                  className="w-full text-left px-3 py-2 rounded-lg text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                >
+                  AI Chat Channel
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="h-4 w-px bg-white/10" />
 
         {/* Profile Section */}
         {user ? (

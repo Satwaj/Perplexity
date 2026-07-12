@@ -49,6 +49,7 @@ const Home = () => {
   };
   
   // Animation Refs
+  const mainWrapperRef = useRef(null);
   const heroRef = useRef(null);
   const playgroundRef = useRef(null);
   const featuresRef = useRef(null);
@@ -75,6 +76,41 @@ const Home = () => {
 
   const [mistralText, setMistralText] = useState("");
   const [groqText, setGroqText] = useState("");
+
+  // Reusable 3D Tilt Hover Animation
+  const handleCardMouseMove = (e) => {
+    const cardEl = e.currentTarget;
+    const rect = cardEl.getBoundingClientRect();
+    const x = e.clientX - rect.left; 
+    const y = e.clientY - rect.top;  
+    const xc = rect.width / 2;
+    const yc = rect.height / 2;
+    const angleX = (yc - y) / 10; 
+    const angleY = (x - xc) / 10; 
+
+    gsap.to(cardEl, {
+      rotateX: angleX,
+      rotateY: angleY,
+      scale: 1.02,
+      borderColor: "rgba(139, 92, 246, 0.25)",
+      boxShadow: "0 25px 45px rgba(0, 0, 0, 0.55), 0 0 25px rgba(139, 92, 246, 0.04)",
+      ease: "power2.out",
+      duration: 0.3
+    });
+  };
+
+  const handleCardMouseLeave = (e) => {
+    const cardEl = e.currentTarget;
+    gsap.to(cardEl, {
+      rotateX: 0,
+      rotateY: 0,
+      scale: 1,
+      borderColor: "rgba(255, 255, 255, 0.06)",
+      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
+      ease: "power2.out",
+      duration: 0.5
+    });
+  };
 
   // Simulated typing and rendering loop for playground
   useEffect(() => {
@@ -136,19 +172,44 @@ const Home = () => {
 
   // Entrance & drift animations
   useEffect(() => {
+    // Initial Page Load Slide Reveal
+    gsap.fromTo(
+      mainWrapperRef.current,
+      { opacity: 0, scale: 0.99 },
+      { opacity: 1, scale: 1, duration: 1, ease: "power4.out" }
+    );
+
+    // Staggered Hero text reveal
     if (heroRef.current) {
       gsap.fromTo(
         heroRef.current.children,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.12, ease: "power3.out" }
+        { y: 35, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: "power3.out" }
       );
     }
 
     if (playgroundRef.current) {
       gsap.fromTo(
         playgroundRef.current,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: "power4.out", delay: 0.3 }
+        { y: 45, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.1, ease: "power4.out", delay: 0.25 }
+      );
+    }
+
+    // Staggered card reveals for features and directory
+    if (featuresRef.current) {
+      gsap.fromTo(
+        featuresRef.current.querySelectorAll(".card-element"),
+        { y: 25, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power2.out", delay: 0.4 }
+      );
+    }
+
+    if (modelDirRef.current) {
+      gsap.fromTo(
+        modelDirRef.current.querySelectorAll(".card-element"),
+        { y: 25, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power2.out", delay: 0.5 }
       );
     }
 
@@ -202,7 +263,7 @@ const Home = () => {
       ease: "sine.inOut"
     });
 
-    // Parallax parallax effect on background glow spots
+    // Parallax effect on background glow spots
     const handleMouseMove = (e) => {
       const { clientX, clientY } = e;
       const xPos = (clientX / window.innerWidth - 0.5) * 45;
@@ -272,17 +333,10 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-white flex flex-col font-sans relative selection:bg-violet-500/30 overflow-x-hidden">
-      {/* 1. Scrolling Marquee Header Ticker */}
-      <div className="w-full bg-zinc-950 text-zinc-400 py-2.5 overflow-hidden border-b border-white/5 select-none z-20 shrink-0">
-        <div className="whitespace-nowrap flex gap-12 font-mono-geist text-[10px] tracking-[0.2em] uppercase animate-marquee">
-          <span>BATTLE ARENA <span className="text-violet-500">•</span> COMPARE MODELS <span className="text-violet-500">•</span> REAL-TIME BENCHMARKS <span className="text-violet-500">•</span> MISTRALAI <span className="text-violet-500">•</span> GROQ <span className="text-violet-500">•</span> LLAMA3 <span className="text-violet-500">•</span> GEMINI <span className="text-violet-500">•</span> CHAT ROOMS</span>
-          <span>BATTLE ARENA <span className="text-violet-500">•</span> COMPARE MODELS <span className="text-violet-500">•</span> REAL-TIME BENCHMARKS <span className="text-violet-500">•</span> MISTRALAI <span className="text-violet-500">•</span> GROQ <span className="text-violet-500">•</span> LLAMA3 <span className="text-violet-500">•</span> GEMINI <span className="text-violet-500">•</span> CHAT ROOMS</span>
-        </div>
-      </div>
-
-      {styleTag}
-
+    <div 
+      ref={mainWrapperRef}
+      className="min-h-screen bg-[#09090b] text-white flex flex-col font-sans relative selection:bg-violet-500/30 overflow-x-hidden opacity-0"
+    >
       {/* Ambient background glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div
@@ -446,7 +500,7 @@ const Home = () => {
         
         {/* SECTION 1: HERO */}
         <section ref={heroRef} className="text-center space-y-6 max-w-4xl mx-auto">
-          <div className="flex justify-center">
+          <div className="flex justify-center animate-fade-in">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-violet-400 bg-violet-500/10 px-3.5 py-1.5 rounded-full border border-violet-500/20">
               V2.0 THE AI OPERATING SYSTEM
             </span>
@@ -480,7 +534,7 @@ const Home = () => {
         {/* SECTION 2: INTERACTIVE SIMULATION PLAYGROUND */}
         <section ref={playgroundRef} className="space-y-6 max-w-4xl mx-auto">
           <div className="text-center space-y-2 mb-8">
-            <h2 className="text-xl font-bold tracking-tight text-white uppercase">Live Battle Simulator</h2>
+            <h2 className="text-xl font-bold tracking-tight text-white uppercase font-space">Live Battle Simulator</h2>
             <p className="text-xs text-zinc-500 font-medium">Watch the comparison system evaluation cycle in action below.</p>
           </div>
           
@@ -517,7 +571,7 @@ const Home = () => {
               {/* 2. Side by Side Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                 {/* Mistral Model Pane */}
-                <div className="bg-zinc-900/50 border border-white/5 rounded-xl p-5 space-y-4">
+                <div className={`bg-zinc-900/50 border rounded-xl p-5 space-y-4 transition-all duration-300 ${simStep === 1 ? "border-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.1)]" : "border-white/5"}`}>
                   <div className="flex items-center justify-between pb-3 border-b border-white/5 select-none">
                     <div className="flex items-center gap-2">
                       <MistralLogo className="w-4 h-4" />
@@ -535,7 +589,7 @@ const Home = () => {
                 </div>
 
                 {/* Groq Model Pane */}
-                <div className="bg-zinc-900/50 border border-white/5 rounded-xl p-5 space-y-4">
+                <div className={`bg-zinc-900/50 border rounded-xl p-5 space-y-4 transition-all duration-300 ${simStep === 1 ? "border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.1)]" : "border-white/5"}`}>
                   <div className="flex items-center justify-between pb-3 border-b border-white/5 select-none">
                     <div className="flex items-center gap-2">
                       <GroqLogo className="w-4 h-4" />
@@ -553,7 +607,7 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* 3. Judge Verdict Box */}
+              {/* 3. Judge Verdict Block */}
               <div className={`transition-all duration-500 overflow-hidden ${simStep === 3 ? "max-h-24 opacity-100 mt-4" : "max-h-0 opacity-0 pointer-events-none"}`}>
                 <div className="border border-white/10 bg-zinc-900 p-4 rounded-xl flex items-center justify-between gap-3 text-zinc-300 font-semibold uppercase tracking-wider text-[10px]">
                   <div className="flex items-center gap-2">
@@ -588,47 +642,71 @@ const Home = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Feature 1 */}
-            <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/[0.06] p-6 rounded-2xl shadow-lg hover:border-violet-500/20 transition-all group">
-              <div className="inline-flex p-3 bg-violet-500/10 border border-violet-500/20 text-violet-400 rounded-xl mb-4 group-hover:scale-105 transition-transform duration-300">
-                <FiLayers size={18} />
+            <div 
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+              className="card-element card-brutalist p-6 rounded-2xl flex flex-col justify-between bg-zinc-900/40 backdrop-blur-xl border border-white/[0.06] shadow-lg hover:border-violet-500/20 transition-all group"
+            >
+              <div>
+                <div className="inline-flex p-3 bg-violet-500/10 border border-violet-500/20 text-violet-400 rounded-xl mb-4 group-hover:scale-105 transition-transform duration-300">
+                  <FiLayers size={18} />
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Dual Battle Arena</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed font-medium">
+                  Pit Groq and Mistral side-by-side. Compare speeds, response code formats, and structure differences.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-white mb-2">Dual Battle Arena</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed font-medium">
-                Pit Groq and Mistral side-by-side. Compare speeds, response code formats, and structure differences.
-              </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/[0.06] p-6 rounded-2xl shadow-lg hover:border-indigo-500/20 transition-all group">
-              <div className="inline-flex p-3 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl mb-4 group-hover:scale-105 transition-transform duration-300">
-                <FiCpu size={18} />
+            <div 
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+              className="card-element card-brutalist p-6 rounded-2xl flex flex-col justify-between bg-zinc-900/40 backdrop-blur-xl border border-white/[0.06] shadow-lg hover:border-indigo-500/20 transition-all group"
+            >
+              <div>
+                <div className="inline-flex p-3 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl mb-4 group-hover:scale-105 transition-transform duration-300">
+                  <FiCpu size={18} />
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Automated Evaluator</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed font-medium">
+                  An automated judge evaluates code snippets, computes speed differentials, and renders verdicts.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-white mb-2">Automated Evaluator</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed font-medium">
-                An automated judge evaluates code snippets, computes speed differentials, and renders verdicts.
-              </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/[0.06] p-6 rounded-2xl shadow-lg hover:border-cyan-500/20 transition-all group">
-              <div className="inline-flex p-3 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl mb-4 group-hover:scale-105 transition-transform duration-300">
-                <FiMessageSquare size={18} />
+            <div 
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+              className="card-element card-brutalist p-6 rounded-2xl flex flex-col justify-between bg-zinc-900/40 backdrop-blur-xl border border-white/[0.06] shadow-lg hover:border-cyan-500/20 transition-all group"
+            >
+              <div>
+                <div className="inline-flex p-3 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl mb-4 group-hover:scale-105 transition-transform duration-300">
+                  <FiMessageSquare size={18} />
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Persistent Agents</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed font-medium">
+                  Create persistent chat sessions, save historical threads, and switch models on the fly.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-white mb-2">Persistent Agents</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed font-medium">
-                Create persistent chat sessions, save historical threads, and switch models on the fly.
-              </p>
             </div>
 
             {/* Feature 4 */}
-            <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/[0.06] p-6 rounded-2xl shadow-lg hover:border-emerald-500/20 transition-all group">
-              <div className="inline-flex p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl mb-4 group-hover:scale-105 transition-transform duration-300">
-                <FiMic size={18} />
+            <div 
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
+              className="card-element card-brutalist p-6 rounded-2xl flex flex-col justify-between bg-zinc-900/40 backdrop-blur-xl border border-white/[0.06] shadow-lg hover:border-emerald-500/20 transition-all group"
+            >
+              <div>
+                <div className="inline-flex p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl mb-4 group-hover:scale-105 transition-transform duration-300">
+                  <FiMic size={18} />
+                </div>
+                <h3 className="text-base font-bold text-white mb-2">Voice & Ingest Tools</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed font-medium">
+                  Ask questions using speech input and synthesis, or upload text files for context ingestion.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-white mb-2">Voice & Ingest Tools</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed font-medium">
-                Ask questions using speech input and synthesis, or upload text files for context ingestion.
-              </p>
             </div>
           </div>
         </section>
@@ -712,7 +790,9 @@ const Home = () => {
               return (
                 <div 
                   key={idx}
-                  className="bg-zinc-900/40 border border-white/[0.06] rounded-2xl p-6 flex flex-col justify-between shadow-xl hover:border-violet-500/20 transition-all duration-300 hover:translate-y-[-2px] group"
+                  onMouseMove={handleCardMouseMove}
+                  onMouseLeave={handleCardMouseLeave}
+                  className="card-element card-brutalist p-6 rounded-2xl flex flex-col justify-between bg-zinc-900/40 border border-white/[0.06] shadow-xl hover:border-violet-500/20 transition-all duration-300 hover:translate-y-[-2px] group"
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
@@ -765,18 +845,5 @@ const Home = () => {
     </div>
   );
 };
-
-const styleTag = (
-  <style>{`
-    @keyframes marquee-drift {
-      0% { transform: translateX(0%); }
-      100% { transform: translateX(-50%); }
-    }
-    .animate-marquee {
-      animation: marquee-drift 26s infinite linear;
-      width: max-content;
-    }
-  `}</style>
-);
 
 export default Home;

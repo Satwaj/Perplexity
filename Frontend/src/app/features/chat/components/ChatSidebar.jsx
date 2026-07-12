@@ -74,47 +74,6 @@ const ChatSidebar = ({ setSidebarOpen }) => {
         </button>
       </div>
 
-      {/* Sidebar Navigation Menu */}
-      <div className="px-6 py-4 border-b border-white/5 flex flex-col gap-2 shrink-0 bg-white/[0.01]">
-        <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-1">
-          Navigation Menu
-        </span>
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            onClick={() => navigateTo("/")}
-            className={`flex items-center justify-center gap-1.5 border border-white/5 rounded-lg p-2 text-xs font-semibold transition-all cursor-pointer ${
-              location.pathname === "/" ? "bg-white/10 text-white" : "bg-zinc-900/40 text-zinc-400 hover:text-white"
-            }`}
-          >
-            Home
-          </button>
-          <button
-            onClick={() => navigateTo("/arena")}
-            className={`flex items-center justify-center gap-1.5 border border-white/5 rounded-lg p-2 text-xs font-semibold transition-all cursor-pointer ${
-              location.pathname === "/arena" || location.pathname === "/battle" ? "bg-white/10 text-white" : "bg-zinc-900/40 text-zinc-400 hover:text-white"
-            }`}
-          >
-            Arena
-          </button>
-          <button
-            onClick={() => navigateTo("/chat")}
-            className={`flex items-center justify-center gap-1.5 border border-white/5 rounded-lg p-2 text-xs font-semibold transition-all cursor-pointer ${
-              location.pathname === "/chat" ? "bg-white/10 text-white" : "bg-zinc-900/40 text-zinc-400 hover:text-white"
-            }`}
-          >
-            Chat
-          </button>
-          <button
-            onClick={() => navigateTo("/pricing")}
-            className={`flex items-center justify-center gap-1.5 border border-white/5 rounded-lg p-2 text-xs font-semibold transition-all cursor-pointer ${
-              location.pathname === "/pricing" ? "bg-white/10 text-white" : "bg-zinc-900/40 text-zinc-400 hover:text-white"
-            }`}
-          >
-            Pricing
-          </button>
-        </div>
-      </div>
-
       {/* Chat History List */}
       <div className="flex-1 overflow-y-auto p-6 space-y-2.5">
         <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-2 px-1">
@@ -158,13 +117,11 @@ const ChatSidebar = ({ setSidebarOpen }) => {
             );
           })
         ) : (
-          <p className="text-xs text-zinc-500 italic px-1">
-            No chats started yet.
-          </p>
+          <p className="text-xs text-zinc-500 italic px-1">No chats started.</p>
         )}
       </div>
 
-      {/* Sidebar Bottom Upgrade Section */}
+      {/* Sidebar Bottom Config Section */}
       <div className="p-6 border-t border-white/5 space-y-4 bg-white/[0.01] shrink-0">
         <button
           onClick={() => navigateTo("/pricing", false)}

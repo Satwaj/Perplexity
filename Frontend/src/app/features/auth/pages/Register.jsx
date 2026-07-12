@@ -155,7 +155,7 @@ const Register = () => {
             {/* Live Terminal Log Box */}
             <div className="bg-zinc-950/70 rounded-xl p-4 border border-white/5 font-mono-geist text-[10px] h-48 overflow-y-auto space-y-1.5 scrollbar-hide text-zinc-400">
               {logs.map((log, idx) => (
-                <div key={idx} className={`${log.startsWith("[OK]") ? "text-emerald-400" : log.startsWith("[SYSTEM]") ? "text-violet-400 font-bold" : "text-zinc-400"}`}>
+                <div key={idx} className={`${log && log.startsWith("[OK]") ? "text-emerald-400" : log && log.startsWith("[SYSTEM]") ? "text-violet-400 font-bold" : "text-zinc-400"}`}>
                   {log}
                 </div>
               ))}

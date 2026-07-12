@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiPaperclip, FiMic } from "react-icons/fi";
+import { FiPaperclip, FiMic, FiArrowUp } from "react-icons/fi";
 import { useChat } from "../hooks/useChat";
 import { useSelector } from "react-redux";
 
@@ -57,7 +57,7 @@ const ChatInput = () => {
             disabled={!message.trim()}
             className="cursor-pointer shrink-0 w-9 h-9 bg-violet-600 hover:bg-violet-500 text-white flex items-center justify-center rounded-xl shadow-[0_4px_10px_rgba(139,92,246,0.2)] hover:scale-[1.05] active:scale-[0.95] transition-all disabled:opacity-50 disabled:scale-100 disabled:shadow-none"
           >
-            <span className="text-xl font-bold leading-none mt-[-2px]">↗</span>
+            <FiArrowUp size={16} className="stroke-[2.8]" />
           </button>
         </div>
       </div>

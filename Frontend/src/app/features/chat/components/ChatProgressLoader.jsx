@@ -7,9 +7,8 @@ import {
   FiSearch,
   FiPlay,
   FiFilter,
-  FiZap,
-  FiTrendingUp,
   FiPenTool,
+  FiTrendingUp,
 } from "react-icons/fi";
 
 export const ChatProgressLoader = () => {
@@ -22,12 +21,48 @@ export const ChatProgressLoader = () => {
   });
 
   useEffect(() => {
+    // 1. Subscribe to real socket events if available
     const unsubscribe = onChatProgress((data) => {
       setProgress(data);
     });
 
+    // 2. Set up a smooth fallback generator that increments status steps up to 95%
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev.progress >= 95) return prev;
+        
+        let nextProgress = prev.progress + Math.floor(Math.random() * 6) + 3;
+        if (nextProgress > 95) nextProgress = 95;
+        
+        let nextStage = prev.stage;
+        let nextMsg = prev.message;
+        
+        if (nextProgress < 20) {
+          nextStage = "initializing";
+          nextMsg = "🚀 Preparing chat context...";
+        } else if (nextProgress < 50) {
+          nextStage = "processing";
+          nextMsg = "🔍 Analyzing prompt logic...";
+        } else if (nextProgress < 80) {
+          nextStage = "thinking";
+          nextMsg = "🧠 Formulating optimal explanation...";
+        } else {
+          nextStage = "generating";
+          nextMsg = "✍️ Composing response stream...";
+        }
+        
+        return {
+          ...prev,
+          progress: nextProgress,
+          stage: nextStage,
+          message: nextMsg,
+        };
+      });
+    }, 400);
+
     return () => {
       unsubscribe();
+      clearInterval(timer);
     };
   }, []);
 
@@ -75,7 +110,7 @@ export const ChatProgressLoader = () => {
 
   return (
     <div
-      className="flex items-center justify-center p-6 bg-zinc-900/60 backdrop-blur-xl border border-white/[0.06] rounded-2xl shadow-xl w-full max-w-lg mx-auto"
+      className="flex items-center justify-center p-6 bg-zinc-900/60 backdrop-blur-xl border border-white/[0.06] rounded-2xl shadow-xl w-full max-w-lg mx-auto animate-fade-in"
     >
       <div className="w-full space-y-5">
         {/* Header */}
@@ -84,14 +119,14 @@ export const ChatProgressLoader = () => {
             {getStageIcon()}
           </div>
           <div>
-            <h3 className="text-base font-bold text-white">
+            <h3 className="text-base font-bold text-white font-space">
               {progress.stage === "initializing" && "Processing Message"}
               {progress.stage === "processing" && "Searching & Analyzing"}
               {progress.stage === "thinking" && "Thinking"}
               {progress.stage === "generating" && "Generating Response"}
               {progress.stage === "complete" && "Complete"}
             </h3>
-            <p className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mt-0.5">
+            <p className="text-[10px] font-semibold text-zinc-550 uppercase tracking-wider mt-0.5">
               Real-time AI processing
             </p>
           </div>
@@ -100,7 +135,7 @@ export const ChatProgressLoader = () => {
         {/* Progress Bar */}
         <div className="space-y-3 bg-zinc-950/40 p-4 rounded-xl border border-white/5">
           <div className="flex justify-between items-center">
-            <p className="text-xs font-semibold text-zinc-450">
+            <p className="text-xs font-semibold text-zinc-400">
               Progress
             </p>
             <p
@@ -136,7 +171,7 @@ export const ChatProgressLoader = () => {
                     ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
                     : isActive
                       ? "bg-violet-500/10 border-violet-500/20 text-violet-400"
-                      : "bg-zinc-950/40 border-white/[0.04] text-zinc-600"
+                      : "bg-zinc-950/40 border-white/[0.04] text-zinc-650"
                 }`}
               >
                 <div className="flex justify-center mb-1">
@@ -164,13 +199,13 @@ export const ChatProgressLoader = () => {
             {progress.stage === "processing" && "🔍 Analyzing your message..."}
             {progress.stage === "thinking" && "🧠 Processing information..."}
             {progress.stage === "generating" && "✍️ Composing response..."}
-            {progress.stage === "complete" && "✅ Done!"}
+            {progress.stage === "complete" && "Done!"}
           </p>
           
-          <div className="flex items-center justify-center gap-1.5 text-zinc-500 text-[10px] font-semibold">
+          <div className="flex items-center justify-center gap-1.5 text-zinc-550 text-[10px] font-semibold">
             <FiTrendingUp size={12} className="text-zinc-650" />
             <span>Elapsed:</span>
-            <span className="font-mono-geist text-zinc-400">
+            <span className="font-mono-geist text-zinc-450">
               {progress.progress > 0
                 ? `${Math.round((Date.now() - progress.timestamp) / 1000)}s`
                 : "0s"}
