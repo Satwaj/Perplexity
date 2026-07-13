@@ -3,8 +3,8 @@ import React, { createContext, useState, useContext } from "react";
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  // Lock to permanent dark aesthetic theme (isDark = true)
-  const isDark = true;
+  // Lock to permanent light aesthetic theme (isDark = false)
+  const isDark = false;
 
   const toggleTheme = () => {
     // Permanent theme, toggling is disabled
@@ -14,26 +14,26 @@ export const ThemeProvider = ({ children }) => {
     isDark,
     toggleTheme,
     bg: {
-      primary: "bg-[#09090b]", // Dark charcoal background
-      secondary: "bg-[#121214]", // Sleek panel background
-      tertiary: "bg-[#1e1e24]", // Dropdown and popup background
-      card: "bg-zinc-900/60 backdrop-blur-lg border border-white/[0.06]", // Soft frosted dark panel
+      primary: "bg-white",
+      secondary: "bg-zinc-50",
+      tertiary: "bg-zinc-100",
+      card: "bg-white border border-zinc-200 shadow-sm",
     },
     text: {
-      primary: "text-[#f4f4f5]", // High-contrast clean off-white
-      secondary: "text-[#a1a1aa]", // Soft slate gray
-      tertiary: "text-[#71717a]", // Muted gray
-      accent: "text-[#8b5cf6]", // Modern violet accent
+      primary: "text-black",
+      secondary: "text-zinc-700",
+      tertiary: "text-zinc-500",
+      accent: "text-black",
     },
     border: {
-      primary: "border-white/10", // Ultra-thin clean line
-      secondary: "border-white/20", // Defined borders
-      accent: "border-[#8b5cf6]/30", // Violet accent border
+      primary: "border-zinc-200",
+      secondary: "border-zinc-300",
+      accent: "border-black",
     },
     button: {
-      primary: "bg-[#8b5cf6] hover:bg-[#7c3aed] text-white transition-all duration-300 shadow-[0_4px_20px_rgba(139,92,246,0.15)]", // Violet primary
-      secondary: "bg-[#18181b] border border-white/10 hover:bg-zinc-800 text-zinc-100 transition-all duration-300",
-      accent: "bg-[#06b6d4] hover:bg-[#0891b2] text-white transition-all duration-300", // Cyan secondary accent
+      primary: "bg-black hover:bg-zinc-800 text-white transition-all duration-300 shadow-md",
+      secondary: "bg-white border border-zinc-300 hover:bg-zinc-50 text-black transition-all duration-300",
+      accent: "bg-zinc-900 hover:bg-zinc-800 text-white transition-all duration-300",
     },
   };
 

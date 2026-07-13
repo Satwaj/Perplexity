@@ -8,8 +8,8 @@ html {
 
 body {
 	font-family: "Instrument Sans", "Plus Jakarta Sans", sans-serif;
-	background-color: #09090b;
-	color: #f4f4f5;
+	background-color: #ffffff;
+	color: #000000;
 	overflow-x: hidden;
 }
 
@@ -33,44 +33,44 @@ body {
 
 /* Re-defining Brutalist classes to Premium OS styles */
 .border-brutalist {
-	border: 1px solid rgba(255, 255, 255, 0.08);
+	border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .shadow-brutalist {
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .shadow-brutalist-lg {
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 40px rgba(139, 92, 246, 0.05);
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 0 40px rgba(139, 92, 246, 0.02);
 }
 
 .btn-brutalist {
-	border: 1px solid rgba(255, 255, 255, 0.08);
-	background-color: #18181b;
-	color: #f4f4f5;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	background-color: #ffffff;
+	color: #000000;
 	border-radius: 8px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 	font-family: "Space Grotesk", sans-serif;
 	transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-brutalist:hover {
 	transform: translateY(-1px);
-	background-color: #27272a;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 255, 255, 0.03);
-	border-color: rgba(255, 255, 255, 0.15);
+	background-color: #f4f4f5;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.02);
+	border-color: rgba(0, 0, 0, 0.25);
 }
 
 .btn-brutalist:active {
 	transform: translateY(1px);
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Redesigning card-brutalist to support 3D animations */
 .card-brutalist {
-	border: 1px solid rgba(255, 255, 255, 0.06);
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-	background-color: rgba(24, 24, 27, 0.65);
+	border: 1px solid rgba(0, 0, 0, 0.06);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+	background-color: rgba(255, 255, 255, 0.85);
 	backdrop-filter: blur(16px);
 	border-radius: 12px;
 	perspective: 1000px;
@@ -79,10 +79,10 @@ body {
 
 /* Glassmorphism Panel */
 .glass-panel {
-	background: rgba(18, 18, 20, 0.6);
+	background: rgba(255, 255, 255, 0.85);
 	backdrop-filter: blur(20px);
-	border: 1px solid rgba(255, 255, 255, 0.06);
-	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
 }
 
 /* Soft Ambient Glow Gradients */
@@ -103,16 +103,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-	background: #09090b;
+	background: #ffffff;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #27272a;
+	background: #e4e4e7;
 	border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #3f3f46;
+	background: #d4d4d8;
 }
 
 .scrollbar-hide {
@@ -126,32 +126,32 @@ body {
 
 /* Text Gradient helper */
 .text-glow-gradient {
-	background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+	background: linear-gradient(135deg, #000000 0%, #3f3f46 100%);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 }
 
 .text-violet-gradient {
-	background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #6d28d9 100%);
+	background: linear-gradient(135deg, #000000 0%, #18181b 50%, #27272a 100%);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 }
 
 /* Custom visual styling for the mockup playground */
 .neon-border {
-	box-shadow: 0 0 15px rgba(139, 92, 246, 0.15), inset 0 0 15px rgba(139, 92, 246, 0.05);
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.05), inset 0 0 15px rgba(0, 0, 0, 0.02);
 }
 
 .glow-indigo {
-	box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
 
 .glow-cyan {
-	box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
 
 .glow-violet {
-	box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
+	box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
 }
 
 /* Typing cursor simulator */
@@ -161,7 +161,7 @@ body {
 .typing-cursor::after {
 	content: "|";
 	animation: blink 1s step-start infinite;
-	color: #8b5cf6;
+	color: #000000;
 	font-weight: bold;
 }
 
@@ -179,4 +179,647 @@ body {
 
 .page-transition {
 	animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --- Global Light Mode Overrides (White BG, Black Font) --- */
+
+/* All standard dark background classes to white (excluding buttons, links, custom styling) */
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-950,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-900,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-800,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-700,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-600,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-black,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-\[\#09090b\],
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-\[\#121214\],
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-\[\#1e1e24\],
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-black\/20,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-black\/85,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-950\/80,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-950\/95,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-900\/60,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-900\/65,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-900\/50,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-900\/40,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-900\/95,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-white\/5,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-white\/\[0\.02\],
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-white\/\[0\.01\],
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-white\/\[0\.05\],
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-950\/60 {
+  background-color: #ffffff !important;
+}
+
+/* Slight gray backgrounds for panels, hover states or lists to add depth (excluding buttons) */
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-900\/40,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-900\/50,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-950\/40,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-950\/20,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-950\/10,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-900\/60,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-800\/80,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-white\/5,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-white\/\[0\.02\],
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-white\/\[0\.01\],
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-white\/\[0\.05\],
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-850,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).bg-zinc-800:hover,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).hover\:bg-zinc-800:hover,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).hover\:bg-zinc-700:hover,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).hover\:bg-white\/\[0\.01\]:hover,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).hover\:bg-white\/\[0\.02\]:hover,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).hover\:bg-white\/5:hover,
+:not(button):not(a):not(.btn-brutalist):not([role="button"]):not(.btn-primary):not(.btn-secondary):not(.btn-accent).hover\:bg-white\/10:hover {
+  background-color: #f4f4f5 !important;
+}
+
+/* Force all text on the website to be black by default */
+body, html, #root,
+p, span, h1, h2, h3, h4, h5, h6, label, li, td, th, input, textarea, select, a {
+  color: #000000 !important;
+}
+
+/* Borders */
+.border-white\/10,
+.border-white\/20,
+.border-white\/\[0\.06\],
+.border-white\/\[0\.08\],
+.border-white\/5,
+.border-white\/\[0\.1\],
+.border-white\/\[0\.05\],
+.border-zinc-800,
+.border-zinc-700 {
+  border-color: #e4e4e7 !important;
+}
+
+/* Ambient glow and backdrop filters can be hidden or set to transparent white */
+.glow-spot,
+.absolute.blur-\[120px\],
+.absolute.blur-\[100px\],
+.absolute.blur-\[140px\],
+.absolute.bg-violet-600\/5,
+.absolute.bg-indigo-600\/5,
+.absolute.bg-fuchsia-600\/3,
+.absolute.bg-violet-500\/5 {
+  display: none !important;
+}
+
+/* Fix custom cursor */
+.mix-blend-screen {
+  mix-blend-mode: normal !important;
+}
+.bg-violet-500 {
+  background-color: #000000 !important;
+}
+.border-violet-500\/20 {
+  border-color: #000000 !important;
+}
+
+/* Force standard dark icons to black (except inside buttons or elements with text-white) */
+:not(button):not(a):not(.btn-primary):not(.btn-accent):not(.bg-violet-600):not(.bg-black) > svg,
+:not(button):not(a):not(.btn-primary):not(.btn-accent):not(.bg-violet-600):not(.bg-black) > svg *,
+:not(button):not(a):not(.btn-primary):not(.btn-accent):not(.bg-violet-600):not(.bg-black) > svg path {
+  color: #000000 !important;
+}
+
+/* Forms/Inputs styling */
+input, textarea, select {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #d4d4d8 !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #a1a1aa !important;
+}
+
+/* --- Premium Button Styles --- */
+
+/* Primary Button (Solid Black) */
+.btn-primary,
+button.bg-violet-600,
+button.bg-\[\#8b5cf6\],
+a.bg-violet-600,
+button.bg-black {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease-in-out !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.btn-primary:hover,
+button.bg-violet-600:hover,
+button.bg-\[\#8b5cf6\].hover\:bg-violet-500:hover,
+a.bg-violet-600:hover,
+button.bg-black:hover {
+  background-color: #27272a !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-1px);
+}
+
+/* Secondary Button (White with Border) */
+.btn-secondary,
+.btn-brutalist,
+button.bg-white,
+button.bg-transparent,
+button.border-white\/10 {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #e4e4e7 !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease-in-out !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+}
+
+.btn-secondary:hover,
+.btn-brutalist:hover,
+button.bg-white:hover,
+button.bg-transparent:hover,
+button.border-white\/10:hover {
+  background-color: #f4f4f5 !important;
+  color: #000000 !important;
+  border-color: #d4d4d8 !important;
+  transform: translateY(-1px);
+}
+
+/* Accent/Danger/etc. Button (Dark Grey button) */
+.btn-accent,
+button.bg-zinc-900 {
+  background-color: #27272a !important;
+  color: #ffffff !important;
+  border: 1px solid #27272a !important;
+  border-radius: 8px !important;
+  transition: all 0.2s ease-in-out !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+.btn-accent:hover,
+button.bg-zinc-900:hover {
+  background-color: #3f3f46 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08) !important;
+  transform: translateY(-1px);
+}
+
+/* Ensure text inside black/dark buttons stays white */
+button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist),
+button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist) *,
+.btn-primary,
+.btn-primary *,
+.btn-accent,
+.btn-accent *,
+a.btn-primary,
+a.btn-primary *,
+a.btn-accent,
+a.btn-accent * {
+  color: #ffffff !important;
+}
+
+/* Ensure icons inside dark buttons stay white */
+button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist) svg,
+button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist) svg *,
+.btn-primary svg,
+.btn-primary svg *,
+.btn-accent svg,
+.btn-accent svg *,
+a.btn-primary svg,
+a.btn-primary svg * {
+  color: #ffffff !important;
+  fill: currentColor !important;
+}
+
+/* Ensure text and icons inside white/secondary buttons are black */
+button.bg-white,
+button.bg-white *,
+button.bg-transparent,
+button.bg-transparent *,
+.btn-secondary,
+.btn-secondary *,
+.btn-brutalist,
+.btn-brutalist * {
+  color: #000000 !important;
+}
+
+button.bg-white svg,
+button.bg-white svg *,
+button.bg-transparent svg,
+button.bg-transparent svg *,
+.btn-secondary svg,
+.btn-secondary svg *,
+.btn-brutalist svg,
+.btn-brutalist svg * {
+  color: #000000 !important;
+  fill: currentColor !important;
+}
+
+/* --- Violet and Blue to Black Utility Mapping Overrides --- */
+
+.bg-violet-600,
+.bg-violet-50,
+.bg-violet-700,
+.bg-violet-800,
+.bg-violet-900,
+.bg-violet-950,
+.bg-blue-600,
+.bg-blue-500,
+.bg-blue-700,
+.bg-blue-800,
+.bg-blue-900,
+.bg-blue-950,
+.bg-indigo-600,
+.bg-indigo-500,
+.bg-indigo-700,
+.bg-indigo-800,
+.bg-indigo-900,
+.bg-indigo-950,
+.bg-cyan-600,
+.bg-cyan-500,
+.bg-cyan-700,
+.bg-cyan-800,
+.bg-cyan-900,
+.bg-cyan-950 {
+  background-color: #000000 !important;
+}
+
+/* Light / transparent background accent utilities to light gray */
+.bg-violet-950\/20,
+.bg-violet-500\/10,
+.bg-violet-600\/5,
+.bg-violet-500\/5,
+.bg-violet-500\/30,
+.bg-blue-500\/10,
+.bg-blue-500\/5,
+.bg-blue-600\/5,
+.bg-blue-500\/20,
+.bg-indigo-500\/10,
+.bg-indigo-500\/5,
+.bg-indigo-600\/5,
+.bg-indigo-500\/20,
+.bg-cyan-500\/10,
+.bg-cyan-500\/5,
+.bg-cyan-600\/5,
+.bg-cyan-500\/20 {
+  background-color: #f4f4f5 !important;
+}
+
+.hover\:bg-violet-500:hover,
+.hover\:bg-violet-600:hover,
+.hover\:bg-violet-700:hover,
+.hover\:bg-blue-600:hover,
+.hover\:bg-indigo-600:hover,
+.hover\:bg-cyan-600:hover {
+  background-color: #27272a !important;
+}
+
+.text-violet-600,
+.text-violet-500,
+.text-violet-400,
+.text-violet-300,
+.text-violet-700,
+.text-violet-800,
+.text-violet-900,
+.text-blue-600,
+.text-blue-500,
+.text-blue-400,
+.text-blue-300,
+.text-indigo-600,
+.text-indigo-500,
+.text-indigo-400,
+.text-indigo-300,
+.text-cyan-600,
+.text-cyan-500,
+.text-cyan-400,
+.text-cyan-300 {
+  color: #000000 !important;
+}
+
+.border-violet-600,
+.border-violet-500,
+.border-violet-300,
+.border-violet-200,
+.border-violet-500\/20,
+.border-violet-500\/25,
+.border-violet-500\/10,
+.border-blue-600,
+.border-blue-500,
+.border-blue-300,
+.border-blue-200,
+.border-blue-500\/20,
+.border-blue-500\/25,
+.border-blue-500\/10,
+.border-indigo-600,
+.border-indigo-500,
+.border-indigo-300,
+.border-indigo-200,
+.border-indigo-500\/20,
+.border-indigo-500\/25,
+.border-indigo-500\/10,
+.border-cyan-600,
+.border-cyan-500,
+.border-cyan-300,
+.border-cyan-200,
+.border-cyan-500\/20,
+.border-cyan-500\/25,
+.border-cyan-500\/10 {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.shadow-violet-500\/15,
+.shadow-blue-500\/15,
+.shadow-indigo-500\/15,
+.shadow-cyan-500\/15 {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* --- Floating Capsule & Mobile Menu Overrides --- */
+
+/* Navigation capsule styling */
+.hidden.md\:flex.items-center.bg-zinc-900\/65 {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  padding: 4px !important;
+}
+
+/* Inactive nav buttons inside desktop capsule (transparent bg, black text) */
+.hidden.md\:flex.items-center.bg-zinc-900\/65 button:not(.bg-violet-600) {
+  color: #000000 !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.hidden.md\:flex.items-center.bg-zinc-900\/65 button:not(.bg-violet-600):hover {
+  background-color: #f4f4f5 !important;
+  color: #000000 !important;
+}
+
+/* Active nav buttons inside desktop capsule (solid black, white text) */
+.hidden.md\:flex.items-center.bg-zinc-900\/65 button.bg-violet-600 {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+}
+
+/* Mobile dropdown menu container */
+.absolute.top-16.left-0.right-0 {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Inactive nav buttons in mobile menu (light gray bg, black text) */
+.absolute.top-16.left-0.right-0 button:not(.bg-violet-600) {
+  color: #000000 !important;
+  background-color: #f4f4f5 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+.absolute.top-16.left-0.right-0 button:not(.bg-violet-600):hover {
+  background-color: #e4e4e7 !important;
+  color: #000000 !important;
+}
+
+/* Active nav buttons in mobile menu (solid black, white text) */
+.absolute.top-16.left-0.right-0 button.bg-violet-600 {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+}
+
+/* --- Chat Input Area Overrides --- */
+
+/* Chat Input Bar Container */
+.bg-zinc-900\/70 {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
+}
+
+.border-white\/10.bg-zinc-900\/70.backdrop-blur-md:focus-within {
+  border-color: #000000 !important;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Chat Input icons and labels inside container */
+.border-white\/10.bg-zinc-900\/70 button,
+.border-white\/10.bg-zinc-900\/70 svg,
+.border-white\/10.bg-zinc-900\/70 svg *,
+.border-white\/10.bg-zinc-900\/70 span {
+  color: #000000 !important;
+}
+
+/* Icons inside input hover state */
+.border-white\/10.bg-zinc-900\/70 button:hover {
+  background-color: #f4f4f5 !important;
+}
+
+/* Textarea input element inside chat input */
+textarea.flex-1 {
+  background-color: transparent !important;
+  color: #000000 !important;
+  border: none !important;
+}
+
+textarea.flex-1::placeholder {
+  color: #71717a !important;
+}
+
+/* --- Sidebar Navigation & Details Overrides --- */
+
+/* Force all text and icons in the sidebar to be black by default */
+aside,
+aside *,
+aside button,
+aside button *,
+aside a,
+aside a * {
+  color: #000000 !important;
+}
+
+/* EXCEPT primary action buttons in the sidebar which should have white text */
+aside button.bg-violet-600,
+aside button.bg-violet-600 *,
+aside button.bg-zinc-900,
+aside button.bg-zinc-900 *,
+aside button.bg-black,
+aside button.bg-black * {
+  color: #ffffff !important;
+}
+
+/* Ensure SVG icons in primary sidebar buttons are white */
+aside button.bg-violet-600 svg,
+aside button.bg-violet-600 svg *,
+aside button.bg-zinc-900 svg,
+aside button.bg-zinc-900 svg * {
+  color: #ffffff !important;
+  fill: currentColor !important;
+}
+
+/* Sidebar active navigation buttons */
+aside .bg-white\/10,
+aside button.bg-white\/10 {
+  background-color: #f4f4f5 !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Sidebar inactive navigation buttons */
+aside button.border-transparent,
+aside a.border-transparent {
+  background-color: transparent !important;
+  color: #000000 !important;
+}
+
+aside button.border-transparent:hover,
+aside a.border-transparent:hover {
+  background-color: #f4f4f5 !important;
+  color: #000000 !important;
+}
+
+/* Sidebar recent chats list items */
+aside .border-transparent.hover\:bg-white\/\[0\.03\]:hover {
+  background-color: #f4f4f5 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+aside .bg-white\/10.border-violet-500\/20 {
+  background-color: #e4e4e7 !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+aside .bg-white\/10.border-violet-500\/20 p,
+aside .bg-white\/10.border-violet-500\/20 span {
+  color: #000000 !important;
+}
+
+/* Shortcut tags (Alt+H, Alt+A, Alt+C, etc.) - solid black background, white text */
+aside span.font-mono-geist,
+aside .bg-zinc-900 {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+}
+
+aside span.font-mono-geist *,
+aside .bg-zinc-900 * {
+  color: #ffffff !important;
+}
+
+/* Sidebar History and Settings Tab Group capsule */
+aside .flex.bg-zinc-900\/50 {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Tab buttons inside the tab group capsule */
+aside .flex.bg-zinc-900\/50 button {
+  background-color: transparent !important;
+  color: #000000 !important;
+}
+
+/* Inactive tab button */
+aside .flex.bg-zinc-900\/50 button:not(.bg-white\/10):hover {
+  background-color: #f4f4f5 !important;
+  color: #000000 !important;
+}
+
+/* Active tab button (solid black with white text) */
+aside .flex.bg-zinc-900\/50 button.bg-white\/10 {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+aside .flex.bg-zinc-900\/50 button.bg-white\/10 * {
+  color: #ffffff !important;
+}
+
+/* Sidebar mobile view background fix (solid white background, no transparency blur) */
+@media (max-width: 767px) {
+  aside {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+/* --- Profile Dropdown and Popover Modal Content Overrides --- */
+
+/* UserDetails Modal & Profile Dropdown Container */
+.bg-zinc-900\/95,
+.bg-zinc-900\/95 * {
+  color: #000000 !important;
+}
+
+/* Reset buttons inside profile clicks to black text/transparent unless they are action buttons */
+.bg-zinc-900\/95 button:not(.bg-violet-600):not(.hover\:bg-red-500\/10) {
+  color: #000000 !important;
+  background-color: transparent !important;
+}
+
+.bg-zinc-900\/95 button:not(.bg-violet-600):not(.hover\:bg-red-500\/10):hover {
+  background-color: #f4f4f5 !important;
+}
+
+/* Upgrade button (Solid Black, White Text) */
+.bg-zinc-900\/95 button.bg-violet-600 {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.bg-zinc-900\/95 button.bg-violet-600 * {
+  color: #ffffff !important;
+}
+
+/* Logout button in details modal */
+.bg-zinc-900\/95 button.hover\:bg-red-500\/10 {
+  color: #ef4444 !important;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+  background-color: transparent !important;
+}
+
+.bg-zinc-900\/95 button.hover\:bg-red-500\/10:hover {
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  color: #ef4444 !important;
+}
+
+/* Navbar profile dropdown button specificity overrides for black text */
+nav .absolute.right-0.mt-2 button:not(.bg-violet-600):not(.bg-black),
+nav .absolute.right-0.mt-2 button:not(.bg-violet-600):not(.bg-black) *,
+nav .absolute.right-0.mt-2 a:not(.bg-violet-600):not(.bg-black),
+nav .absolute.right-0.mt-2 a:not(.bg-violet-600):not(.bg-black) * {
+  color: #000000 !important;
+  background-color: transparent !important;
+}
+
+nav .absolute.right-0.mt-2 button:not(.bg-violet-600):not(.bg-black):hover,
+nav .absolute.right-0.mt-2 a:not(.bg-violet-600):not(.bg-black):hover {
+  background-color: #f4f4f5 !important;
+  color: #000000 !important;
+}
+
+/* Active buttons inside profile dropdown */
+nav .absolute.right-0.mt-2 button.bg-violet-600,
+nav .absolute.right-0.mt-2 button.bg-violet-600 * {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Navbar profile button and general buttons text color */
+nav button:not(.bg-violet-600):not(.bg-black),
+nav button:not(.bg-violet-600):not(.bg-black) *,
+nav button:not(.bg-violet-600):not(.bg-black) span {
+  color: #000000 !important;
+}
+
+/* Profile avatars - black background, white text */
+.w-5.h-5.bg-violet-600,
+.w-16.h-16.bg-violet-600\/10,
+.w-5.h-5.bg-violet-600 *,
+.w-16.h-16.bg-violet-600\/10 * {
+  background-color: #000000 !important;
+  color: #ffffff !important;
 }
