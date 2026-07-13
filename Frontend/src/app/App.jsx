@@ -124,12 +124,8 @@ const App = () => {
     }
 
     const init = async () => {
-      const startTime = Date.now();
-      const minDuration = 1800; // 1.8 seconds minimum animation time
-      
       const storedToken = localStorage.getItem("authToken");
       if (!storedToken) {
-        await new Promise((resolve) => setTimeout(resolve, minDuration));
         setInitializing(false);
         return;
       }
@@ -140,11 +136,6 @@ const App = () => {
       } catch (err) {
         dispatch(setError(err.response?.data?.message || "Failed to fetch user data"));
       } finally {
-        const elapsed = Date.now() - startTime;
-        const remaining = minDuration - elapsed;
-        if (remaining > 0) {
-          await new Promise((resolve) => setTimeout(resolve, remaining));
-        }
         setInitializing(false);
         dispatch(setLoading(false));
       }
