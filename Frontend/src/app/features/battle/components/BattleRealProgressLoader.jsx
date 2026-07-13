@@ -23,8 +23,40 @@ export const BattleRealProgressLoader = () => {
       setProgress(data);
     });
 
+    // Simulated fallback progression timer
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        if (prev.progress >= 95) return prev;
+
+        let nextProgress = prev.progress + Math.floor(Math.random() * 5) + 2;
+        if (nextProgress > 95) nextProgress = 95;
+
+        let nextStage = prev.stage;
+        let nextMsg = prev.message;
+
+        if (nextProgress < 20) {
+          nextStage = "initializing";
+          nextMsg = "🚀 Preparing for battle...";
+        } else if (nextProgress < 75) {
+          nextStage = "generating";
+          nextMsg = "⚡ Both AI models are generating solutions";
+        } else {
+          nextStage = "judging";
+          nextMsg = "⚖️ Judge is evaluating the solutions";
+        }
+
+        return {
+          ...prev,
+          progress: nextProgress,
+          stage: nextStage,
+          message: nextMsg,
+        };
+      });
+    }, 500);
+
     return () => {
       unsubscribe();
+      clearInterval(timer);
     };
   }, []);
 

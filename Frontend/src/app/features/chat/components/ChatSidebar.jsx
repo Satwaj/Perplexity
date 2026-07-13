@@ -64,6 +64,31 @@ const ChatSidebar = ({ setSidebarOpen }) => {
         )}
       </div>
 
+      {/* Mobile-only Quick Navigation Row */}
+      <div className="md:hidden px-6 pt-4 pb-4 border-b border-white/5 flex gap-2 shrink-0 select-none">
+        <button
+          onClick={() => navigateTo("/", false)}
+          className="flex-1 flex flex-col items-center justify-center py-2 rounded-xl border border-white/10 bg-zinc-900/60 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all cursor-pointer gap-1"
+        >
+          <FiHome size={15} />
+          <span className="text-[9px] font-bold uppercase tracking-wider">Home</span>
+        </button>
+        <button
+          onClick={() => navigateTo("/arena", false)}
+          className="flex-1 flex flex-col items-center justify-center py-2 rounded-xl border border-white/10 bg-zinc-900/60 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all cursor-pointer gap-1"
+        >
+          <GiCrossedSwords size={15} />
+          <span className="text-[9px] font-bold uppercase tracking-wider">Arena</span>
+        </button>
+        <button
+          onClick={() => navigateTo("/chat", false)}
+          className="flex-1 flex flex-col items-center justify-center py-2 rounded-xl border border-white/10 bg-zinc-900/60 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all cursor-pointer gap-1"
+        >
+          <FiMessageSquare size={15} />
+          <span className="text-[9px] font-bold uppercase tracking-wider">Chat</span>
+        </button>
+      </div>
+
       {/* New Chat Button */}
       <div className="p-6 border-b border-white/5 shrink-0">
         <button

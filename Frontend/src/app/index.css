@@ -3,182 +3,186 @@
 @import "tailwindcss";
 
 html {
-	scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 body {
-	font-family: "Instrument Sans", "Plus Jakarta Sans", sans-serif;
-	background-color: #ffffff;
-	color: #000000;
-	overflow-x: hidden;
+  font-family: "Instrument Sans", "Plus Jakarta Sans", sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+  overflow-x: hidden;
 }
 
 /* Custom Typography hooks */
 .font-serif-brutalist {
-	font-family: "Clash Display", "Space Grotesk", sans-serif;
-	letter-spacing: -0.03em;
+  font-family: "Clash Display", "Space Grotesk", sans-serif;
+  letter-spacing: -0.03em;
 }
 
 .font-mono-geist {
-	font-family: "JetBrains Mono", "Geist Mono", monospace;
+  font-family: "JetBrains Mono", "Geist Mono", monospace;
 }
 
 .font-sora {
-	font-family: "Urbanist", sans-serif;
+  font-family: "Urbanist", sans-serif;
 }
 
 .font-space {
-	font-family: "Space Grotesk", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 /* Re-defining Brutalist classes to Premium OS styles */
 .border-brutalist {
-	border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .shadow-brutalist {
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .shadow-brutalist-lg {
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 0 40px rgba(139, 92, 246, 0.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 0 40px rgba(139, 92, 246, 0.02);
 }
 
 .btn-brutalist {
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	background-color: #ffffff;
-	color: #000000;
-	border-radius: 8px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-	font-family: "Space Grotesk", sans-serif;
-	transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  color: #000000;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: "Space Grotesk", sans-serif;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-brutalist:hover {
-	transform: translateY(-1px);
-	background-color: #f4f4f5;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.02);
-	border-color: rgba(0, 0, 0, 0.25);
+  transform: translateY(-1px);
+  background-color: #f4f4f5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.25);
 }
 
 .btn-brutalist:active {
-	transform: translateY(1px);
-	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(1px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Redesigning card-brutalist to support 3D animations */
 .card-brutalist {
-	border: 1px solid rgba(0, 0, 0, 0.06);
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-	background-color: rgba(255, 255, 255, 0.85);
-	backdrop-filter: blur(16px);
-	border-radius: 12px;
-	perspective: 1000px;
-	transform-style: preserve-3d;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  border-radius: 12px;
+  perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
 /* Glassmorphism Panel */
 .glass-panel {
-	background: rgba(255, 255, 255, 0.85);
-	backdrop-filter: blur(20px);
-	border: 1px solid rgba(0, 0, 0, 0.08);
-	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
 }
 
 /* Soft Ambient Glow Gradients */
 .glow-spot {
-	position: absolute;
-	border-radius: 50%;
-	filter: blur(100px);
-	opacity: 0.12;
-	pointer-events: none;
-	z-index: 0;
-	transition: all 1s ease-in-out;
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.12;
+  pointer-events: none;
+  z-index: 0;
+  transition: all 1s ease-in-out;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-	width: 6px;
-	height: 6px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-	background: #ffffff;
+  background: #ffffff;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #e4e4e7;
-	border-radius: 10px;
+  background: #e4e4e7;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #d4d4d8;
+  background: #d4d4d8;
 }
 
 .scrollbar-hide {
-	-ms-overflow-style: none;
-	scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 
 /* Text Gradient helper */
 .text-glow-gradient {
-	background: linear-gradient(135deg, #000000 0%, #3f3f46 100%);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+  background: linear-gradient(135deg, #000000 0%, #3f3f46 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .text-violet-gradient {
-	background: linear-gradient(135deg, #000000 0%, #18181b 50%, #27272a 100%);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+  background: linear-gradient(135deg, #000000 0%, #18181b 50%, #27272a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Custom visual styling for the mockup playground */
 .neon-border {
-	box-shadow: 0 0 15px rgba(0, 0, 0, 0.05), inset 0 0 15px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05), inset 0 0 15px rgba(0, 0, 0, 0.02);
 }
 
 .glow-indigo {
-	box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
 
 .glow-cyan {
-	box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
 
 .glow-violet {
-	box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
 }
 
 /* Typing cursor simulator */
 @keyframes blink {
-	50% { opacity: 0; }
+  50% {
+    opacity: 0;
+  }
 }
+
 .typing-cursor::after {
-	content: "|";
-	animation: blink 1s step-start infinite;
-	color: #000000;
-	font-weight: bold;
+  content: "|";
+  animation: blink 1s step-start infinite;
+  color: #000000;
+  font-weight: bold;
 }
 
 /* Smooth Page Transitions */
 @keyframes fadeInUp {
-	from {
-		opacity: 0;
-		transform: translateY(8px) scale(0.995);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.995);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .page-transition {
-	animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* --- Global Light Mode Overrides (White BG, Black Font) --- */
@@ -234,8 +238,25 @@ body {
 }
 
 /* Force all text on the website to be black by default */
-body, html, #root,
-p, span, h1, h2, h3, h4, h5, h6, label, li, td, th, input, textarea, select, a {
+body,
+html,
+#root,
+p,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label,
+li,
+td,
+th,
+input,
+textarea,
+select,
+a {
   color: #000000 !important;
 }
 
@@ -268,28 +289,33 @@ p, span, h1, h2, h3, h4, h5, h6, label, li, td, th, input, textarea, select, a {
 .mix-blend-screen {
   mix-blend-mode: normal !important;
 }
+
 .bg-violet-500 {
   background-color: #000000 !important;
 }
+
 .border-violet-500\/20 {
   border-color: #000000 !important;
 }
 
 /* Force standard dark icons to black (except inside buttons or elements with text-white) */
-:not(button):not(a):not(.btn-primary):not(.btn-accent):not(.bg-violet-600):not(.bg-black) > svg,
-:not(button):not(a):not(.btn-primary):not(.btn-accent):not(.bg-violet-600):not(.bg-black) > svg *,
-:not(button):not(a):not(.btn-primary):not(.btn-accent):not(.bg-violet-600):not(.bg-black) > svg path {
+:not(button):not(a):not(.btn-primary):not(.btn-accent):not(.bg-violet-600):not(.bg-black)>svg,
+:not(button):not(a):not(.btn-primary):not(.btn-accent):not(.bg-violet-600):not(.bg-black)>svg *,
+:not(button):not(a):not(.btn-primary):not(.btn-accent):not(.bg-violet-600):not(.bg-black)>svg path {
   color: #000000 !important;
 }
 
 /* Forms/Inputs styling */
-input, textarea, select {
+input,
+textarea,
+select {
   background-color: #ffffff !important;
   color: #000000 !important;
   border: 1px solid #d4d4d8 !important;
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: #a1a1aa !important;
 }
 
@@ -365,8 +391,8 @@ button.bg-zinc-900:hover {
 }
 
 /* Ensure text inside black/dark buttons stays white */
-button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist),
-button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist) *,
+button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist):not(.border-white\/10):not(.text-zinc-400):not(.text-zinc-300),
+button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist):not(.border-white\/10):not(.text-zinc-400):not(.text-zinc-300) *,
 .btn-primary,
 .btn-primary *,
 .btn-accent,
@@ -379,8 +405,8 @@ a.btn-accent * {
 }
 
 /* Ensure icons inside dark buttons stay white */
-button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist) svg,
-button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist) svg *,
+button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist):not(.border-white\/10):not(.text-zinc-400):not(.text-zinc-300) svg,
+button:not(.bg-white):not(.bg-transparent):not(.bg-zinc-50):not(.btn-secondary):not(.btn-brutalist):not(.border-white\/10):not(.text-zinc-400):not(.text-zinc-300) svg *,
 .btn-primary svg,
 .btn-primary svg *,
 .btn-accent svg,
@@ -696,14 +722,12 @@ aside .bg-white\/10.border-violet-500\/20 span {
 }
 
 /* Shortcut tags (Alt+H, Alt+A, Alt+C, etc.) - solid black background, white text */
-aside span.font-mono-geist,
 aside .bg-zinc-900 {
   background-color: #000000 !important;
   color: #ffffff !important;
   border: 1px solid #000000 !important;
 }
 
-aside span.font-mono-geist *,
 aside .bg-zinc-900 * {
   color: #ffffff !important;
 }
@@ -822,4 +846,37 @@ nav button:not(.bg-violet-600):not(.bg-black) span {
 .w-16.h-16.bg-violet-600\/10 * {
   background-color: #000000 !important;
   color: #ffffff !important;
+}
+
+/* --- Brutalist Card Black Text Overrides --- */
+.card-brutalist,
+.card-brutalist *,
+.card-brutalist p,
+.card-brutalist span,
+.card-brutalist h1,
+.card-brutalist h2,
+.card-brutalist h3,
+.card-brutalist h4,
+.card-brutalist h5,
+.card-brutalist h6,
+.card-brutalist li,
+.card-brutalist td,
+.card-brutalist th,
+.card-brutalist code,
+.card-brutalist pre,
+.card-brutalist strong,
+.card-brutalist em,
+.card-brutalist a {
+  color: #000000 !important;
+}
+
+/* Override code, pre, and dark inner containers inside brutalist cards to light grey background */
+.card-brutalist .bg-zinc-955\/40,
+.card-brutalist .bg-zinc-950\/40,
+.card-brutalist .bg-zinc-950\/70,
+.card-brutalist .bg-zinc-800,
+.card-brutalist code,
+.card-brutalist pre {
+  background-color: #f4f4f5 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
 }

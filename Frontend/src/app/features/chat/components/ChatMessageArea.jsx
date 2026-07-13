@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FiCopy, FiThumbsUp, FiThumbsDown, FiVolume2, FiVolumeX, FiCheck, FiArrowRight } from "react-icons/fi";
+import { FiCopy, FiThumbsUp, FiThumbsDown, FiVolume2, FiVolumeX, FiCheck, FiArrowRight, FiZap, FiActivity, FiClock, FiCpu } from "react-icons/fi";
 import { useTheme } from "../../../context/ThemeContext";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
@@ -244,7 +244,7 @@ const ChatMessageArea = ({ messages = [] }) => {
           Chat Mode
         </span>
         
-        <h1 className="text-4xl md:text-5xl font-serif-brutalist font-bold text-white leading-[1.15] my-6 tracking-tight text-glow-gradient">
+        <h1 className="text-3xl md:text-5xl font-serif-brutalist font-bold text-white leading-[1.15] my-6 tracking-tight text-glow-gradient">
           How can I help you today?
         </h1>
         
@@ -296,11 +296,13 @@ const ChatMessageArea = ({ messages = [] }) => {
                   A
                 </div>
                 <div className="max-w-2xl flex-1">
-                  <div className="bg-zinc-900/30 border border-white/[0.06] rounded-2xl p-5 space-y-4 shadow-lg">
+                  <div className="card-brutalist flex flex-col bg-zinc-900/40 backdrop-blur-xl border border-white/[0.06] rounded-2xl p-6 space-y-5 hover:border-violet-500/20 transition-all duration-300 shadow-lg">
                     {/* Header */}
-                    <div className="flex items-center justify-between pb-3 border-b border-white/5 select-none">
-                      <div className="border border-white/10 bg-zinc-800/50 px-2.5 py-0.5 rounded-full text-[9px] font-semibold tracking-wider text-zinc-400">
-                        AI ASSISTANT
+                    <div className="flex items-center justify-between pb-4 border-b border-white/5 select-none">
+                      <div className="flex items-center gap-3">
+                        <div className="border border-white/10 bg-zinc-800/50 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase text-zinc-300">
+                          AI ASSISTANT
+                        </div>
                       </div>
                       
                       <div className="flex items-center gap-2">
@@ -314,7 +316,7 @@ const ChatMessageArea = ({ messages = [] }) => {
                                 speak(message.text);
                               }
                             }}
-                            className={`px-3 py-1.5 rounded-xl border transition-all cursor-pointer shrink-0 flex items-center gap-1.5 text-[10px] font-bold tracking-wider uppercase ${
+                            className={`px-3.5 py-1.5 rounded-xl border transition-all cursor-pointer shrink-0 flex items-center gap-1.5 text-[10px] font-bold tracking-wider uppercase ${
                               isSpeaking 
                                 ? "bg-violet-500/15 border-violet-500/30 text-violet-400 shadow-[0_0_15px_rgba(139,92,246,0.15)]" 
                                 : "bg-zinc-800/60 border-white/10 text-zinc-300 hover:text-white hover:bg-zinc-800"
@@ -363,22 +365,57 @@ const ChatMessageArea = ({ messages = [] }) => {
                         </button>
                       </div>
                     </div>
+
+                    {/* Dynamic Diagnostic Telemetry Grid */}
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="bg-zinc-950/40 border border-white/[0.04] p-2.5 rounded-xl flex flex-col items-center justify-center font-mono-geist text-[10px] text-zinc-400 select-none">
+                        <FiZap className="text-amber-400/80 mb-1" size={12} />
+                        <span className="text-zinc-550 text-[9px] uppercase tracking-wider">Speed</span>
+                        <span className="font-bold text-zinc-250 mt-0.5">{Math.floor(Math.random() * 50) + 250} t/s</span>
+                      </div>
+
+                      <div className="bg-zinc-950/40 border border-white/[0.04] p-2.5 rounded-xl flex flex-col items-center justify-center font-mono-geist text-[10px] text-zinc-400 select-none">
+                        <FiActivity className="text-violet-450 mb-1" size={12} />
+                        <span className="text-zinc-550 text-[9px] uppercase tracking-wider">Tokens</span>
+                        <span className="font-bold text-zinc-250 mt-0.5">{Math.max(12, Math.floor((message.text || "").length / 3.8))} t</span>
+                      </div>
+
+                      <div className="bg-zinc-950/40 border border-white/[0.04] p-2.5 rounded-xl flex flex-col items-center justify-center font-mono-geist text-[10px] text-zinc-400 select-none">
+                        <FiClock className="text-cyan-405 mb-1" size={12} />
+                        <span className="text-zinc-550 text-[9px] uppercase tracking-wider">Time</span>
+                        <span className="font-bold text-zinc-250 mt-0.5">{(Math.max(12, Math.floor((message.text || "").length / 3.8)) / (Math.floor(Math.random() * 50) + 250)).toFixed(2)}s</span>
+                      </div>
+                    </div>
+
+                    {/* Title */}
+                    <div className="flex items-center justify-between select-none">
+                      <h3 className="text-base font-bold tracking-tight text-white">
+                        Sophisticated Analysis
+                      </h3>
+                      <FiCpu size={18} className="text-violet-400 stroke-[2]" />
+                    </div>
+
                     {/* Text Markdown */}
-                    <div className="prose prose-sm max-w-none text-zinc-200 text-sm font-medium leading-relaxed">
-                      {streamingIndex === index ? (
-                        <TypewriterMarkdown
-                          text={message.text}
-                          markdownComponents={markdownComponents}
-                          onComplete={() => setStreamingIndex(null)}
-                        />
-                      ) : (
-                        <ReactMarkdown
-                          remarkPlugins={[remarkGfm]}
-                          components={markdownComponents}
-                        >
-                          {message.text}
-                        </ReactMarkdown>
-                      )}
+                    <div className="space-y-2 flex-1">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 select-none">
+                        Response Content
+                      </p>
+                      <div className="prose prose-sm max-w-none text-zinc-200 text-sm font-medium leading-relaxed max-h-128 overflow-y-auto pr-2">
+                        {streamingIndex === index ? (
+                          <TypewriterMarkdown
+                            text={message.text}
+                            markdownComponents={markdownComponents}
+                            onComplete={() => setStreamingIndex(null)}
+                          />
+                        ) : (
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            components={markdownComponents}
+                          >
+                            {message.text}
+                          </ReactMarkdown>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

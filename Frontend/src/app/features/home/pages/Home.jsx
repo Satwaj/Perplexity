@@ -596,7 +596,7 @@ const Home = () => {
               V2.0 THE AI OPERATING SYSTEM
             </span>
           </div>
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif-brutalist font-black text-white tracking-tight leading-[1.05] mt-4 text-glow-gradient">
+          <h1 className="text-3xl sm:text-6xl md:text-7xl font-serif-brutalist font-black text-white tracking-tight leading-[1.05] mt-4 text-glow-gradient">
             Benchmark and Chat. <br className="hidden sm:inline" />
             <span className="text-violet-gradient mt-2 inline-block">
               In One Unified Grid

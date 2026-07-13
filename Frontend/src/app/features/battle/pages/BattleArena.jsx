@@ -25,10 +25,12 @@ const BattleArena = () => {
   const [activeTab, setActiveTab] = useState("history"); 
   const [navOpen, setNavOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [pendingProblem, setPendingProblem] = useState(null);
   const { handleLogout } = useAuth();
   const user = useSelector((state) => state.auth?.user);
 
   const navigateTo = (path, replace = true) => {
+    setSidebarOpen(false);
     if (location.pathname !== path) {
       navigate(path, { replace });
     }
@@ -61,7 +63,12 @@ const BattleArena = () => {
       navigateTo("/login", false);
       return;
     }
-    await handleStartBattle(problem);
+    setPendingProblem(problem);
+    try {
+      await handleStartBattle(problem);
+    } finally {
+      setPendingProblem(null);
+    }
   };
 
   useEffect(() => {
@@ -207,6 +214,31 @@ const BattleArena = () => {
             className="md:hidden p-2 rounded-lg border border-white/10 bg-zinc-900/60 text-white cursor-pointer"
           >
             <HiX size={18} />
+          </button>
+        </div>
+
+        {/* Mobile-only Quick Navigation Row */}
+        <div className="md:hidden px-6 pt-4 pb-4 border-b border-white/5 flex gap-2 shrink-0 select-none">
+          <button
+            onClick={() => navigateTo("/", false)}
+            className="flex-1 flex flex-col items-center justify-center py-2 rounded-xl border border-white/10 bg-zinc-900/60 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all cursor-pointer gap-1"
+          >
+            <FiHome size={15} />
+            <span className="text-[9px] font-bold uppercase tracking-wider">Home</span>
+          </button>
+          <button
+            onClick={() => navigateTo("/arena", false)}
+            className="flex-1 flex flex-col items-center justify-center py-2 rounded-xl border border-white/10 bg-zinc-900/60 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all cursor-pointer gap-1"
+          >
+            <GiCrossedSwords size={15} />
+            <span className="text-[9px] font-bold uppercase tracking-wider">Arena</span>
+          </button>
+          <button
+            onClick={() => navigateTo("/chat", false)}
+            className="flex-1 flex flex-col items-center justify-center py-2 rounded-xl border border-white/10 bg-zinc-900/60 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all cursor-pointer gap-1"
+          >
+            <FiMessageSquare size={15} />
+            <span className="text-[9px] font-bold uppercase tracking-wider">Chat</span>
           </button>
         </div>
 
@@ -523,7 +555,22 @@ const BattleArena = () => {
           
           {/* Scrollable results columns */}
           <div ref={scrollContainerRef} className="p-6 md:p-12 w-full flex-1 overflow-y-auto bg-[#09090b]">
-            {!currentBattle ? (
+            {loading ? (
+              <div className="max-w-6xl mx-auto space-y-12">
+                {/* Header Inquiry */}
+                <div className="space-y-3 pb-6 border-b border-white/5">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-550">
+                    Query Origin: User
+                  </span>
+                  <h1 className="text-lg md:text-2xl font-semibold text-white leading-tight">
+                    {currentBattle?.problem || pendingProblem || "Starting battle..."}
+                  </h1>
+                </div>
+                <div className="h-full min-h-[40vh] flex items-center justify-center">
+                  <BattleRealProgressLoader />
+                </div>
+              </div>
+            ) : !currentBattle ? (
               <div
                 ref={heroRef}
                 className="max-w-2xl mx-auto flex flex-col justify-center h-full min-h-[50vh] py-10"
@@ -532,7 +579,7 @@ const BattleArena = () => {
                   Query Origin: User
                 </span>
                 
-                <h1 className="text-4xl md:text-5xl font-serif-brutalist font-black text-white leading-[1.15] my-6 tracking-tight text-glow-gradient">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif-brutalist font-black text-white leading-[1.15] my-6 tracking-tight text-glow-gradient">
                   Battle Arena: side-by-side comparison.
                 </h1>
                 
@@ -550,10 +597,6 @@ const BattleArena = () => {
                 >
                   Type Inquiry Below
                 </button>
-              </div>
-            ) : loading ? (
-              <div className="h-full min-h-[60vh] flex items-center justify-center">
-                <BattleRealProgressLoader />
               </div>
             ) : (
               <div
