@@ -8,6 +8,39 @@ import remarkGfm from "remark-gfm";
 import { ChatProgressLoader } from "./ChatProgressLoader";
 import { useVoice } from "../../battle/hooks/useVoice";
 
+const TypewriterMarkdown = ({ text, onComplete, markdownComponents }) => {
+  const [displayedText, setDisplayedText] = useState("");
+  
+  useEffect(() => {
+    let currentLength = 0;
+    const totalLength = text.length;
+    const step = 4; // characters per tick
+    
+    const interval = setInterval(() => {
+      if (currentLength < totalLength) {
+        currentLength = Math.min(currentLength + step, totalLength);
+        setDisplayedText(text.substring(0, currentLength));
+      } else {
+        clearInterval(interval);
+        if (onComplete) onComplete();
+      }
+    }, 15);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [text, onComplete]);
+
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={markdownComponents}
+    >
+      {displayedText}
+    </ReactMarkdown>
+  );
+};
+
 const ChatMessageArea = ({ messages = [] }) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -15,8 +48,27 @@ const ChatMessageArea = ({ messages = [] }) => {
   const [likedMessages, setLikedMessages] = useState(new Set());
   const [dislikedMessages, setDislikedMessages] = useState(new Set());
   const isLoading = useSelector((state) => state.chat.isLoading);
+  const chatProgress = useSelector((state) => state.chat.chatProgress);
+  const currentChatId = useSelector((state) => state.chat.currentChatId);
   const { speak, isSpeaking, stopSpeaking, supported } = useVoice();
   const scrollRef = useRef(null);
+  
+  const [streamingIndex, setStreamingIndex] = useState(null);
+  const prevIsLoadingRef = useRef(isLoading);
+
+  useEffect(() => {
+    if (prevIsLoadingRef.current && !isLoading && messages.length > 0) {
+      const lastMsg = messages[messages.length - 1];
+      if (lastMsg.sender === "assistant") {
+        setStreamingIndex(messages.length - 1);
+      }
+    }
+    prevIsLoadingRef.current = isLoading;
+  }, [isLoading, messages]);
+
+  useEffect(() => {
+    setStreamingIndex(null);
+  }, [currentChatId]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -313,12 +365,20 @@ const ChatMessageArea = ({ messages = [] }) => {
                     </div>
                     {/* Text Markdown */}
                     <div className="prose prose-sm max-w-none text-zinc-200 text-sm font-medium leading-relaxed">
-                      <ReactMarkdown
-                        remarkPlugins={[remarkGfm]}
-                        components={markdownComponents}
-                      >
-                        {message.text}
-                      </ReactMarkdown>
+                      {streamingIndex === index ? (
+                        <TypewriterMarkdown
+                          text={message.text}
+                          markdownComponents={markdownComponents}
+                          onComplete={() => setStreamingIndex(null)}
+                        />
+                      ) : (
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={markdownComponents}
+                        >
+                          {message.text}
+                        </ReactMarkdown>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -327,8 +387,50 @@ const ChatMessageArea = ({ messages = [] }) => {
           </div>
         ))}
 
-        {/* Show Progress Loader When Loading */}
-        {isLoading && <ChatProgressLoader />}
+        {/* Show ChatGPT/Gemini-Style Thinking Bubble when loading */}
+        {isLoading && (
+          <div className="flex justify-start gap-3.5 animate-fade-in">
+            {/* Avatar */}
+            <div className="w-8 h-8 rounded-xl border border-white/10 bg-zinc-800 flex items-center justify-center font-bold text-xs text-zinc-300 shrink-0 select-none">
+              A
+            </div>
+            <div className="max-w-2xl flex-1">
+              <div className="bg-zinc-900/30 border border-white/[0.06] rounded-2xl p-5 space-y-4 shadow-lg">
+                <div className="flex items-center justify-between pb-3 border-b border-white/5 select-none">
+                  <div className="border border-white/10 bg-zinc-800/50 px-2.5 py-0.5 rounded-full text-[9px] font-semibold tracking-wider text-zinc-400">
+                    AI ASSISTANT
+                  </div>
+                  <div className="flex items-center gap-1.5 text-zinc-500 text-[10px] font-semibold">
+                    <span className="font-mono-geist">thinking...</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-3 py-2">
+                  {/* waving dots */}
+                  <div className="flex items-center gap-1.5 px-1 py-1">
+                    <span className="w-2 h-2 bg-violet-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="w-2 h-2 bg-violet-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                    <span className="w-2 h-2 bg-violet-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                  </div>
+                  
+                  {/* Subtle progress description and loader */}
+                  <div className="mt-2 p-3 bg-zinc-950/40 rounded-xl border border-white/5 space-y-2">
+                    <div className="flex justify-between items-center text-[10px] font-semibold text-zinc-400">
+                      <span>{chatProgress.message || "Generating response..."}</span>
+                      <span className="text-violet-400 font-bold">{chatProgress.progress || 0}%</span>
+                    </div>
+                    <div className="w-full h-1 bg-zinc-950 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-violet-400 to-indigo-500 rounded-full transition-all duration-300 ease-out"
+                        style={{ width: `${chatProgress.progress || 0}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

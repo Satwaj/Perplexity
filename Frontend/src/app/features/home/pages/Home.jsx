@@ -6,6 +6,7 @@ import { FiUser, FiLogOut, FiCpu, FiMessageSquare, FiTrendingUp, FiLayers, FiShi
 import { GiCrossedSwords } from "react-icons/gi";
 import { HiMenu, HiX } from "react-icons/hi";
 import gsap from "gsap";
+import { useNavigationShortcuts } from "../../../hooks/useNavigationShortcuts";
 
 // High-fidelity vector logos for brand items
 const MistralLogo = ({ className = "w-4 h-4" }) => (
@@ -36,6 +37,7 @@ const GeminiLogo = ({ className = "w-4 h-4" }) => (
 );
 
 const Home = () => {
+  useNavigationShortcuts();
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);

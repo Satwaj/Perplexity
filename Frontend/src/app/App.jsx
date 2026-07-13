@@ -1,7 +1,10 @@
 import { RouterProvider } from "react-router";
 import { router } from "./app.routes";
-import { useAuth } from "./features/auth/hooks/useAuth";
 import { useEffect, useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { getMe } from "./features/auth/services/api.auth";
+import { setUser, setLoading, setError } from "./features/auth/auth.slice";
+import Loading from "./features/auth/pages/Loading";
 import gsap from "gsap";
 
 const CustomCursor = () => {
@@ -108,7 +111,7 @@ const CustomCursor = () => {
 };
 
 const App = () => {
-  const { handleGetMe } = useAuth();
+  const dispatch = useDispatch();
   const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
@@ -121,24 +124,37 @@ const App = () => {
     }
 
     const init = async () => {
+      const startTime = Date.now();
+      const minDuration = 1800; // 1.8 seconds minimum animation time
+      
       const storedToken = localStorage.getItem("authToken");
       if (!storedToken) {
+        await new Promise((resolve) => setTimeout(resolve, minDuration));
         setInitializing(false);
         return;
       }
       try {
-        // Fetch user data in the background without blocking the mount
-        handleGetMe();
+        dispatch(setLoading(true));
+        const data = await getMe();
+        dispatch(setUser(data.user));
+      } catch (err) {
+        dispatch(setError(err.response?.data?.message || "Failed to fetch user data"));
       } finally {
+        const elapsed = Date.now() - startTime;
+        const remaining = minDuration - elapsed;
+        if (remaining > 0) {
+          await new Promise((resolve) => setTimeout(resolve, remaining));
+        }
         setInitializing(false);
+        dispatch(setLoading(false));
       }
     };
 
     init();
-  }, [handleGetMe]);
+  }, [dispatch]);
 
   if (initializing) {
-    return null;
+    return <Loading />;
   }
 
   return (

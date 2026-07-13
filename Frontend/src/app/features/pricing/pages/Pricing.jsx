@@ -178,7 +178,7 @@ const Pricing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-white pb-24 font-sans flex flex-col relative selection:bg-violet-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#09090b] text-white pb-24 font-sans flex flex-col relative selection:bg-violet-500/30 overflow-x-hidden page-transition">
       {/* Background radial grid pattern */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-[0.08] z-0" 

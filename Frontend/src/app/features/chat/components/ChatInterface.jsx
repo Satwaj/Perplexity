@@ -5,8 +5,10 @@ import ChatMessageArea from "./ChatMessageArea";
 import ChatInput from "./ChatInput";
 import { useSelector } from "react-redux";
 import gsap from "gsap";
+import { useNavigationShortcuts } from "../../../hooks/useNavigationShortcuts";
 
 const ChatInterface = () => {
+  useNavigationShortcuts();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Get messages from Redux store
@@ -124,7 +126,7 @@ const ChatInterface = () => {
     });
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#09090b] font-sans selection:bg-violet-500/30 relative">
+    <div className="flex h-screen w-screen overflow-hidden bg-[#09090b] font-sans selection:bg-violet-500/30 relative page-transition">
       
       {/* Floating Radial Background Glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">

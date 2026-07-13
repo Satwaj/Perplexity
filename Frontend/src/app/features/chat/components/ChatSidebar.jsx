@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { FiPlus, FiTrash2, FiLogOut, FiHelpCircle } from "react-icons/fi";
+import { FiPlus, FiTrash2, FiLogOut, FiHelpCircle, FiHome, FiMessageSquare } from "react-icons/fi";
+import { GiCrossedSwords } from "react-icons/gi";
 import { HiX } from "react-icons/hi";
 import { useNavigate, useLocation } from "react-router";
 import { useChat } from "../hooks/useChat";
@@ -71,6 +72,63 @@ const ChatSidebar = ({ setSidebarOpen }) => {
         >
           <FiPlus size={16} className="stroke-[3]" />
           New Chat
+        </button>
+      </div>
+
+      {/* Navigation Shortcuts */}
+      <div className="px-6 py-4 border-b border-white/5 flex flex-col gap-1.5 shrink-0">
+        <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 block mb-1 px-1">
+          Navigation
+        </span>
+        <button
+          onClick={() => navigateTo("/")}
+          className={`flex items-center justify-between p-2.5 rounded-xl transition-all cursor-pointer ${
+            location.pathname === "/"
+              ? "bg-white/10 text-white font-semibold border border-white/10"
+              : "text-zinc-400 hover:text-white hover:bg-white/[0.02] border border-transparent"
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <FiHome size={16} />
+            <span className="text-xs font-semibold">Home</span>
+          </div>
+          <span className="text-[9px] font-bold text-zinc-500 bg-zinc-900 px-1.5 py-0.5 rounded border border-white/5 uppercase tracking-wide font-mono-geist">
+            Alt+H
+          </span>
+        </button>
+
+        <button
+          onClick={() => navigateTo("/arena")}
+          className={`flex items-center justify-between p-2.5 rounded-xl transition-all cursor-pointer ${
+            location.pathname === "/arena" || location.pathname === "/battle"
+              ? "bg-white/10 text-white font-semibold border border-white/10"
+              : "text-zinc-400 hover:text-white hover:bg-white/[0.02] border border-transparent"
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <GiCrossedSwords size={16} />
+            <span className="text-xs font-semibold">Arena</span>
+          </div>
+          <span className="text-[9px] font-bold text-zinc-500 bg-zinc-900 px-1.5 py-0.5 rounded border border-white/5 uppercase tracking-wide font-mono-geist">
+            Alt+A
+          </span>
+        </button>
+
+        <button
+          onClick={() => navigateTo("/chat")}
+          className={`flex items-center justify-between p-2.5 rounded-xl transition-all cursor-pointer ${
+            location.pathname === "/chat"
+              ? "bg-white/10 text-white font-semibold border border-white/10"
+              : "text-zinc-400 hover:text-white hover:bg-white/[0.02] border border-transparent"
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <FiMessageSquare size={16} />
+            <span className="text-xs font-semibold">Chat</span>
+          </div>
+          <span className="text-[9px] font-bold text-zinc-500 bg-zinc-900 px-1.5 py-0.5 rounded border border-white/5 uppercase tracking-wide font-mono-geist">
+            Alt+C
+          </span>
         </button>
       </div>
 

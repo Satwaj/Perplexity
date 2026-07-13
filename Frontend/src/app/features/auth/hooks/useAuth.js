@@ -1,11 +1,11 @@
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import { register, login, getMe, logout } from "../services/api.auth";
 import { setUser, setLoading, setError } from "../auth.slice";
 
 
 export function useAuth() {
-
-
+    const navigate = useNavigate();
     const dispatch = useDispatch()
 
     async function handleRegister({ email, username, password }) {
@@ -65,6 +65,7 @@ export function useAuth() {
             // Clear local storage and Redux state regardless of API response
             localStorage.removeItem('authToken')
             dispatch(setUser(null))
+            navigate('/')
         }
     }
 

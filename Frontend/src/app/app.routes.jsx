@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router";
 import { lazy, Suspense } from "react";
 import Protected from "./features/chat/components/Protected";
-import Loading from "./features/auth/pages/Loading";
+import RouteLoader from "./features/auth/pages/RouteLoader";
 
 const Login = lazy(() => import("./features/auth/pages/Login"));
 const Register = lazy(() => import("./features/auth/pages/Register"));
@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: (
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<RouteLoader />}>
         <Login />
       </Suspense>
     ),
@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     element: (
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<RouteLoader />}>
         <Register />
       </Suspense>
     ),
@@ -35,7 +35,7 @@ export const router = createBrowserRouter([
   {
     path: "/pricing",
     element: (
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<RouteLoader />}>
         <Pricing />
       </Suspense>
     ),
@@ -43,7 +43,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<RouteLoader />}>
         <Home />
       </Suspense>
     ),
@@ -51,7 +51,7 @@ export const router = createBrowserRouter([
   {
     path: "/arena",
     element: (
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<RouteLoader />}>
         <BattleArena />
       </Suspense>
     ),
@@ -60,7 +60,7 @@ export const router = createBrowserRouter([
     path: "/chat",
     element: (
       <Protected>
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<RouteLoader />}>
           <ChatInterface />
         </Suspense>
       </Protected>
@@ -77,7 +77,7 @@ export const router = createBrowserRouter([
   {
     path: "*",
     element: (
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<RouteLoader />}>
         <NotFound />
       </Suspense>
     ),

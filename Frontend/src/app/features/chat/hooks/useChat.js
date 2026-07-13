@@ -30,39 +30,75 @@ export const useChat = () => {
   }, [dispatch]);
 
   const handleSendmessage = useCallback(async ({message, chatId}) => {
+    const isNewChat = !chatId;
+    const tempChatId = isNewChat ? "temp-" + Date.now() : null;
+
     try {
       dispatch(setLoading(true))
       dispatch(resetChatProgress())
-      
-      const data = await sendMessage(message, chatId)
-      const {chat, aiMessage} = data
-     
-      if(!chatId) {
+
+      if (isNewChat) {
         dispatch(createNewChat({
-          chatId: chatId || chat._id,
-          title: chat.title,
-        }))
-      }
-
-      if(aiMessage) {
+          chatId: tempChatId,
+          title: message.substring(0, 30) + (message.length > 30 ? "..." : ""),
+        }));
         dispatch(addNewMessage({
-          chatId: chatId || chat._id,
+          chatId: tempChatId,
           content: message,
-          role:"user"
-        }))
-
+          role: "user"
+        }));
+        dispatch(setCurrentChatId(tempChatId));
+      } else {
         dispatch(addNewMessage({
-          chatId: chatId || chat._id,
-          content: aiMessage.content,
-          role: aiMessage.role
-        }))
+          chatId: chatId,
+          content: message,
+          role: "user"
+        }));
       }
-      dispatch(setCurrentChatId(chatId || chat._id))
+      
+      const data = await sendMessage(message, isNewChat ? null : chatId);
+      const {chat, aiMessage} = data;
+     
+      if (isNewChat) {
+        // Create the real chat
+        dispatch(createNewChat({
+          chatId: chat._id,
+          title: chat.title,
+        }));
+        // Add user message to real chat
+        dispatch(addNewMessage({
+          chatId: chat._id,
+          content: message,
+          role: "user"
+        }));
+        // Add assistant message to real chat
+        if (aiMessage) {
+          dispatch(addNewMessage({
+            chatId: chat._id,
+            content: aiMessage.content,
+            role: aiMessage.role
+          }));
+        }
+        dispatch(setCurrentChatId(chat._id));
+        // Remove the temporary chat
+        dispatch(deleteChatAction(tempChatId));
+      } else {
+        if (aiMessage) {
+          dispatch(addNewMessage({
+            chatId: chatId,
+            content: aiMessage.content,
+            role: aiMessage.role
+          }));
+        }
+      }
     } catch (error) {
-      dispatch(setError(error.message || "An error occurred while sending message."))
-      console.error("Error sending message:", error)
+      dispatch(setError(error.message || "An error occurred while sending message."));
+      console.error("Error sending message:", error);
+      if (isNewChat && tempChatId) {
+        dispatch(deleteChatAction(tempChatId));
+      }
     } finally {
-      dispatch(setLoading(false))
+      dispatch(setLoading(false));
     }
   }, [dispatch]);
 
